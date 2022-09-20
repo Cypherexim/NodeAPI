@@ -1,0 +1,22 @@
+{
+  "name": "cypher-api",
+  "version": "1.0.0",
+  "description": "Rest API for Cypher",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "Sumit Kumar",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "express": "^4.18.1",
+    "express-validator": "^6.14.2",
+    "pg": "^8.8.0",
+    "sequelize": "^6.22.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
