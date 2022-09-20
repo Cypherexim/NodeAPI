@@ -5,7 +5,7 @@ const { success, error, validation } = require('../../src/utils/response');
 const query = require('../../src/sql/queries');
 db.connect();
 
-
+// get import api
 exports.getimport = async (req, res) => {
     try {
         db.query(query.get_import_by_recordId,[2955314], (error, results) => {
