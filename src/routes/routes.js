@@ -7,5 +7,6 @@ const importController = require('../controllers/import');
 router.get('/getUsers', firstController.getUsers);
 router.post('/addUser',check('email').isEmail(), firstController.createtUser);
 router.get('/fetchImport', importController.getimport);
+router.get('/getImports', importController.getimports);
 
 module.exports = router;

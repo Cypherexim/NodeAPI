@@ -16,3 +16,15 @@ exports.getimport = async (req, res) => {
     };
     db.end;
 }
+
+// to get import data
+exports.getimports = async (req, res) => {
+    try {
+        db.query(query.get_import, (error, results) => {
+            return res.status(200).json(success("Ok", results.rows, res.statusCode));
+        })
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+    db.end;
+}
