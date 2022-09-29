@@ -10,35 +10,26 @@ queryCondition = (params) => {
                 break;
             }
             case '!=': {
-                conditions.push(item.name + " != $" + index);
+                conditions.push('"' + item.name + '"' + " != $" + (index + 1));
                 values.push(item.value);
                 break;
             }
-            case '<': {
-                conditions.push(item.name + " < $" + index);
+            case '>=': {
+                conditions.push('"' + item.name + '"' + " >= $" + (index + 1));
                 values.push(item.value);
                 break;
             }
-            case '>': {
-                conditions.push(item.name + " > $" + index);
+            case '<=': {
+                conditions.push('"' + item.name + '"' + " <= $" + (index + 1));
                 values.push(item.value);
                 break;
             }
             case '%_%': {
-                conditions.push(item.name + " LIKE $" + index);
+                conditions.push('"' + item.name + '"' + " ILIKE $" + (index + 1));
                 values.push("%" + item.value + "%");
                 break;
             }
-            case '%_': {
-                conditions.push(item.name + " LIKE $" + index);
-                values.push("%" + item.value);
-                break;
-            }
-            case '_%': {
-                conditions.push(item.name + " LIKE ?");
-                values.push(item.value + "%");
-                break;
-            }
+
         }
     });
 

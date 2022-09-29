@@ -2,10 +2,10 @@ const Pool = require('pg').Pool;
 const env = require('dotenv').config()
 
 const pool = new Pool({
-    user:'eximread',
+    user:'cypher',
     host: '18.214.151.123',
-    database:'exim_portal_db',
-    password: 'readonly@123',
+    database:'cypher',
+    password: 'cypher123',
     port:5432
 })
 

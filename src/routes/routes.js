@@ -7,6 +7,6 @@ const importController = require('../controllers/import');
 router.get('/getUsers', firstController.getUsers);
 router.post('/addUser',check('email').isEmail(), firstController.createtUser);
 router.get('/fetchImport', importController.getimport);
-router.get('/getImports',check('fromDate').notEmpty().isDate(),check('toDate').notEmpty().isDate(), importController.getimports);
+router.get('/getImports',check('fromDate').notEmpty().isDate(),check('toDate').notEmpty().isDate(), importController.getimportwithsearch);
 
 module.exports = router;
