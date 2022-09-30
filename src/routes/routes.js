@@ -15,5 +15,6 @@ router.get('/getImports',check('fromDate').notEmpty().isDate(),check('toDate').n
 
 // Account Controller
 router.post('/signup',check('FullName').notEmpty(),check('CompanyName').notEmpty(),body('MobileNumber').isLength({min:10, max:10}).withMessage('Mobile Number should be of 10 digit.'),check('Password').notEmpty(), check('Email').isEmail(), accountController.createtUser);
+router.post('/signin',check('Password').notEmpty(), check('Email').isEmail(), accountController.postLogin);
 
 module.exports = router;
