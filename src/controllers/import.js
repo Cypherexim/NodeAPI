@@ -54,7 +54,7 @@ exports.getimports = async (req, res) => {
 // to get import data
 exports.getimportwithsearch = async (req, res) => {
     try {
-        const { fromDate, toDate, HSCODE, HSCodeDesc, Importer_Name, EXPORTER_NAME } = req.body;
+        const { fromDate, toDate, HSCODE, HSCodeDesc, Importer_Name, EXPORTER_NAME } = req.query;
         let params = []
 
         if (fromDate != '' && fromDate != undefined) {
@@ -86,3 +86,4 @@ exports.getimportwithsearch = async (req, res) => {
     };
     db.end;
 }
+

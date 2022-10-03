@@ -12,6 +12,6 @@ app.use(bodyParser.json());
 //     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
 //     next();
 // });
- app.use(cors());
+app.use(cors());
 app.use('/user', routes);
 app.listen(8080);
