@@ -87,3 +87,39 @@ exports.getimportwithsearch = async (req, res) => {
     db.end;
 }
 
+// to get export data
+exports.getexporttwithsearch = async (req, res) => {
+    try {
+        const { fromDate, toDate, HSCODE, HSCodeDesc, Importer_Name, EXPORTER_NAME } = req.query;
+        let params = []
+
+        if (fromDate != '' && fromDate != undefined) {
+            params.push(utility.generateParams("Date", ">=", fromDate))
+        }
+        if (toDate != '' && toDate != undefined) {
+            params.push(utility.generateParams("Date", "<=", toDate))
+        }
+        if (HSCODE != '' && HSCODE != undefined) {
+            params.push(utility.generateParams("HSCODE", "%_%", HSCODE))
+        }
+        if (HSCodeDesc != '' && HSCodeDesc != undefined) {
+            params.push(utility.generateParams("HSCodeDesc", "%_%", HSCodeDesc))
+        }
+        if (Importer_Name != '' && Importer_Name != undefined) {
+            params.push(utility.generateParams("Imp_Name", "%_%", Importer_Name))
+        }
+        if (EXPORTER_NAME != '' && EXPORTER_NAME != undefined) {
+            params.push(utility.generateParams("Exp_Name", "%_%", EXPORTER_NAME))
+        }
+
+        const querytoexecute = utility.generateFilterQuery(params, 'export_data');
+        console.log(querytoexecute);
+        await db.query(querytoexecute[0], querytoexecute[1], (error, results) => {
+            return res.status(200).json(success("Ok", results.rows, res.statusCode));
+        })
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+    db.end;
+}
+
