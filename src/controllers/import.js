@@ -51,7 +51,7 @@ exports.getimports = async (req, res) => {
     db.end;
 }
 
-// to get import data
+// to get import with search data
 exports.getimportwithsearch = async (req, res) => {
     try {
         const { fromDate, toDate, HSCODE, HSCodeDesc, Importer_Name, EXPORTER_NAME } = req.query;
@@ -123,3 +123,23 @@ exports.getexporttwithsearch = async (req, res) => {
     db.end;
 }
 
+// to get HSCODE list
+exports.getHscode = async (req, res) => {
+    try {
+        const { hscodefor } = req.query;
+        if (hscodefor.toUpperCase() == 'IMPORT') {
+            db.query(query.get_hscode_import, (error, results) => {
+                return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            })
+        } else if(hscodefor.toUpperCase() == 'EXPORT'){
+            db.query(query.get_hscode_export, (error, results) => {
+                return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            })
+        } else {
+            return res.status(200).json(success("Ok", [], res.statusCode));
+        }
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+    db.end;
+}
