@@ -50,6 +50,8 @@ exports.postLogin = async (req, res) => {
             .then(doMatch => {
                 if (doMatch) {
                     return res.status(200).json(success("Login Successfully !", user.rows[0], res.statusCode));
+                } else {
+                    return res.status(422).json(error("Wrong password !", res.statusCode));
                 }
             })
             .catch(err => {
