@@ -127,17 +127,9 @@ exports.getexporttwithsearch = async (req, res) => {
 exports.getHscode = async (req, res) => {
     try {
         const { hscodefor } = req.query;
-        if (hscodefor.toUpperCase() == 'IMPORT') {
-            db.query(query.get_hscode_import, (error, results) => {
-                return res.status(200).json(success("Ok", results.rows, res.statusCode));
-            })
-        } else if(hscodefor.toUpperCase() == 'EXPORT'){
-            db.query(query.get_hscode_export, (error, results) => {
-                return res.status(200).json(success("Ok", results.rows, res.statusCode));
-            })
-        } else {
-            return res.status(200).json(success("Ok", [], res.statusCode));
-        }
+        db.query(query.get_hscode_export, (error, results) => {
+            return res.status(200).json(success("Ok", results.rows, res.statusCode));
+        })
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };

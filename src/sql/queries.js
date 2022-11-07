@@ -11,6 +11,6 @@ module.exports = {
         "FullName", "CompanyName", "MobileNumber", "Email", "Password")
         VALUES ($1, $2, $3, $4, $5);`,
     get_user_by_email: `SELECT * FROM public."Cypher" where "Email"=$1;`,
-    get_hscode_import: 'SELECT DISTINCT "HSCODE" FROM public.import_data',
-    get_hscode_export: 'SELECT DISTINCT "HSCODE" FROM public.export_data'
+    get_hscode_import: 'SELECT * FROM public.HSCodes',
+    get_hscode_export: 'SELECT * FROM public."HSCodes"'
 };
