@@ -14,5 +14,5 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 //app.use(cors());
-app.use('/user', routes);
+app.use('/api', routes);
 app.listen(8080);
