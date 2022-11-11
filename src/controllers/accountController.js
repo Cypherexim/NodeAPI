@@ -7,7 +7,7 @@ const bycrypt = require('bcryptjs');
 db.connect();
 
 exports.createtUser = async (req, res) => {
-    const { FullName, CompanyName, MobileNumber, Email, Password, country } = req.body;
+    const { FullName, CompanyName, MobileNumber, Email, Password, country,ParentUserId } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         err = [];
@@ -22,7 +22,7 @@ exports.createtUser = async (req, res) => {
         return res.status(422).json(error("Email already registered !", res.statusCode));
     } else {
         bycrypt.hash(Password, 12).then(hashPassword => {
-            db.query(query.add_user, [FullName, CompanyName, MobileNumber, Email, hashPassword,country ], (err, result) => {
+            db.query(query.add_user, [FullName, CompanyName, MobileNumber, Email, hashPassword,country,ParentUserId ], (err, result) => {
                 if (!err) {
                     return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
                 }
