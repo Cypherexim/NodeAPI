@@ -62,5 +62,5 @@ exports.postLogin = async (req, res) => {
     } else {
         return res.status(200).json(error("Email not found !", res.statusCode));
     }
-    db.end();
+    db.end;
 }
