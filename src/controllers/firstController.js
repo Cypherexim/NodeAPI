@@ -1,11 +1,12 @@
 
 const { response } = require('express');
 const db = require('../../src/utils/database');
-const { validationResult } = require('express-validator/check');
+const { validationResult } = require('express-validator');
 const { success, error, validation } = require('../../src/utils/response');
-db.connect();
+
 
 exports.getUsers = async (req, res) => {
+    db.connect();
     try {
         db.query('SELECT * FROM public."Users"', (error, results) => {
             return res.status(200).json(success("Ok", results.rows, res.statusCode));
@@ -17,6 +18,7 @@ exports.getUsers = async (req, res) => {
 }
 
 exports.createtUser = async (req, res) => {
+    db.connect();
     const user = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -35,5 +37,5 @@ exports.createtUser = async (req, res) => {
         }
         else { return res.status(500).json(error("Somthing went wrong", res.statusCode)); }
     })
-    db.end;
+    db.end();
 }
