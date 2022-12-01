@@ -37,5 +37,5 @@ exports.createtUser = async (req, res) => {
         }
         else { return res.status(500).json(error("Somthing went wrong", res.statusCode)); }
     })
-    db.end();
+    db.end;
 }

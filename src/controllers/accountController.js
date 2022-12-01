@@ -31,7 +31,7 @@ exports.createtUser = async (req, res) => {
             })
         });
     }
-    db.end();
+    db.end;
 }
 
 exports.postLogin = async (req, res) => {

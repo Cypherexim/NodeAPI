@@ -129,7 +129,7 @@ exports.getexporttwithsearch = async (req, res) => {
 
 // to get HSCODE list
 exports.getHscode = async (req, res) => {
-    if(db.)
+    
     db.connect();
     try {
         const { hscodefor } = req.query;
