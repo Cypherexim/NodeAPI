@@ -8,7 +8,7 @@ const utility = require('../utils/utility');
 
 // to get import data
 exports.getimport = async (req, res) => {
-    db.connect();
+    //db.connect();
     try {
         db.query(query.get_import_by_recordId, [2955314], (error, results) => {
             return res.status(200).json(success("Ok", results.rows, res.statusCode));
@@ -16,7 +16,7 @@ exports.getimport = async (req, res) => {
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
-    db.end;
+    //db.end;
 }
 
 // to get import data
@@ -28,12 +28,12 @@ exports.getimport = async (req, res) => {
 //     } catch (err) {
 //         return res.status(500).json(error(err, res.statusCode));
 //     };
-//     db.end;
+//     //db.end;
 // }
 
 // to get import data
 exports.getimports = async (req, res) => {
-    db.connect();
+    //db.connect();
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -50,12 +50,12 @@ exports.getimports = async (req, res) => {
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
-    db.end;
+    //db.end;
 }
 
 // to get import with search data
 exports.getimportwithsearch = async (req, res) => {
-    db.connect();
+    //db.connect();
     try {
         const { fromDate, toDate, HSCODE, HSCodeDesc, Importer_Name, EXPORTER_NAME } = req.query;
         let params = []
@@ -87,12 +87,12 @@ exports.getimportwithsearch = async (req, res) => {
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
-    db.end;
+    //db.end;
 }
 
 // to get export data
 exports.getexporttwithsearch = async (req, res) => {
-    db.connect();
+    //db.connect();
     try {
         const { fromDate, toDate, HSCODE, HSCodeDesc, Importer_Name, EXPORTER_NAME } = req.query;
         let params = []
@@ -124,13 +124,13 @@ exports.getexporttwithsearch = async (req, res) => {
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
-    db.end;
+    //db.end;
 }
 
 // to get HSCODE list
 exports.getHscode = async (req, res) => {
     
-    db.connect();
+    //db.connect();
     try {
         const { hscodefor } = req.query;
         db.query(query.get_hscode_export, (error, results) => {
@@ -139,5 +139,5 @@ exports.getHscode = async (req, res) => {
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
-    db.end;
+    //db.end;
 }

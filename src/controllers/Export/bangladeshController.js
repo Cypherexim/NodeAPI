@@ -9,7 +9,7 @@ const utility = require('../../utils/utility');
 
 // to get import with search data
 exports.getbangladeshExport = async (req, res) => {
-    db.connect();
+    //db.connect();
     try {
         const { fromDate, toDate, HSCODE, HSCodeDesc, Importer_Name, EXPORTER_NAME } = req.query;
        
@@ -19,5 +19,5 @@ exports.getbangladeshExport = async (req, res) => {
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
-    db.end;
+    //db.end;
 }

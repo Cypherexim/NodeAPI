@@ -6,7 +6,7 @@ const { success, error, validation } = require('../../src/utils/response');
 
 
 exports.getUsers = async (req, res) => {
-    db.connect();
+    //db.connect();
     try {
         db.query('SELECT * FROM public."Users"', (error, results) => {
             return res.status(200).json(success("Ok", results.rows, res.statusCode));
@@ -14,11 +14,11 @@ exports.getUsers = async (req, res) => {
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
-    db.end;
+    //db.end;
 }
 
 exports.createtUser = async (req, res) => {
-    db.connect();
+    //db.connect();
     const user = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -37,5 +37,5 @@ exports.createtUser = async (req, res) => {
         }
         else { return res.status(500).json(error("Somthing went wrong", res.statusCode)); }
     })
-    db.end;
+    //db.end;
 }

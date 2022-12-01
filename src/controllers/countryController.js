@@ -6,7 +6,7 @@ const query = require('../../src/sql/queries');
 
 
 exports.getCountries = async (req, res) => {
-    db.connect();
+    //db.connect();
     try {
         db.query(query.getCountry, (error, results) => {
             return res.status(200).json(success("Ok", results.rows, res.statusCode));
@@ -14,5 +14,5 @@ exports.getCountries = async (req, res) => {
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
-    db.end;
+    //db.end;
 }

@@ -9,7 +9,7 @@ const utility = require('../../utils/utility');
 
 // to get import with search data
 exports.getsrilankaExport = async (req, res) => {
-    db.connect();
+    //db.connect();
     try {
         const { fromDate, toDate, HSCODE, HSCodeDesc, Importer_Name, EXPORTER_NAME } = req.query;
         await db.query(query.get_srilanka_export,[fromDate,toDate,HSCODE,HSCodeDesc,Importer_Name,EXPORTER_NAME], (error, results) => {
@@ -18,5 +18,5 @@ exports.getsrilankaExport = async (req, res) => {
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
-    db.end;
+    //db.end;
 }

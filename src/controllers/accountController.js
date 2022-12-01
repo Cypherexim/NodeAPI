@@ -7,7 +7,7 @@ const bycrypt = require('bcryptjs');
 
 
 exports.createtUser = async (req, res) => {
-    db.connect();
+    ////db.connect();
     const { FullName, CompanyName, MobileNumber, Email, Password, country,ParentUserId } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -31,11 +31,11 @@ exports.createtUser = async (req, res) => {
             })
         });
     }
-    db.end;
+   // //db.end;
 }
 
 exports.postLogin = async (req, res) => {
-    db.connect();
+   // //db.connect();
     const { Email, Password } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -62,5 +62,5 @@ exports.postLogin = async (req, res) => {
     } else {
         return res.status(200).json(error("Email not found !", res.statusCode));
     }
-    db.end;
+    ////db.end;
 }
