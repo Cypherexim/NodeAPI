@@ -16,7 +16,7 @@ exports.getimport = async (req, res) => {
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
-    db.end();
+    db.end;
 }
 
 // to get import data
@@ -50,7 +50,7 @@ exports.getimports = async (req, res) => {
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
-    db.end();
+    db.end;
 }
 
 // to get import with search data
@@ -87,7 +87,7 @@ exports.getimportwithsearch = async (req, res) => {
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
-    db.end();
+    db.end;
 }
 
 // to get export data
@@ -124,11 +124,12 @@ exports.getexporttwithsearch = async (req, res) => {
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
-    db.end();
+    db.end;
 }
 
 // to get HSCODE list
 exports.getHscode = async (req, res) => {
+    if(db.)
     db.connect();
     try {
         const { hscodefor } = req.query;
@@ -138,5 +139,5 @@ exports.getHscode = async (req, res) => {
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
-    db.end();
+    db.end;
 }
