@@ -13,5 +13,9 @@ module.exports = {
     get_user_by_email: `SELECT * FROM public."Cypher" where "Email"=$1`,
     get_hscode_import: 'SELECT * FROM public.HSCodes',
     get_hscode_export: 'SELECT "Hscode" FROM public."HSCodes"',
-    getCountry: 'SELECT * FROM public."Country"'
+    getCountry: 'SELECT * FROM public."Country"',
+    get_plan_by_name: `SELECT * FROM public.plan WHERE "PlanName"=$1`,
+    add_plan:`INSERT INTO public.plan(
+        "PlanName", "Amount", "Validity", "DataAccess", "Downloads", "Searches", "CountryAccess", "CommodityAccess", "TarrifCodeAccess", "Workspace", "WSSLimit", "Downloadfacility", "Favoriteshipment", "Whatstrending", "Companyprofile", "Contactdetails", "Addonfacility", "Analysis", "User")
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)`
 };

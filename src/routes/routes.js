@@ -11,6 +11,7 @@ const srilankaImportController = require('../controllers/Import/srilankaControll
 const srilankaExportController = require('../controllers/Export/srilankaController');
 const bangladeshImportController = require('../controllers/Import/bangladeshController');
 const bangladeshExportController = require('../controllers/Export/bangladeshController');
+const planController = require('../controllers/planController');
 
 // first Controller
 router.get('/getUsers', firstController.getUsers);
@@ -35,4 +36,8 @@ router.post('/signin', check('Password').notEmpty(), check('Email').isEmail(), a
 
 // Country Controller
 router.get('/getContries', countryController.getCountries);
+
+// Plan Controller
+router.post('/addplan', check('PlanName').notEmpty(), planController.createPlan);
+
 module.exports = router;
