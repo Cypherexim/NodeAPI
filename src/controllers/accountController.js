@@ -4,12 +4,14 @@ const { validationResult } = require('express-validator');
 const { success, error, validation } = require('../../src/utils/response');
 const query = require('../../src/sql/queries');
 const bycrypt = require('bcryptjs');
+const config = require('../utils/config');
 
 
 exports.createtUser = async (req, res) => {
     ////db.connect();
     const { FullName, CompanyName, MobileNumber, Email, Password, country,ParentUserId } = req.body;
     const errors = validationResult(req);
+    const date = new Date();
     if (!errors.isEmpty()) {
         err = [];
         errors.errors.forEach(element => {
@@ -23,9 +25,14 @@ exports.createtUser = async (req, res) => {
         return res.status(422).json(error("Email already registered !", res.statusCode));
     } else {
         bycrypt.hash(Password, 12).then(hashPassword => {
-            db.query(query.add_user, [FullName, CompanyName, MobileNumber, Email, hashPassword,country,ParentUserId ], (err, result) => {
+            db.query(query.add_user, [FullName, CompanyName, MobileNumber, Email, hashPassword, country, ParentUserId], async (err, result) => {
                 if (!err) {
-                    return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
+                    const planDetails = await db.query(query.get_plan_by_name, [config.DefaultPlan]);
+                    if (planDetails != null) {
+                        db.query(query.add_Plan_Trasaction, [result.rows[0].UserId, planDetails.rows[0].PlanId, planDetails.rows[0].Downloads, planDetails.rows[0].Searches, date.toISOString()], (err, result) => {
+                            return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
+                        });
+                    }
                 }
                 else { return res.status(500).json(error("Somthing went wrong", res.statusCode)); }
             })
