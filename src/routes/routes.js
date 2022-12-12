@@ -33,6 +33,7 @@ router.get('/getBangladeshExports', check('fromDate').notEmpty().isDate(), check
 // Account Controller
 router.post('/signup', check('FullName').notEmpty(), check('CompanyName').notEmpty(), body('MobileNumber').isLength({ min: 10, max: 10 }).withMessage('Mobile Number should be of 10 digit.'), check('Password').notEmpty(), check('Email').isEmail(), accountController.createtUser);
 router.post('/signin', check('Password').notEmpty(), check('Email').isEmail(), accountController.postLogin);
+router.get('/getAccountDetails',accountController.getAccountDetails );
 
 // Country Controller
 router.get('/getContries', countryController.getCountries);

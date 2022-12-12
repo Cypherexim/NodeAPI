@@ -9,7 +9,7 @@ const config = require('../utils/config');
 
 exports.createtUser = async (req, res) => {
     ////db.connect();
-    const { FullName, CompanyName, MobileNumber, Email, Password, country,ParentUserId } = req.body;
+    const { FullName, CompanyName, MobileNumber, Email, Password, country, ParentUserId } = req.body;
     const errors = validationResult(req);
     const date = new Date();
     if (!errors.isEmpty()) {
@@ -38,11 +38,11 @@ exports.createtUser = async (req, res) => {
             })
         });
     }
-   // //db.end;
+    // //db.end;
 }
 
 exports.postLogin = async (req, res) => {
-   // //db.connect();
+    // //db.connect();
     const { Email, Password } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -70,4 +70,15 @@ exports.postLogin = async (req, res) => {
         return res.status(200).json(error("Email not found !", res.statusCode));
     }
     ////db.end;
+}
+
+exports.getAccountDetails = async (req, res) => {
+    try {
+        const { UserId } = req.query;
+        db.query(query.get_Searches_By_UserId, [UserId], (error, results) => {
+            return res.status(200).json(success("Ok", results.rows, res.statusCode));
+        })
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
 }

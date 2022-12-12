@@ -19,5 +19,9 @@ module.exports = {
         "PlanName", "Amount", "Validity", "DataAccess", "Downloads", "Searches", "CountryAccess", "CommodityAccess", "TarrifCodeAccess", "Workspace", "WSSLimit", "Downloadfacility", "Favoriteshipment", "Whatstrending", "Companyprofile", "Contactdetails", "Addonfacility", "Analysis", "User")
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)`,
     add_Plan_Trasaction:`INSERT INTO public.userplantransaction("UserId", "PlanId", "Downloads", "Searches", "StartDate")
-        VALUES ($1, $2, $3, $4, $5)`
+        VALUES ($1, $2, $3, $4, $5)`,
+    get_Plan_By_UserId:`SELECT * FROM public.userplantransaction WHERE "UserId"=$1`,
+    update_Plan_transaction:`UPDATE public.userplantransaction SET "Searches" = $1 WHERE "UserId"= $2`,
+
+    get_Searches_By_UserId:`SELECT "Downloads","Searches" FROM public.userplantransaction WHERE "UserId"=$1`,
 };
