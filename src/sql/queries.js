@@ -13,6 +13,7 @@ module.exports = {
     get_user_by_email: `SELECT * FROM public."Cypher" inner join public.userplantransaction on "Cypher"."UserId" = "userplantransaction"."UserId" where "Email"=$1`,
     get_hscode_import: 'SELECT * FROM public.HSCodes',
     get_hscode_export: 'SELECT "Hscode" FROM public."HSCodes"',
+    get_hscode_export_digit: 'SELECT "Hscode" FROM public."HSCodes" where length("Hscode") =$1',
     getCountry: 'SELECT * FROM public."Country"',
     get_plan_by_name: `SELECT * FROM public.plan WHERE "PlanName"=$1`,
     add_plan:`INSERT INTO public.plan(

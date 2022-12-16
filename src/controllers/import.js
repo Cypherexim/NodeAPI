@@ -129,13 +129,19 @@ exports.getexporttwithsearch = async (req, res) => {
 
 // to get HSCODE list
 exports.getHscode = async (req, res) => {
-    
+
     //db.connect();
     try {
-        const { hscodefor } = req.query;
-        db.query(query.get_hscode_export, (error, results) => {
-            return res.status(200).json(success("Ok", results.rows, res.statusCode));
-        })
+        const { digit } = req.query;
+        if (digit == null) {
+            db.query(query.get_hscode_export, (error, results) => {
+                return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            })
+        } else {
+            db.query(query.get_hscode_export_digit,[digit], (error, results) => {
+                return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            })
+        }
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };

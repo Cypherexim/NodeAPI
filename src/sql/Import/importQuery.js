@@ -12,5 +12,17 @@ module.exports = {
     get_bangladesh_import: `select * from import_bangladesh WHERE "Date" BETWEEN $1 AND $2 
     AND ("HSCODE" IN ($3)) OR ("HSCodeDesc" ILIKE $4) 
     OR ("Imp_Name" ILIKE $5) OR ("Exp_Name" ILIKE $6) 
+    order by "RecordID" limit 1000000`,
+    get_ethiopia_import: `select * from import_ethiopia WHERE "Date" BETWEEN $1 AND $2 
+    AND ("HSCODE" IN ($3)) OR ("ProductDesc" ILIKE $4) 
+    OR ("Consignee_Name" ILIKE $5) 
+    order by "RecordID" limit 1000000`,
+    get_chile_import: `select * from import_chile WHERE "Date" BETWEEN $1 AND $2 
+    AND ("HSCODE" IN ($3)) OR ("CommodityDesc" ILIKE $4) 
+    OR ("Importer" ILIKE $5) OR ("TransportName" ILIKE $6) 
+    order by "RecordID" limit 1000000`,
+    get_philip_import: `select * from import_philip WHERE "Date" BETWEEN $1 AND $2 
+    AND ("HSCODE" IN ($3)) OR ("CommodityDesc" ILIKE $4) 
+    OR ("Importer_Name" ILIKE $5) OR ("Exporter_Name" ILIKE $6) 
     order by "RecordID" limit 1000000`
 }
