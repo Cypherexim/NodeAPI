@@ -11,9 +11,9 @@ const common = require('../../utils/common');
 exports.getethiopiaImport = async (req, res) => {
     //db.connect();
     try {
-        const { fromDate, toDate, HSCODE, HSCodeDesc, Importer_Name, EXPORTER_NAME,UserId } = req.query;
+        const { fromDate, toDate, HSCODE, HSCodeDesc, Importer_Name, EXPORTER_NAME,UserId,IsWorkspaceSearch } = req.query;
 
-        const check = await common.deductSearches(UserId);
+        const check = await common.deductSearches(UserId,IsWorkspaceSearch);
         if (check) {
             await db.query(query.get_ethiopia_import, [fromDate, toDate, HSCODE, HSCodeDesc, Importer_Name], (error, results) => {
                 return res.status(200).json(success("Ok", results.rows, res.statusCode));
