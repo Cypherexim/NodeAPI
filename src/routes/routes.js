@@ -26,6 +26,7 @@ router.post('/addUser', check('email').isEmail(), firstController.createtUser);
 //Normal Controller
 router.get('/fetchImport', importController.getimport);
 router.get('/gethscode', importController.getHscode);
+router.get('/getSideFilterAccess', importController.getSideFilterAccess);
 
 //Import controller
 router.get('/getIndiaImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), indiaImportController.getindiaImport);

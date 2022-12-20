@@ -138,7 +138,7 @@ exports.getHscode = async (req, res) => {
                 return res.status(200).json(success("Ok", results.rows, res.statusCode));
             })
         } else {
-            db.query(query.get_hscode_export_digit,[digit], (error, results) => {
+            db.query(query.get_hscode_export_digit, [digit], (error, results) => {
                 return res.status(200).json(success("Ok", results.rows, res.statusCode));
             })
         }
@@ -146,4 +146,16 @@ exports.getHscode = async (req, res) => {
         return res.status(500).json(error(err, res.statusCode));
     };
     //db.end;
+}
+
+exports.getSideFilterAccess = async (req, res) => {
+    try {
+        const { Country } = req.query;
+        db.query(query.get_sidefilter_Access,[Country], (error, results) => {
+            return res.status(200).json(success("Ok", results.rows, res.statusCode));
+        })
+
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
 }
