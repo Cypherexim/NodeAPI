@@ -11,7 +11,7 @@ const common = require('../../utils/common');
 exports.getphilipExport = async (req, res) => {
     //db.connect();
     try {
-        const { fromDate, toDate, HSCODE, HSCodeDesc, Importer_Name, EXPORTER_NAME,UserId,IsWorkspaceSearch } = req.query;
+        const { fromDate, toDate, HSCODE, HSCodeDesc, Importer_Name, EXPORTER_NAME,UserId,IsWorkspaceSearch= false } = req.query;
         const check = await common.deductSearches(UserId,IsWorkspaceSearch);
         if (check) {
             await db.query(query.get_philip_export, [fromDate, toDate, HSCODE, HSCodeDesc, Importer_Name, EXPORTER_NAME], (error, results) => {
