@@ -79,7 +79,7 @@ exports.getimportwithsearch = async (req, res) => {
             params.push(utility.generateParams("EXPORTER_NAME", "%_%", EXPORTER_NAME))
         }
 
-        const querytoexecute = utility.generateFilterQuery(params, 'import_data');
+        const querytoexecute = utility.generateFilterQuery(params, 'import_india');
         console.log(querytoexecute);
         await db.query(querytoexecute[0], querytoexecute[1], (error, results) => {
             return res.status(200).json(success("Ok", results.rows, res.statusCode));
@@ -116,7 +116,7 @@ exports.getexporttwithsearch = async (req, res) => {
             params.push(utility.generateParams("Exp_Name", "%_%", EXPORTER_NAME))
         }
 
-        const querytoexecute = utility.generateFilterQuery(params, 'export_data');
+        const querytoexecute = utility.generateFilterQuery(params, 'export_india');
         console.log(querytoexecute);
         await db.query(querytoexecute[0], querytoexecute[1], (error, results) => {
             return res.status(200).json(success("Ok", results.rows, res.statusCode));
