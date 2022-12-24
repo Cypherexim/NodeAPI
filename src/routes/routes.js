@@ -27,6 +27,10 @@ router.post('/addUser', check('email').isEmail(), firstController.createtUser);
 router.get('/fetchImport', importController.getimport);
 router.get('/gethscode', importController.getHscode);
 router.get('/getSideFilterAccess', importController.getSideFilterAccess);
+router.get('/getImportExportList', importController.getImportExportList);
+router.post('/addUpdateAccess', importController.addupdateAccessSideFilter);
+router.get('/getWorkSpace', importController.getWorksapce);
+router.post('/addWorkspace', importController.addWorkspace);
 
 //Import controller
 router.get('/getIndiaImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), indiaImportController.getindiaImport);

@@ -151,10 +151,79 @@ exports.getHscode = async (req, res) => {
 exports.getSideFilterAccess = async (req, res) => {
     try {
         const { Country } = req.query;
-        db.query(query.get_sidefilter_Access,[Country], (error, results) => {
+        db.query(query.get_sidefilter_Access, [Country], (error, results) => {
             return res.status(200).json(success("Ok", results.rows, res.statusCode));
         })
 
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
+
+exports.getImportExportList = async (req, res) => {
+    try {
+        const { Country, type } = req.query;
+        if (type.toLowerCase() == 'import') {
+            db.query('SELECT DISTINCT "Imp_Name", "Exp_Name" FROM public.import_' + Country.toLowerCase() + ' limit 1000', (error, results) => {
+                return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            })
+        } else {
+            db.query('SELECT DISTINCT "Imp_Name", "Exp_Name" FROM public.export_' + Country.toLowerCase() + ' limit 1000', (error, results) => {
+                return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            })
+        }
+
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
+
+exports.addupdateAccessSideFilter = async (req, res) => {
+    try {
+        const { HSCode, ProductDescription, ProductDescNative, Exporter, Importer, CountryDestination, CountryofOrigin,
+            PortofOrigin, ShipmentMode, Unit, Quantity, MONTH, YEAR, Country, Import, Export, HsProductDescription,
+            CommodityDesc, PortofDestination, LoadingPort, Currency, ValueCurrency, NotifyPartName, UQC } = req.body;
+
+        const access = await db.query(query.get_sidefilter_Access, [Country]);
+        if(access != null){
+            db.query(query.update_sidefilter_Access, [Country, HSCode, ProductDescription, ProductDescNative, Exporter, Importer, 
+                CountryDestination, CountryofOrigin,
+                PortofOrigin, ShipmentMode, Unit, Quantity, MONTH, YEAR, Import, Export, HsProductDescription,
+                CommodityDesc, PortofDestination, LoadingPort, Currency, ValueCurrency, NotifyPartName, UQC], (err, result) => {
+                return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
+            });
+        } else {
+            db.query(query.insert_sidefilter_Access, [HSCode, ProductDescription, ProductDescNative, Exporter, Importer, CountryDestination, 
+                CountryofOrigin,
+                PortofOrigin, ShipmentMode, Unit, Quantity, MONTH, YEAR, Country, Import, Export, HsProductDescription,
+                CommodityDesc, PortofDestination, LoadingPort, Currency, ValueCurrency, NotifyPartName, UQC], (err, result) => {
+                return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
+            });
+        }
+        
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
+
+exports.getWorksapce = async (req, res) => {
+    try {
+        const { UserId } = req.query;
+        db.query(query.get_workspace, [UserId], (error, results) => {
+            return res.status(200).json(success("Ok", results.rows, res.statusCode));
+        })
+
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
+
+exports.addWorkspace = async(req,res) =>{
+    try {
+        const { UserId, Searchbar,Sidefilter } = req.body;
+            db.query(query.add_workspace, [UserId, Searchbar, Sidefilter], (err, result) => {
+                return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
+            });
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
