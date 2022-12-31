@@ -180,23 +180,22 @@ exports.getImportExportList = async (req, res) => {
 
 exports.addupdateAccessSideFilter = async (req, res) => {
     try {
-        const { HSCode, ProductDescription, ProductDescNative, Exporter, Importer, CountryDestination, CountryofOrigin,
-            PortofOrigin, ShipmentMode, Unit, Quantity, MONTH, YEAR, Country, Import, Export, HsProductDescription,
-            CommodityDesc, PortofDestination, LoadingPort, Currency, ValueCurrency, NotifyPartName, UQC } = req.body;
+        const { HsCode, ProductDesc, Exp_Name, Imp_Name, CountryofDestination, CountryofOrigin, PortofOrigin,
+             Mode, uqc, Quantity, Month, Year, Country, PortofDestination, LoadingPort, Currency, 
+             NotifyPartyName } = req.body;
 
         const access = await db.query(query.get_sidefilter_Access, [Country]);
-        if(access != null){
-            db.query(query.update_sidefilter_Access, [Country, HSCode, ProductDescription, ProductDescNative, Exporter, Importer, 
-                CountryDestination, CountryofOrigin,
-                PortofOrigin, ShipmentMode, Unit, Quantity, MONTH, YEAR, Import, Export, HsProductDescription,
-                CommodityDesc, PortofDestination, LoadingPort, Currency, ValueCurrency, NotifyPartName, UQC], (err, result) => {
+        if(access.rows.length >0){
+            db.query(query.update_sidefilter_Access, [Country, HsCode, ProductDesc, Exp_Name, Imp_Name, CountryofDestination, 
+                CountryofOrigin, PortofOrigin,
+                Mode, uqc, Quantity, Month, Year, PortofDestination, LoadingPort, Currency, 
+                NotifyPartyName], (err, result) => {
                 return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
             });
         } else {
-            db.query(query.insert_sidefilter_Access, [HSCode, ProductDescription, ProductDescNative, Exporter, Importer, CountryDestination, 
-                CountryofOrigin,
-                PortofOrigin, ShipmentMode, Unit, Quantity, MONTH, YEAR, Country, Import, Export, HsProductDescription,
-                CommodityDesc, PortofDestination, LoadingPort, Currency, ValueCurrency, NotifyPartName, UQC], (err, result) => {
+            db.query(query.insert_sidefilter_Access, [HsCode, ProductDesc, Exp_Name, Imp_Name, CountryofDestination, CountryofOrigin, 
+                PortofOrigin, Mode, uqc, Quantity, Month, Year, Country, PortofDestination, LoadingPort, Currency, 
+                NotifyPartyName], (err, result) => {
                 return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
             });
         }

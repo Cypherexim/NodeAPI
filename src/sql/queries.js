@@ -32,10 +32,12 @@ module.exports = {
     get_exporter_list: `SELECT DISTINCT "Imp_Name", "Exp_Name" FROM public.export_$1 limit 1000`,
 
     insert_sidefilter_Access:`INSERT INTO public."SideFilterAccess"(
-        "HSCode", "ProductDescription", "ProductDescNative", "Exporter", "Importer", "CountryDestination", "CountryofOrigin", "PortofOrigin", "ShipmentMode", "Unit", "Quantity", "MONTH", "YEAR", "Country", "Import", "Export", "HsProductDescription", "CommodityDesc", "PortofDestination", "LoadingPort", "Currency", "ValueCurrency", "NotifyPartName", "UQC")
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24);`,
+        "HsCode", "ProductDesc", "Exp_Name", "Imp_Name", "CountryofDestination", "CountryofOrigin", 
+                "PortofOrigin", "Mode", "uqc", "Quantity", "Month", "Year", "Country", "PortofDestination", "LoadingPort", "Currency", 
+                "NotifyPartyName")
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17);`,
     update_sidefilter_Access:`UPDATE public."SideFilterAccess"
-	SET  "HSCode"=$2, "ProductDescription"=$3, "ProductDescNative"=$4, "Exporter"=$5, "Importer"=$6, "CountryDestination"=$7, "CountryofOrigin"=$8, "PortofOrigin"=$9, "ShipmentMode"=$10, "Unit"=$11, "Quantity"=$12, "MONTH"=$13, "YEAR"=$14, "Import"=$15, "Export"=$16, "HsProductDescription"=$17, "CommodityDesc"=$18, "PortofDestination"=$19, "LoadingPort"=$20, "Currency"=$21, "ValueCurrency"=$22, "NotifyPartName"=$23, "UQC"=$24
+	SET  "HsCode"=$2, "ProductDesc"=$3, "Exp_Name"=$4, "Imp_Name"=$5, "CountryofDestination"=$6, "CountryofOrigin"=$7, "PortofOrigin"=$8, "Mode"=$9, "uqc"=$10, "Quantity"=$11, "Month"=$12, "Year"=$13, "PortofDestination"=$14, "LoadingPort"=$15, "Currency"=$16, "NotifyPartyName"=$17
 	WHERE "Country"=$1;`,
     get_workspace: `SELECT * FROM public.workspace WHERE "UserId"=$1`,
 
