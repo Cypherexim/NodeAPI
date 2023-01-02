@@ -43,5 +43,17 @@ module.exports = {
 
     add_workspace:`INSERT INTO public.workspace(
         "UserId", "Searchbar", "Sidefilter")
-        VALUES ($1, $2, $3);`
+        VALUES ($1, $2, $3);`,
+    
+    get_download_cost:`SELECT * FROM public."Dowload_cost" WHERE "CountryCode"=$1`,
+
+    check_download_workspancename:`SELECT * FROM public.userdownloadtransaction  where "workspacename"=$1`,
+
+    add_download_workspace:`INSERT INTO public.userdownloadtransaction(
+        "countrycode", "userId", direction, "recordIds", workspacename)
+        VALUES ($1, $2, $3, $4, $5);`,
+
+    get_download_Workspace:`SELECT "Id", countrycode as CountryName, "userId", direction,cardinality("recordIds") as totalrecords
+    ,"recordIds", workspacename, datetime
+        FROM public.userdownloadtransaction WHERE "userId"=$1`
 };

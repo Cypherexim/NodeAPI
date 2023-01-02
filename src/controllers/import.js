@@ -227,3 +227,14 @@ exports.addWorkspace = async(req,res) =>{
         return res.status(500).json(error(err, res.statusCode));
     };
 }
+
+exports.getDownloadCost = async(req,res) =>{
+    try {
+        const { CountryCode } = req.query;
+            db.query(query.get_download_cost, [CountryCode], (err, result) => {
+                return res.status(200).json(success("Ok", result.rows, res.statusCode));
+            });
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}

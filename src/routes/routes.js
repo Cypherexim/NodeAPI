@@ -18,6 +18,8 @@ const chileExportController = require('../controllers/Export/chileController');
 const philipImportController = require('../controllers/Import/philipController');
 const philipExportController = require('../controllers/Export/philipController');
 const planController = require('../controllers/planController');
+const fileController = require('../controllers/fileController');
+const downloadController = require('../controllers/downloadController');
 
 // first Controller
 router.get('/getUsers', firstController.getUsers);
@@ -31,6 +33,7 @@ router.get('/getImportExportList', importController.getImportExportList);
 router.post('/addUpdateAccess', importController.addupdateAccessSideFilter);
 router.get('/getWorkSpace', importController.getWorksapce);
 router.post('/addWorkspace', importController.addWorkspace);
+router.get('/getDownloadCost',check('CountryCode').notEmpty(), importController.getDownloadCost);
 
 //Import controller
 router.get('/getIndiaImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), indiaImportController.getindiaImport);
@@ -58,5 +61,13 @@ router.get('/getContries', countryController.getCountries);
 
 // Plan Controller
 router.post('/addplan', check('PlanName').notEmpty(), planController.createPlan);
+
+//File Controller
+router.post('/addFiles',fileController.uploadFiletoS3 );
+
+// Download controller
+
+router.post('/savedownloadworkspace',downloadController.saveDownload );
+router.get('/getdownloadworkspace',downloadController.getDownloadworkspace )
 
 module.exports = router;
