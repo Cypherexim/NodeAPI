@@ -26,19 +26,19 @@ module.exports = {
 
     get_Searches_By_UserId: `SELECT "Downloads","Searches" FROM public.userplantransaction WHERE "UserId"=$1`,
 
-    get_sidefilter_Access: `SELECT * FROM public."SideFilterAccess" where "Country"=$1`,
+    get_sidefilter_Access: `SELECT * FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
 
     get_importer_list: `SELECT DISTINCT "Imp_Name", "Exp_Name" FROM public.import_$1 limit 1000`,
     get_exporter_list: `SELECT DISTINCT "Imp_Name", "Exp_Name" FROM public.export_$1 limit 1000`,
 
     insert_sidefilter_Access:`INSERT INTO public."SideFilterAccess"(
         "HsCode", "ProductDesc", "Exp_Name", "Imp_Name", "CountryofDestination", "CountryofOrigin", 
-                "PortofOrigin", "Mode", "uqc", "Quantity", "Month", "Year", "Country", "PortofDestination", "LoadingPort", "Currency", 
+                "PortofOrigin", "Mode", "uqc", "Quantity", "Month", "Year", "Country","Direction", "PortofDestination", "LoadingPort", "Currency", 
                 "NotifyPartyName")
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17);`,
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18);`,
     update_sidefilter_Access:`UPDATE public."SideFilterAccess"
 	SET  "HsCode"=$2, "ProductDesc"=$3, "Exp_Name"=$4, "Imp_Name"=$5, "CountryofDestination"=$6, "CountryofOrigin"=$7, "PortofOrigin"=$8, "Mode"=$9, "uqc"=$10, "Quantity"=$11, "Month"=$12, "Year"=$13, "PortofDestination"=$14, "LoadingPort"=$15, "Currency"=$16, "NotifyPartyName"=$17
-	WHERE "Country"=$1;`,
+	WHERE "Country"=$1 AND "Direction"=$18`,
     get_workspace: `SELECT * FROM public.workspace WHERE "UserId"=$1`,
 
     add_workspace:`INSERT INTO public.workspace(

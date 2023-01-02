@@ -150,8 +150,8 @@ exports.getHscode = async (req, res) => {
 
 exports.getSideFilterAccess = async (req, res) => {
     try {
-        const { Country } = req.query;
-        db.query(query.get_sidefilter_Access, [Country], (error, results) => {
+        const { Country, Direction } = req.query;
+        db.query(query.get_sidefilter_Access, [Country, Direction.toUpperCase()], (error, results) => {
             return res.status(200).json(success("Ok", results.rows, res.statusCode));
         })
 
@@ -182,19 +182,19 @@ exports.addupdateAccessSideFilter = async (req, res) => {
     try {
         const { HsCode, ProductDesc, Exp_Name, Imp_Name, CountryofDestination, CountryofOrigin, PortofOrigin,
              Mode, uqc, Quantity, Month, Year, Country, PortofDestination, LoadingPort, Currency, 
-             NotifyPartyName } = req.body;
+             NotifyPartyName, Direction } = req.body;
 
-        const access = await db.query(query.get_sidefilter_Access, [Country]);
+        const access = await db.query(query.get_sidefilter_Access, [Country,Direction.toUpperCase()]);
         if(access.rows.length >0){
             db.query(query.update_sidefilter_Access, [Country, HsCode, ProductDesc, Exp_Name, Imp_Name, CountryofDestination, 
                 CountryofOrigin, PortofOrigin,
                 Mode, uqc, Quantity, Month, Year, PortofDestination, LoadingPort, Currency, 
-                NotifyPartyName], (err, result) => {
+                NotifyPartyName, Direction.toUpperCase()], (err, result) => {
                 return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
             });
         } else {
             db.query(query.insert_sidefilter_Access, [HsCode, ProductDesc, Exp_Name, Imp_Name, CountryofDestination, CountryofOrigin, 
-                PortofOrigin, Mode, uqc, Quantity, Month, Year, Country, PortofDestination, LoadingPort, Currency, 
+                PortofOrigin, Mode, uqc, Quantity, Month, Year, Country,Direction.toUpperCase(), PortofDestination, LoadingPort, Currency, 
                 NotifyPartyName], (err, result) => {
                 return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
             });
