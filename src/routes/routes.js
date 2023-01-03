@@ -69,5 +69,6 @@ router.post('/addFiles',fileController.uploadFiletoS3 );
 
 router.post('/savedownloadworkspace',downloadController.saveDownload );
 router.get('/getdownloadworkspace',downloadController.getDownloadworkspace )
+router.get('/getdownloadData', downloadController.getdownloaddata);
 
 module.exports = router;

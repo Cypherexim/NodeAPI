@@ -50,10 +50,12 @@ module.exports = {
     check_download_workspancename:`SELECT * FROM public.userdownloadtransaction  where "workspacename"=$1`,
 
     add_download_workspace:`INSERT INTO public.userdownloadtransaction(
-        "countrycode", "userId", direction, "recordIds", workspacename)
-        VALUES ($1, $2, $3, $4, $5);`,
+        "countrycode", "userId", direction, "recordIds", workspacename,datetime)
+        VALUES ($1, $2, $3, $4, $5, $6);`,
 
     get_download_Workspace:`SELECT "Id", countrycode as CountryName, "userId", direction,cardinality("recordIds") as totalrecords
     ,"recordIds", workspacename, datetime
-        FROM public.userdownloadtransaction WHERE "userId"=$1`
+        FROM public.userdownloadtransaction WHERE "userId"=$1`,
+
+    update_download_count:`UPDATE public.userplantransaction SET "Downloads" = $1 WHERE "UserId"= $2`
 };
