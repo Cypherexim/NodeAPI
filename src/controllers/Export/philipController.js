@@ -20,7 +20,7 @@ exports.getphilipExport = async (req, res) => {
                 })
             } else {
                 // db.query(query.get_philip_export, [fromDate, toDate, HSCODE, HSCodeDesc, Importer_Name, EXPORTER_NAME], (error, results) => {
-                    db.query('select * from export_philip WHERE "Date" BETWEEN $1 AND $2 limit 100000',[fromDate, toDate], (error, results) => {
+                    db.query('select * from export_philip WHERE "Date" BETWEEN $1 AND $2 limit 500000',[fromDate, toDate], (error, results) => {
                     return res.status(200).json(success("Ok", results.rows, res.statusCode));
                 })
             }
