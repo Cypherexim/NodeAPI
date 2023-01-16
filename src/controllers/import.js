@@ -181,25 +181,25 @@ exports.getImportExportList = async (req, res) => {
 exports.addupdateAccessSideFilter = async (req, res) => {
     try {
         const { HsCode, ProductDesc, Exp_Name, Imp_Name, CountryofDestination, CountryofOrigin, PortofOrigin,
-             Mode, uqc, Quantity, Month, Year, Country, PortofDestination, LoadingPort, Currency, 
-             NotifyPartyName, Direction } = req.body;
+            Mode, uqc, Quantity, Month, Year, Country, PortofDestination, LoadingPort, Currency,
+            NotifyPartyName, Direction } = req.body;
 
-        const access = await db.query(query.get_sidefilter_Access, [Country,Direction.toUpperCase()]);
-        if(access.rows.length >0){
-            db.query(query.update_sidefilter_Access, [Country, HsCode, ProductDesc, Exp_Name, Imp_Name, CountryofDestination, 
+        const access = await db.query(query.get_sidefilter_Access, [Country, Direction.toUpperCase()]);
+        if (access.rows.length > 0) {
+            db.query(query.update_sidefilter_Access, [Country, HsCode, ProductDesc, Exp_Name, Imp_Name, CountryofDestination,
                 CountryofOrigin, PortofOrigin,
-                Mode, uqc, Quantity, Month, Year, PortofDestination, LoadingPort, Currency, 
+                Mode, uqc, Quantity, Month, Year, PortofDestination, LoadingPort, Currency,
                 NotifyPartyName, Direction.toUpperCase()], (err, result) => {
-                return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
-            });
+                    return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
+                });
         } else {
-            db.query(query.insert_sidefilter_Access, [HsCode, ProductDesc, Exp_Name, Imp_Name, CountryofDestination, CountryofOrigin, 
-                PortofOrigin, Mode, uqc, Quantity, Month, Year, Country,Direction.toUpperCase(), PortofDestination, LoadingPort, Currency, 
+            db.query(query.insert_sidefilter_Access, [HsCode, ProductDesc, Exp_Name, Imp_Name, CountryofDestination, CountryofOrigin,
+                PortofOrigin, Mode, uqc, Quantity, Month, Year, Country, Direction.toUpperCase(), PortofDestination, LoadingPort, Currency,
                 NotifyPartyName], (err, result) => {
-                return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
-            });
+                    return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
+                });
         }
-        
+
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
@@ -217,23 +217,34 @@ exports.getWorksapce = async (req, res) => {
     };
 }
 
-exports.addWorkspace = async(req,res) =>{
+exports.addWorkspace = async (req, res) => {
     try {
-        const { UserId, Searchbar,Sidefilter } = req.body;
-            db.query(query.add_workspace, [UserId, Searchbar, Sidefilter], (err, result) => {
-                return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
-            });
+        const { UserId, Searchbar, Sidefilter } = req.body;
+        db.query(query.add_workspace, [UserId, Searchbar, Sidefilter], (err, result) => {
+            return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
+        });
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
 }
 
-exports.getDownloadCost = async(req,res) =>{
+exports.getDownloadCost = async (req, res) => {
     try {
         const { CountryCode } = req.query;
-            db.query(query.get_download_cost, [CountryCode], (err, result) => {
-                return res.status(200).json(success("Ok", result.rows, res.statusCode));
-            });
+        db.query(query.get_download_cost, [CountryCode], (err, result) => {
+            return res.status(200).json(success("Ok", result.rows, res.statusCode));
+        });
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
+
+exports.getTotalRecord = async (req, res) => {
+    try {
+        const { countryname, direction } = req.query;
+        db.query('select COUNT(*) from ' + direction + '_' + countryname, (err, result) => {
+            return res.status(200).json(success("Ok", result.rows, res.statusCode));
+        });
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
