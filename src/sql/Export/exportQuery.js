@@ -42,11 +42,11 @@ module.exports = {
     OR ("Exp_Name" ILIKE $5) 
     LIMIT 1000`,
     get_philip_export_pagination: `select * from export_philip WHERE "Date" BETWEEN $1 AND $2 
-    AND ("HsCode" IN ($3)) OR ("ProductDesc" ILIKE $4) 
-    OR ("Imp_Name" ILIKE $5) OR ("Exp_Name" ILIKE $6) 
+    AND ("HsCode" IN ($3)) AND ("ProductDesc" ILIKE $4) 
+    AND ("Imp_Name" ILIKE $5) AND ("Exp_Name" ILIKE $6) 
     LIMIT $7 OFFSET $8`,
     get_philip_export: `select * from export_philip WHERE "Date" BETWEEN $1 AND $2 
     AND ("HsCode" IN ($3)) OR ("ProductDesc" ILIKE $4) 
     OR ("Imp_Name" ILIKE $5) OR ("Exp_Name" ILIKE $6) 
-    limit 1000`
+    LIMIT $7 OFFSET $8`
 }

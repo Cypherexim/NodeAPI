@@ -29,7 +29,16 @@ queryCondition = (params) => {
                 values.push("%" + item.value + "%");
                 break;
             }
-
+            case 'IN': {
+                conditions.push('"' + item.name + '"' + " IN ($" + (index + 1)+")");
+                values.push(item.value);
+                break;
+            }
+            case 'IN=': {
+                conditions.push('"' + item.name + '"' + " = ANY ($" + (index + 1)+"::[])");
+                values.push(item.value);
+                break;
+            }
         }
     });
 
@@ -52,7 +61,7 @@ exports.generateFilterQuery = (params, tablename) => {
         values: values
     };
 
-    let query = 'SELECT * FROM ' + tablename + ' WHERE ' + build.where;
+    let query = 'SELECT *, count(*) OVER() AS total_records FROM ' + tablename + ' WHERE ' + build.where;
     return [query, build.values]
 }
 
