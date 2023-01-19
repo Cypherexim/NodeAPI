@@ -1,12 +1,12 @@
 queryCondition = (params) => {
     var conditions = [];
-    var values = [];
+    var values = [0];
 
     params.forEach((item, index) => {
         switch (item.eq) {
             case '=': {
                 conditions.push('"' + item.name + '"' + " = $" + (index + 1));
-                values.push(item.value);
+                values.insert(item.value);
                 break;
             }
             case '!=': {
@@ -34,8 +34,8 @@ queryCondition = (params) => {
                 values.push(item.value);
                 break;
             }
-            case 'IN=': {
-                conditions.push('"' + item.name + '"' + " = ANY ($" + (index + 1)+"::[])");
+            case 'ANY': {
+                conditions.push('"' + item.name + '"' + " = ANY ($" + (index + 1)+")");
                 values.push(item.value);
                 break;
             }

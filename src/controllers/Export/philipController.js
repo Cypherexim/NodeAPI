@@ -10,14 +10,14 @@ exports.getphilipExport = async (req, res) => {
     try {
         const { fromDate, toDate, HSCODE, HSCodeDesc, Importer_Name, EXPORTER_NAME, CountryofOrigin,
             CountryofDestination, Month, Year, Currency, UQC, Quantity, UserId, IsWorkspaceSearch = false,
-            page, itemperpage } = req.query;
+            page, itemperpage } = req.body;
 
         const check = await common.deductSearches(UserId, IsWorkspaceSearch);
         if (check) {
             const query = await common.getExportData(fromDate, toDate, HSCODE, HSCodeDesc, Importer_Name, EXPORTER_NAME, CountryofOrigin,
                 CountryofDestination, Month, Year, UQC, Quantity, Currency, page, itemperpage, 'export_philip');
 
-            db.query(query[0], query[1], (error, results) => {
+            db.query(query[0], query[1].slice(1), (error, results) => {
                 if (!error) {
                     return res.status(200).json(success("Ok", results.rows, res.statusCode));
                 } else {

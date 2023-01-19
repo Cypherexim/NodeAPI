@@ -34,37 +34,37 @@ exports.getExportData = async (fromDate, toDate, HSCODE, HSCodeDesc, Importer_Na
         params.push(utility.generateParams("Date", "<=", toDate))
     }
     if (HSCODE != '' && HSCODE != undefined) {
-        params.push(utility.generateParams("HsCode", "IN", HSCODE))
+        params.push(utility.generateParams("HsCode", "ANY", HSCODE))
     }
     if (HSCodeDesc != '' && HSCodeDesc != undefined) {
-        params.push(utility.generateParams("ProductDesc", "IN", HSCodeDesc))
+        params.push(utility.generateParams("ProductDesc", "ANY", HSCodeDesc))
     }
     if (Importer_Name != '' && Importer_Name != undefined) {
-        params.push(utility.generateParams("Imp_Name", "IN", Importer_Name))
+        params.push(utility.generateParams("Imp_Name", "ANY", Importer_Name))
     }
     if (EXPORTER_NAME != '' && EXPORTER_NAME != undefined) {
-        params.push(utility.generateParams("Exp_Name", "IN", EXPORTER_NAME))
+        params.push(utility.generateParams("Exp_Name", "ANY", EXPORTER_NAME))
     }
     if (CountryofOrigin != '' && CountryofOrigin != undefined) {
-        params.push(utility.generateParams("CountryofOrigin", "IN", CountryofOrigin))
+        params.push(utility.generateParams("CountryofOrigin", "ANY", CountryofOrigin))
     }
     if (CountryofDestination != '' && CountryofDestination != undefined) {
-        params.push(utility.generateParams("CountryofDestination", "IN", CountryofDestination))
+        params.push(utility.generateParams("CountryofDestination", "ANY", CountryofDestination))
     }
     if (Month != '' && Month != undefined) {
-        params.push(utility.generateParams("Month", "IN", Month))
+        params.push(utility.generateParams("Month", "ANY", Month))
     }
     if (Year != '' && Year != undefined) {
-        params.push(utility.generateParams("Year", "IN", Year))
+        params.push(utility.generateParams("Year", "ANY", Year))
     }
     if (UQC != '' && UQC != undefined) {
-        params.push(utility.generateParams("uqc", "IN", UQC))
+        params.push(utility.generateParams("uqc", "ANY", UQC))
     }
     if (Quantity != '' && Quantity != undefined) {
         params.push(utility.generateParams("Quantity", "IN", Quantity))
     }
     if (Currency != '' && Currency != undefined) {
-        params.push(utility.generateParams("Currency", "IN", Currency))
+        params.push(utility.generateParams("Currency", "ANY", Currency))
     }
 
     const querytoexecute = utility.generateFilterQuery(params, tablename);
