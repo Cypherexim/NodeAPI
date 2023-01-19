@@ -23,8 +23,11 @@ exports.deductSearches = async (UserId, IsWorkspaceSearch) => {
     } else { return true }
 }
 
-exports.getExportData = async (fromDate, toDate, HSCODE, HSCodeDesc, Importer_Name, EXPORTER_NAME, CountryofOrigin,
-    CountryofDestination, Month, Year, UQC, Quantity, Currency, page, itemperpage, tablename) => {
+exports.getExportData = async (fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
+    CountryofDestination, Month, Year, UQC, Quantity, PortofOrigin,
+    PortofDestination,
+    Mode, LoadingPort,
+    NotifyPartyName, Currency, page, itemperpage, tablename) => {
     let params = []
 
     if (fromDate != '' && fromDate != undefined) {
@@ -34,16 +37,16 @@ exports.getExportData = async (fromDate, toDate, HSCODE, HSCodeDesc, Importer_Na
         params.push(utility.generateParams("Date", "<=", toDate))
     }
     if (HSCODE != '' && HSCODE != undefined) {
-        params.push(utility.generateParams("HsCode", "ANY", HSCODE))
+        params.push(utility.generateParams("HsCode", "ANY", HsCode))
     }
     if (HSCodeDesc != '' && HSCodeDesc != undefined) {
-        params.push(utility.generateParams("ProductDesc", "ANY", HSCodeDesc))
+        params.push(utility.generateParams("ProductDesc", "ANY", ProductDesc))
     }
     if (Importer_Name != '' && Importer_Name != undefined) {
-        params.push(utility.generateParams("Imp_Name", "ANY", Importer_Name))
+        params.push(utility.generateParams("Imp_Name", "ANY", Imp_Name))
     }
     if (EXPORTER_NAME != '' && EXPORTER_NAME != undefined) {
-        params.push(utility.generateParams("Exp_Name", "ANY", EXPORTER_NAME))
+        params.push(utility.generateParams("Exp_Name", "ANY", Exp_Name))
     }
     if (CountryofOrigin != '' && CountryofOrigin != undefined) {
         params.push(utility.generateParams("CountryofOrigin", "ANY", CountryofOrigin))
@@ -66,9 +69,24 @@ exports.getExportData = async (fromDate, toDate, HSCODE, HSCodeDesc, Importer_Na
     if (Currency != '' && Currency != undefined) {
         params.push(utility.generateParams("Currency", "ANY", Currency))
     }
+    if (PortofOrigin != '' && PortofOrigin != undefined) {
+        params.push(utility.generateParams("PortofOrigin", "ANY", PortofOrigin))
+    }
+    if (PortofDestination != '' && PortofDestination != undefined) {
+        params.push(utility.generateParams("PortofDestination", "ANY", PortofDestination))
+    }
+    if (Mode != '' && Mode != undefined) {
+        params.push(utility.generateParams("Mode", "ANY", Mode))
+    }
+    if (LoadingPort != '' && LoadingPort != undefined) {
+        params.push(utility.generateParams("LoadingPort", "ANY", LoadingPort))
+    }
+    if (NotifyPartyName != '' && NotifyPartyName != undefined) {
+        params.push(utility.generateParams("NotifyPartyName", "ANY", NotifyPartyName))
+    }
 
     const querytoexecute = utility.generateFilterQuery(params, tablename);
     const finalQuery = querytoexecute[0] + ' ORDER BY "RecordID" LIMIT ' + parseInt(itemperpage) + ' OFFSET ' + (parseInt(page) - 1) * parseInt(itemperpage)
 
-    return [finalQuery,querytoexecute[1]];
+    return [finalQuery, querytoexecute[1]];
 }
