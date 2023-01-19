@@ -3,8 +3,8 @@ const db = require('../../utils/database');
 const { validationResult } = require('express-validator');
 const { success, error, validation } = require('../../utils/response');
 const query = require('../../sql/Export/exportQuery');
-const utility = require('../../utils/utility');
 const common = require('../../utils/common');
+const config = require('../../utils/config');
 
 
 
@@ -24,7 +24,7 @@ exports.getsrilankaExport = async (req, res) => {
                 CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
                 PortofDestination,
                 Mode, LoadingPort,
-                NotifyPartyName, Currency, page, itemperpage, config.export_philip);
+                NotifyPartyName, Currency, page, itemperpage, config.export_srilanka);
 
             db.query(query[0], query[1].slice(1), (error, results) => {
                 if (!error) {
