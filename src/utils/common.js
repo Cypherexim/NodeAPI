@@ -24,7 +24,7 @@ exports.deductSearches = async (UserId, IsWorkspaceSearch) => {
 }
 
 exports.getExportData = async (fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
-    CountryofDestination, Month, Year, UQC, Quantity, PortofOrigin,
+    CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
     PortofDestination,
     Mode, LoadingPort,
     NotifyPartyName, Currency, page, itemperpage, tablename) => {
@@ -36,16 +36,16 @@ exports.getExportData = async (fromDate, toDate, HsCode, ProductDesc, Imp_Name, 
     if (toDate != '' && toDate != undefined) {
         params.push(utility.generateParams("Date", "<=", toDate))
     }
-    if (HSCODE != '' && HSCODE != undefined) {
+    if (HsCode != '' && HsCode != undefined) {
         params.push(utility.generateParams("HsCode", "ANY", HsCode))
     }
-    if (HSCodeDesc != '' && HSCodeDesc != undefined) {
+    if (ProductDesc != '' && ProductDesc != undefined) {
         params.push(utility.generateParams("ProductDesc", "ANY", ProductDesc))
     }
-    if (Importer_Name != '' && Importer_Name != undefined) {
+    if (Imp_Name != '' && Imp_Name != undefined) {
         params.push(utility.generateParams("Imp_Name", "ANY", Imp_Name))
     }
-    if (EXPORTER_NAME != '' && EXPORTER_NAME != undefined) {
+    if (Exp_Name != '' && Exp_Name != undefined) {
         params.push(utility.generateParams("Exp_Name", "ANY", Exp_Name))
     }
     if (CountryofOrigin != '' && CountryofOrigin != undefined) {
@@ -60,8 +60,8 @@ exports.getExportData = async (fromDate, toDate, HsCode, ProductDesc, Imp_Name, 
     if (Year != '' && Year != undefined) {
         params.push(utility.generateParams("Year", "ANY", Year))
     }
-    if (UQC != '' && UQC != undefined) {
-        params.push(utility.generateParams("uqc", "ANY", UQC))
+    if (uqc != '' && uqc != undefined) {
+        params.push(utility.generateParams("uqc", "ANY", uqc))
     }
     if (Quantity != '' && Quantity != undefined) {
         params.push(utility.generateParams("Quantity", "IN", Quantity))

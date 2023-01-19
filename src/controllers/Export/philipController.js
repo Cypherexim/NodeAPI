@@ -9,7 +9,7 @@ const common = require('../../utils/common');
 exports.getphilipExport = async (req, res) => {
     try {
         const { fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
-            CountryofDestination, Month, Year, Currency, UQC, Quantity, PortofOrigin,
+            CountryofDestination, Month, Year, Currency, uqc, Quantity, PortofOrigin,
             PortofDestination,
             Mode, LoadingPort,
             NotifyPartyName, UserId, IsWorkspaceSearch = false,
@@ -18,7 +18,7 @@ exports.getphilipExport = async (req, res) => {
         const check = await common.deductSearches(UserId, IsWorkspaceSearch);
         if (check) {
             const query = await common.getExportData(fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
-                CountryofDestination, Month, Year, UQC, Quantity, PortofOrigin,
+                CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
                 PortofDestination,
                 Mode, LoadingPort,
                 NotifyPartyName, Currency, page, itemperpage, 'export_philip');
