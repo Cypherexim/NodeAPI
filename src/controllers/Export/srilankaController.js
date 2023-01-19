@@ -10,25 +10,34 @@ const common = require('../../utils/common');
 
 // to get import with search data
 exports.getsrilankaExport = async (req, res) => {
-    //db.connect();
     try {
-        const { fromDate, toDate, HSCODE, HSCodeDesc, Importer_Name, EXPORTER_NAME, UserId, IsWorkspaceSearch = false, page, itemperpage } = req.query;
+        const { fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
+            CountryofDestination, Month, Year, Currency, uqc, Quantity, PortofOrigin,
+            PortofDestination,
+            Mode, LoadingPort,
+            NotifyPartyName, UserId, IsWorkspaceSearch = false,
+            page, itemperpage } = req.body;
+
         const check = await common.deductSearches(UserId, IsWorkspaceSearch);
         if (check) {
-            if (page != null && itemperpage != null) {
-                 db.query(query.get_srilanka_export_pagination, [fromDate, toDate, HSCODE, HSCodeDesc, Importer_Name, EXPORTER_NAME, parseInt(itemperpage), (parseInt(page) - 1) * parseInt(itemperpage)], (error, results) => {
+            const query = await common.getExportData(fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
+                CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
+                PortofDestination,
+                Mode, LoadingPort,
+                NotifyPartyName, Currency, page, itemperpage, config.export_philip);
+
+            db.query(query[0], query[1].slice(1), (error, results) => {
+                if (!error) {
                     return res.status(200).json(success("Ok", results.rows, res.statusCode));
-                })
-            } else {
-                 db.query(query.get_srilanka_export, [fromDate, toDate, HSCODE, HSCodeDesc, Importer_Name, EXPORTER_NAME], (error, results) => {
-                    return res.status(200).json(success("Ok", results.rows, res.statusCode));
-                })
-            }
+                } else {
+                    return res.status(500).json(error("Internal server error", res.statusCode));
+                }
+            })
         } else {
             return res.status(200).json(error("You don't have enough search credit please contact admin to recharge !"));
         }
+
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
-    //db.end;
 }

@@ -2,33 +2,41 @@ const { response } = require('express');
 const db = require('../../utils/database');
 const { validationResult } = require('express-validator');
 const { success, error, validation } = require('../../utils/response');
-const query = require('../../sql/Import/importQuery');
-const utility = require('../../utils/utility');
+const query = require('../../sql/Export/exportQuery');
 const common = require('../../utils/common');
+const config = require('../../utils/config');
 
 
 // to get import with search data
 exports.getbangladeshImport = async (req, res) => {
-    //db.connect();
     try {
-        const { fromDate, toDate, HSCODE, HSCodeDesc, Importer_Name, EXPORTER_NAME, UserId, IsWorkspaceSearch = false, page, itemperpage } = req.query;
+        const { fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
+            CountryofDestination, Month, Year, Currency, uqc, Quantity, PortofOrigin,
+            PortofDestination,
+            Mode, LoadingPort,
+            NotifyPartyName, UserId, IsWorkspaceSearch = false,
+            page, itemperpage } = req.body;
 
         const check = await common.deductSearches(UserId, IsWorkspaceSearch);
         if (check) {
-            if (page != null && itemperpage != null) {
-                await db.query(query.get_bangladesh_import_pagination, [fromDate, toDate, HSCODE, HSCodeDesc, Importer_Name, EXPORTER_NAME, parseInt(itemperpage), (parseInt(page) - 1) * parseInt(itemperpage)], (error, results) => {
+            const query = await common.getExportData(fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
+                CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
+                PortofDestination,
+                Mode, LoadingPort,
+                NotifyPartyName, Currency, page, itemperpage, config.import_bangladesh);
+
+            db.query(query[0], query[1].slice(1), (error, results) => {
+                if (!error) {
                     return res.status(200).json(success("Ok", results.rows, res.statusCode));
-                })
-            } else {
-                await db.query(query.get_bangladesh_import, [fromDate, toDate, HSCODE, HSCodeDesc, Importer_Name, EXPORTER_NAME], (error, results) => {
-                    return res.status(200).json(success("Ok", results.rows, res.statusCode));
-                })
-            }
+                } else {
+                    return res.status(500).json(error("Internal server error", res.statusCode));
+                }
+            })
         } else {
             return res.status(200).json(error("You don't have enough search credit please contact admin to recharge !"));
         }
+
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
-    //db.end;
 }

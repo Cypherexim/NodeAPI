@@ -4,6 +4,7 @@ const { validationResult } = require('express-validator');
 const { success, error, validation } = require('../../utils/response');
 const query = require('../../sql/Export/exportQuery');
 const common = require('../../utils/common');
+const config = require('../../utils/config');
 
 // to get import with search data
 exports.getphilipExport = async (req, res) => {
@@ -21,7 +22,7 @@ exports.getphilipExport = async (req, res) => {
                 CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
                 PortofDestination,
                 Mode, LoadingPort,
-                NotifyPartyName, Currency, page, itemperpage, 'export_philip');
+                NotifyPartyName, Currency, page, itemperpage, config.export_philip);
 
             db.query(query[0], query[1].slice(1), (error, results) => {
                 if (!error) {
