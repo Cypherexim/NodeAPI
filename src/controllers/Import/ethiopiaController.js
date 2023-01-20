@@ -16,18 +16,26 @@ exports.getethiopiaImport = async (req, res) => {
             Mode, LoadingPort,
             NotifyPartyName, UserId, IsWorkspaceSearch = false,
             page, itemperpage } = req.body;
-
+        var result = {counters:{}, data:{}};
         const check = await common.deductSearches(UserId, IsWorkspaceSearch);
         if (check) {
             const query = await common.getExportData(fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
                 CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
                 PortofDestination,
                 Mode, LoadingPort,
-                NotifyPartyName, Currency, page, itemperpage, config.import_ethiopia);
-
+                NotifyPartyName, Currency, page, itemperpage, config.select_Query_for_totalrecords, config.import_ethiopia, true);
+            const counterquery = await common.getExportData(fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
+                CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
+                PortofDestination,
+                Mode, LoadingPort,
+                NotifyPartyName, Currency, page, itemperpage, config.select_Query_for_totalCounts, config.import_ethiopia, false);
+            db.query(counterquery[0], counterquery[1].slice(1), (error, results) => {
+                result.counters = results.rows[0];
+            })
             db.query(query[0], query[1].slice(1), (error, results) => {
+                result.data = results.rows;
                 if (!error) {
-                    return res.status(200).json(success("Ok", results.rows, res.statusCode));
+                    return res.status(200).json(success("Ok", result, res.statusCode));
                 } else {
                     return res.status(500).json(error("Internal server error", res.statusCode));
                 }

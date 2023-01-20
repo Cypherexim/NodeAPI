@@ -27,7 +27,7 @@ exports.getExportData = async (fromDate, toDate, HsCode, ProductDesc, Imp_Name, 
     CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
     PortofDestination,
     Mode, LoadingPort,
-    NotifyPartyName, Currency, page, itemperpage, tablename) => {
+    NotifyPartyName, Currency, page, itemperpage,selectQuery, tablename, isOrderBy) => {
     let params = []
 
     if (fromDate != '' && fromDate != undefined) {
@@ -85,8 +85,8 @@ exports.getExportData = async (fromDate, toDate, HsCode, ProductDesc, Imp_Name, 
         params.push(utility.generateParams("NotifyPartyName", "ANY", NotifyPartyName))
     }
 
-    const querytoexecute = utility.generateFilterQuery(params, tablename);
-    const finalQuery = querytoexecute[0] + ' ORDER BY "RecordID" LIMIT ' + parseInt(itemperpage) + ' OFFSET ' + (parseInt(page) - 1) * parseInt(itemperpage)
+    const querytoexecute = utility.generateFilterQuery(params,selectQuery, tablename);
+    const finalQuery = querytoexecute[0]  + (isOrderBy? ' ORDER BY "RecordID" LIMIT ' + parseInt(itemperpage) + ' OFFSET ' + (parseInt(page) - 1) * parseInt(itemperpage) :'')
 
     return [finalQuery, querytoexecute[1]];
 }

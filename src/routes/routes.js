@@ -71,5 +71,4 @@ router.post('/addFiles',fileController.uploadFiletoS3 );
 router.post('/savedownloadworkspace',downloadController.saveDownload );
 router.get('/getdownloadworkspace',downloadController.getDownloadworkspace )
 router.post('/getdownloadData', downloadController.getdownloaddata);
-router.get('/getindiaimportbypagging', indiaImportController.getindiaImportpaging)
 module.exports = router;

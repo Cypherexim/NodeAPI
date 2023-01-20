@@ -1,8 +1,6 @@
 module.exports = {
-    DefaultPlan: 'Start-Up'
-}
-
-module.exports = {
+    DefaultPlan: 'Start-Up', // Default plan name
+    /* Table names */
     Plan: "plan",
     Cypher: "Cypher",
     HsCode: "HSCodes",
@@ -24,5 +22,9 @@ module.exports = {
     Dowload_cost: "Dowload_cost",
     SideFilterAccess: "SideFilterAccess",
     userdownloadtransaction: "userdownloadtransaction",
-    import_philip: "import_philip"
+    import_philip: "import_philip",
+
+    /* Select Queries */
+    select_Query_for_totalrecords:'*, count(*) OVER() AS total_records FROM',
+    select_Query_for_totalCounts:'COUNT(distinct  "Exp_Name") as TotalExpName, COUNT(distinct  "Imp_Name") as TotalImpName, COUNT(distinct  "HsCode") as TotalHsCode FROM'
 }

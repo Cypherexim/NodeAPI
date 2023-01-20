@@ -30,12 +30,12 @@ queryCondition = (params) => {
                 break;
             }
             case 'IN': {
-                conditions.push('"' + item.name + '"' + " IN ($" + (index + 1)+")");
+                conditions.push('"' + item.name + '"' + " IN ($" + (index + 1) + ")");
                 values.push(item.value);
                 break;
             }
             case 'ANY': {
-                conditions.push('"' + item.name + '"' + " = ANY ($" + (index + 1)+")");
+                conditions.push('"' + item.name + '"' + " = ANY ($" + (index + 1) + ")");
                 values.push(item.value);
                 break;
             }
@@ -45,7 +45,7 @@ queryCondition = (params) => {
     return [conditions, values]
 }
 
-exports.generateFilterQuery = (params, tablename) => {
+exports.generateFilterQuery = (params, selectQuery, tablename) => {
     let conditions, values = []
     let conditionsStr;
 
@@ -61,7 +61,7 @@ exports.generateFilterQuery = (params, tablename) => {
         values: values
     };
 
-    let query = 'SELECT *, count(*) OVER() AS total_records FROM ' + tablename + ' WHERE ' + build.where;
+    let query = 'SELECT ' + selectQuery + ' ' + tablename + ' WHERE ' + build.where;
     return [query, build.values]
 }
 
