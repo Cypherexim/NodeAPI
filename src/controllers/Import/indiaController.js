@@ -29,7 +29,7 @@ exports.getindiaImport = async (req, res) => {
                 PortofDestination,
                 Mode, LoadingPort,
                 NotifyPartyName, Currency, page, itemperpage, config.select_Query_for_totalCounts, config.import_india, false);
-            db.query(counterquery[0], counterquery[1].slice(1), (error, results) => {
+           await db.query(counterquery[0], counterquery[1].slice(1), (error, results) => {
                 result.counters = results.rows[0];
             })
             db.query(query[0], query[1].slice(1), (error, results) => {
