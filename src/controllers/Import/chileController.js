@@ -29,17 +29,18 @@ exports.getchileImport = async (req, res) => {
                 PortofDestination,
                 Mode, LoadingPort,
                 NotifyPartyName, Currency, page, itemperpage, config.select_Query_for_totalCounts, config.import_chile, false);
-            db.query(counterquery[0], counterquery[1].slice(1), (error, results) => {
-                result.counters = results.rows[0];
-            })
-            db.query(query[0], query[1].slice(1), (error, results) => {
-                result.data = results.rows;
-                if (!error) {
-                    return res.status(200).json(success("Ok", result, res.statusCode));
-                } else {
-                    return res.status(500).json(error("Internal server error", res.statusCode));
-                }
-            })
+                db.query(query[0], query[1].slice(1), (error, results) => {
+                    result.data = results.rows;
+                    db.query(counterquery[0], counterquery[1].slice(1), (error, results) => {
+                        result.counters = results.rows[0];
+                        if (!error) {
+                            return res.status(200).json(success("Ok", result, res.statusCode));
+                        } else {
+                            return res.status(500).json(error("Internal server error", res.statusCode));
+                        }
+                    })
+                    
+                })
         } else {
             return res.status(200).json(error("You don't have enough search credit please contact admin to recharge !"));
         }
