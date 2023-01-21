@@ -35,6 +35,7 @@ router.get('/getWorkSpace', importController.getWorksapce);
 router.post('/addWorkspace', importController.addWorkspace);
 router.get('/getDownloadCost',check('CountryCode').notEmpty(), importController.getDownloadCost);
 router.get('/gettotalrecords',importController.getTotalRecord);
+router.get('/getSideFilterData', importController.getListofSidefilterdata);
 
 //Import controller
 router.post('/getIndiaImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), indiaImportController.getindiaImport);
