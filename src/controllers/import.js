@@ -260,7 +260,7 @@ exports.getListofSidefilterdata = async (req, res) => {
             NotifyPartyName, CountryCode, CountryName, Direction } = req.body;
         const access = await db.query(query.get_sidefilter_Access, [CountryCode, Direction.toUpperCase()]);
         var selectQuery = 'Distinct ';
-        var output = null;
+        var output = {};
         if (access.rows.length > 0) {
             const keys = Object.keys(access.rows[0]);
             const obj = access.rows[0];
@@ -274,18 +274,18 @@ exports.getListofSidefilterdata = async (req, res) => {
                 CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
                 PortofDestination,
                 Mode, LoadingPort,
-                NotifyPartyName, Currency, 0, 0, selectQuery.replace(/,\s*$/, "")+' FROM ', Direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
-            
+                NotifyPartyName, Currency, 0, 0, selectQuery.replace(/,\s*$/, "") + ' FROM ', Direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
+
             db.query(query[0], query[1].slice(1), (error, results) => {
                 if (!error) {
-                //     for (let i = 0; i < keys.length; i++) {
-                //         if (obj[keys[i]] == true) {
-                //             output+'.'+keys[i] = extractValue(results.rows,keys[i]);
-                //         }
-                //     }
-                //    //output.HSCODE = extractValue(results.rows,'HsCode');
-                //    console.log(output);
-                    return res.status(200).json(success("Ok", results.rows, res.statusCode));
+                        for (let i = 0; i < keys.length; i++) {
+                            if (obj[keys[i]] == true) {
+                                output[keys[i]] =[...new Set(extractValue(results.rows,keys[i]))];
+                            }
+                        }
+                      // output.HSCODE = extractValue(results.rows,'HsCode');
+                      // console.log(output);
+                    return res.status(200).json(success("Ok", output, res.statusCode));
                 } else {
                     return res.status(500).json(error("Internal server error", res.statusCode));
                 }
