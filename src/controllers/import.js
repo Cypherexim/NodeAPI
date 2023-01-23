@@ -295,12 +295,19 @@ exports.getListofSidefilterdata = async (req, res) => {
         return res.status(500).json(error(err, res.statusCode));
     };
 }
+exports.getProductDesc = async (req, res) => {
+    try {
+        const { product } = req.query;
+        db.query('SELECT * FROM public."Products" WHERE "Product" LIKE $1', [''+ product + '%'], (err, result) => {
+            return res.status(200).json(success("Ok", result.rows, res.statusCode));
+        });
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
 
 function extractValue(arr, prop) {
-
     // extract value from property
     let extractedValue = arr.map(item => item[prop]);
-
     return extractedValue;
-
 }
