@@ -164,12 +164,15 @@ exports.getSideFilterAccess = async (req, res) => {
 exports.getImportExportList = async (req, res) => {
     try {
         const { Country, type } = req.query;
-        if (type.toLowerCase() == 'import') {
-            db.query('SELECT DISTINCT "Imp_Name", "Exp_Name" FROM public.import_' + Country.toLowerCase() + ' limit 1000', (error, results) => {
-                return res.status(200).json(success("Ok", results.rows, res.statusCode));
+        const fieldList = ["Imp_Name", "Exp_Name"];
+        const availablefield = await db.query('SELECT column_name FROM information_schema.columns WHERE table_name = $1 and column_name = ANY($2)', [type.toLowerCase() + '_' + Country.toLowerCase(), fieldList]);
+        if (availablefield.rows.length > 0) {
+            var fields = [];
+            availablefield.rows.forEach(x=>{
+                fields.push('"'+x.column_name.toString()+'"');
             })
-        } else {
-            db.query('SELECT DISTINCT "Imp_Name", "Exp_Name" FROM public.export_' + Country.toLowerCase() + ' limit 1000', (error, results) => {
+            const query = 'SELECT DISTINCT ' + fields.join(",") + ' FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' limit 1000';
+            db.query(query, (error, results) => {
                 return res.status(200).json(success("Ok", results.rows, res.statusCode));
             })
         }
@@ -278,13 +281,13 @@ exports.getListofSidefilterdata = async (req, res) => {
 
             db.query(query[0], query[1].slice(1), (error, results) => {
                 if (!error) {
-                        for (let i = 0; i < keys.length; i++) {
-                            if (obj[keys[i]] == true) {
-                                output[keys[i]] =[...new Set(extractValue(results.rows,keys[i]))];
-                            }
+                    for (let i = 0; i < keys.length; i++) {
+                        if (obj[keys[i]] == true) {
+                            output[keys[i]] = [...new Set(extractValue(results.rows, keys[i]))];
                         }
-                      // output.HSCODE = extractValue(results.rows,'HsCode');
-                      // console.log(output);
+                    }
+                    // output.HSCODE = extractValue(results.rows,'HsCode');
+                    // console.log(output);
                     return res.status(200).json(success("Ok", output, res.statusCode));
                 } else {
                     return res.status(500).json(error("Internal server error", res.statusCode));
@@ -298,7 +301,7 @@ exports.getListofSidefilterdata = async (req, res) => {
 exports.getProductDesc = async (req, res) => {
     try {
         const { product } = req.query;
-        db.query('SELECT * FROM public."Products" WHERE "Product" LIKE $1', [''+ product + '%'], (err, result) => {
+        db.query('SELECT * FROM public."Products" WHERE "Product" LIKE $1', ['' + product + '%'], (err, result) => {
             return res.status(200).json(success("Ok", result.rows, res.statusCode));
         });
     } catch (err) {

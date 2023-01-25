@@ -37,7 +37,7 @@ exports.getExportData = async (fromDate, toDate, HsCode, ProductDesc, Imp_Name, 
         params.push(utility.generateParams("Date", "<=", toDate))
     }
     if (HsCode != '' && HsCode != undefined) {
-        params.push(utility.generateParams("HsCode", "ANY", HsCode))
+        params.push(utility.generateParams("HsCode", "SIMILAR TO", "("+HsCode.join("|")+")%" )) //'(300|500)%'     '(300|500)%'
     }
     if (ProductDesc != '' && ProductDesc != undefined) {
         params.push(utility.generateParams("ProductDesc", "ANY", ProductDesc))
@@ -64,7 +64,7 @@ exports.getExportData = async (fromDate, toDate, HsCode, ProductDesc, Imp_Name, 
         params.push(utility.generateParams("uqc", "ANY", uqc))
     }
     if (Quantity != '' && Quantity != undefined) {
-        params.push(utility.generateParams("Quantity", "IN", Quantity))
+        params.push(utility.generateParams("Quantity", "<=", Quantity))
     }
     if (Currency != '' && Currency != undefined) {
         params.push(utility.generateParams("Currency", "ANY", Currency))

@@ -39,6 +39,11 @@ queryCondition = (params) => {
                 values.push(item.value);
                 break;
             }
+            case 'SIMILAR TO':{
+                conditions.push('"' + item.name + '"' + " SIMILAR TO ($" + (index + 1) + ")");
+                values.push(item.value);
+                break;
+            }
         }
     });
 

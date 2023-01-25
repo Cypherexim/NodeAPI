@@ -58,6 +58,4 @@ module.exports = {
         FROM public.userdownloadtransaction WHERE "userId"=$1`,
 
     update_download_count:`UPDATE public.userplantransaction SET "Downloads" = $1 WHERE "UserId"= $2`,
-
-    product_desc_list:`SELECT * FROM public."Products" WHERE "Product" ILIKE '$1%'`
 };
