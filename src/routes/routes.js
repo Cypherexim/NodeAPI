@@ -64,6 +64,7 @@ router.get('/getContries', countryController.getCountries);
 
 // Plan Controller
 router.post('/addplan', check('PlanName').notEmpty(), planController.createPlan);
+router.get('/getallplans',planController.getPlanList);
 
 //File Controller
 router.post('/addFiles',fileController.uploadFiletoS3 );
