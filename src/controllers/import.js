@@ -171,7 +171,7 @@ exports.getImportExportList = async (req, res) => {
             availablefield.rows.forEach(x=>{
                 fields.push('"'+x.column_name.toString()+'"');
             })
-            const query = 'SELECT DISTINCT ' + fields.join(",") + ' FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' limit 1000';
+            const query = 'SELECT DISTINCT ' + fields.join(",") + ' FROM ' + type.toLowerCase() + '_' + Country.toLowerCase();
             db.query(query, (error, results) => {
                 return res.status(200).json(success("Ok", results.rows, res.statusCode));
             })
