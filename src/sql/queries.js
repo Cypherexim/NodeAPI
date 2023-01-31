@@ -64,4 +64,8 @@ module.exports = {
         FROM public.userdownloadtransaction WHERE "userId"=$1`,
 
     update_download_count:`UPDATE public.userplantransaction SET "Downloads" = $1 WHERE "UserId"= $2`,
+
+    get_all_roles :`SELECT * FROM public."Role"`,
+
+    getRoleswithAccess:`SELECT * FROM "Role" inner join "RoleAccess" on "Role"."RoleId" = "RoleAccess"."RoleId" WHERE "Role"."RoleId" =$1`
 };

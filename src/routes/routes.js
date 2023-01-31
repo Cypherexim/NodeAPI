@@ -20,6 +20,7 @@ const philipExportController = require('../controllers/Export/philipController')
 const planController = require('../controllers/planController');
 const fileController = require('../controllers/fileController');
 const downloadController = require('../controllers/downloadController');
+const rolesController = require('../controllers/rolesController');
 
 // first Controller
 router.get('/getUsers', firstController.getUsers);
@@ -68,6 +69,10 @@ router.get('/getallplans',planController.getPlanList);
 
 //File Controller
 router.post('/addFiles',fileController.uploadFiletoS3 );
+
+// Roles Controller
+router.get('/getAllRoles', rolesController.getRoleList);
+router.get('/getRolesAccessById', rolesController.getAccessByRoleId);
 
 // Download controller
 
