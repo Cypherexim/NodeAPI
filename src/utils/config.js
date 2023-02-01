@@ -1,5 +1,6 @@
 module.exports = {
     DefaultPlan: 'Start-Up', // Default plan name
+    DefaultRole: 1,
     /* Table names */
     Plan: "plan",
     Cypher: "Cypher",

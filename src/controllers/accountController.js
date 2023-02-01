@@ -7,7 +7,7 @@ const bycrypt = require('bcryptjs');
 const config = require('../utils/config');
 
 
-exports.createtUser = async (req, res) => {
+exports.createUser = async (req, res) => {
     ////db.connect();
     const { FullName, CompanyName, MobileNumber, Email, Password, country, ParentUserId } = req.body;
     const errors = validationResult(req);
@@ -25,7 +25,7 @@ exports.createtUser = async (req, res) => {
         return res.status(422).json(error("Email already registered !", res.statusCode));
     } else {
         bycrypt.hash(Password, 12).then(hashPassword => {
-            db.query(query.add_user, [FullName, CompanyName, MobileNumber, Email, hashPassword, country, ParentUserId], async (err, result) => {
+            db.query(query.add_user, [FullName, CompanyName, MobileNumber, Email, hashPassword, country, ParentUserId, '', '', '', '', config.DefaultRole], async (err, result) => {
                 if (!err) {
                     const planDetails = await db.query(query.get_plan_by_name, [config.DefaultPlan]);
                     if (planDetails != null) {
@@ -81,4 +81,30 @@ exports.getAccountDetails = async (req, res) => {
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
+}
+
+exports.addUserByAdmin = async (req, res) => {
+    const { FullName, CompanyName, MobileNumber, Email, Password, country, ParentUserId, Designation = null, Location = null, GST = null, IEC = null, RoleId
+        , PlanId, Downloads, Searches, StartDate, EndDate, Validity, DataAccess, CountryAccess, CommodityAccess,
+        TarrifCodeAccess, Workspace, WSSLimit, Downloadfacility, Favoriteshipment, Whatstrending, Companyprofile, Addonfacility, Analysis, User } = req.body;
+    
+    const date = new Date();
+   
+    const user = await db.query(query.get_user_by_email, [Email]);
+    if (user.rows.length > 0) {
+        return res.status(422).json(error("Email already registered !", res.statusCode));
+    } else {
+        bycrypt.hash(Password, 12).then(hashPassword => {
+            db.query(query.add_user, [FullName, CompanyName, MobileNumber, Email, hashPassword, country, ParentUserId, Designation, Location, GST, IEC, RoleId], async (err, result) => {
+                if (!err) {
+                    db.query(query.add_Plan_Trasaction_by_admin, [result.rows[0].UserId, PlanId, Downloads, Searches, StartDate, EndDate,
+                        Validity, DataAccess, CountryAccess, CommodityAccess, TarrifCodeAccess, Workspace, WSSLimit, Downloadfacility,
+                        Favoriteshipment, Whatstrending, Companyprofile, Addonfacility, Analysis, User], (err, result) => {
+                            return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
+                        });
+                }
+                else { return res.status(500).json(error(err.message, res.statusCode)); }
+            })
+        });
+    }
 }
