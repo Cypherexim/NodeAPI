@@ -13,7 +13,7 @@ module.exports = {
     add_user: `INSERT INTO public."Cypher"(
         "FullName", "CompanyName", "MobileNumber", "Email", "Password", "CountryCode", "ParentUserId", "Designation", "Location", "GST", "IEC","RoleId")
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING public."Cypher"."UserId";;`,
-    get_user_by_email: `SELECT * FROM public."Cypher" inner join public.userplantransaction on "Cypher"."UserId" = "userplantransaction"."UserId" where "Email"=$1`,
+    get_user_by_email: `SELECT * FROM public."Cypher" inner join public.userplantransaction on "Cypher"."UserId" = "userplantransaction"."UserId" inner join "Role" on "Cypher"."RoleId" = "Role"."RoleId" where "Email"=$1`,
     get_hscode_import: 'SELECT * FROM public.HSCodes',
     get_hscode_export: 'SELECT "Hscode" FROM public."HSCodes"',
     get_hscode_export_digit: 'SELECT "Hscode" FROM public."HSCodes" where length("Hscode") =$1',
