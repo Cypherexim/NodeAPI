@@ -60,6 +60,7 @@ router.post('/signup', check('FullName').notEmpty(), check('CompanyName').notEmp
 router.post('/signin', check('Password').notEmpty(), check('Email').isEmail(), accountController.postLogin);
 router.get('/getAccountDetails',accountController.getAccountDetails );
 router.post('/addUserAdmin', accountController.addUserByAdmin);
+router.get('/getAllUserList',accountController.getAllUserlist );
 
 // Country Controller
 router.get('/getContries', countryController.getCountries);

@@ -73,5 +73,11 @@ module.exports = {
 
     get_all_roles: `SELECT * FROM public."Role"`,
 
-    getRoleswithAccess: `SELECT * FROM "Role" inner join "RoleAccess" on "Role"."RoleId" = "RoleAccess"."RoleId" WHERE "Role"."RoleId" =$1`
+    getRoleswithAccess: `SELECT * FROM "Role" inner join "RoleAccess" on "Role"."RoleId" = "RoleAccess"."RoleId" WHERE "Role"."RoleId" =$1`,
+
+    get_userlist:`SELECT * FROM public."Cypher" 
+    inner join "Role" on "Cypher"."RoleId" = "Role"."RoleId"
+    inner join public.userplantransaction on "Cypher"."UserId" = "userplantransaction"."UserId"
+    inner join public.plan  on "plan"."PlanId" = "userplantransaction"."PlanId"
+    ORDER BY "Cypher"."UserId" DESC`
 };
