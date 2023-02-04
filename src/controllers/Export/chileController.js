@@ -29,7 +29,7 @@ exports.gethchileExport = async (req, res) => {
                 CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
                 PortofDestination,
                 Mode, LoadingPort,
-                NotifyPartyName, Currency, page, itemperpage, config.select_Query_for_totalCounts, config.export_chile, false);
+                NotifyPartyName, Currency, page, itemperpage,await common.getavailableFieldlist(config.export_chile), config.export_chile, false);
                 db.query(query[0], query[1].slice(1), (error, results) => {
                     result.data = results.rows;
                     db.query(counterquery[0], counterquery[1].slice(1), (error, results) => {

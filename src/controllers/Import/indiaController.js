@@ -28,7 +28,7 @@ exports.getindiaImport = async (req, res) => {
                 CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
                 PortofDestination,
                 Mode, LoadingPort,
-                NotifyPartyName, Currency, page, itemperpage, config.select_Query_for_totalCounts, config.import_india, false);
+                NotifyPartyName, Currency, page, itemperpage, await common.getavailableFieldlist(config.import_india), config.import_india, false);
             
             db.query(query[0], query[1].slice(1), (error, results) => {
                 result.data = results.rows;

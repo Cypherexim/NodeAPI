@@ -27,7 +27,7 @@ exports.getExportData = async (fromDate, toDate, HsCode, ProductDesc, Imp_Name, 
     CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
     PortofDestination,
     Mode, LoadingPort,
-    NotifyPartyName, Currency, page, itemperpage,selectQuery, tablename, isOrderBy) => {
+    NotifyPartyName, Currency, page, itemperpage, selectQuery, tablename, isOrderBy) => {
     let params = []
 
     if (fromDate != '' && fromDate != undefined) {
@@ -37,7 +37,7 @@ exports.getExportData = async (fromDate, toDate, HsCode, ProductDesc, Imp_Name, 
         params.push(utility.generateParams("Date", "<=", toDate))
     }
     if (HsCode != '' && HsCode != undefined) {
-        params.push(utility.generateParams("HsCode", "SIMILAR TO", "("+HsCode.join("|")+")%" )) //'(300|500)%'     '(300|500)%'
+        params.push(utility.generateParams("HsCode", "SIMILAR TO", "(" + HsCode.join("|") + ")%")) //'(300|500)%'     '(300|500)%'
     }
     if (ProductDesc != '' && ProductDesc != undefined) {
         params.push(utility.generateParams("ProductDesc", "ANY", ProductDesc))
@@ -85,8 +85,27 @@ exports.getExportData = async (fromDate, toDate, HsCode, ProductDesc, Imp_Name, 
         params.push(utility.generateParams("NotifyPartyName", "ANY", NotifyPartyName))
     }
 
-    const querytoexecute = utility.generateFilterQuery(params,selectQuery, tablename);
-    const finalQuery = querytoexecute[0]  + (isOrderBy? ' ORDER BY "RecordID" LIMIT ' + parseInt(itemperpage) + ' OFFSET ' + (parseInt(page) - 1) * parseInt(itemperpage) :'')
+    const querytoexecute = utility.generateFilterQuery(params, selectQuery, tablename);
+    const finalQuery = querytoexecute[0] + (isOrderBy ? ' ORDER BY "RecordID" LIMIT ' + parseInt(itemperpage) + ' OFFSET ' + (parseInt(page) - 1) * parseInt(itemperpage) : '')
 
     return [finalQuery, querytoexecute[1]];
+}
+
+exports.getavailableFieldlist = async (tablename) => {
+    const fieldList = ["Imp_Name", "Exp_Name"];
+    const availablefield = await db.query('SELECT column_name FROM information_schema.columns WHERE table_name = $1 and column_name = ANY($2)', [tablename, fieldList]);
+    if (availablefield.rows.length > 0) {
+        var fields = [];
+        var querystring;
+        availablefield.rows.forEach(x => {
+            fields.push('"' + x.column_name.toString() + '"');
+        })
+        if (fields.length == 1) {
+            querystring = 'COUNT(distinct  ' + fields[0] + ') as '+fields[0].replace(/"|'/g, '')+'Count';
+        } else {
+            querystring = 'COUNT(distinct  ' + fields[0] + ') as '+fields[0].replace(/"|'/g, '')+'Count , COUNT(distinct  ' + fields[1] + ') as '+fields[1].replace(/"|'/g, '')+'Count';
+        }
+        const query = querystring + ' , COUNT(distinct  "HsCode") as TotalHsCode FROM';
+        return [query];
+    }
 }
