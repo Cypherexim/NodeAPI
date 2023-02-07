@@ -22,7 +22,6 @@ exports.createPlan = async (req, res) => {
 
 
     if (PlanId != undefined && PlanId != null) {
-        const plan = await db.query(query.get_plan_by_name, [PlanName]);
 
         db.query(query.update_plan, [PlanName, Amount, Validity, DataAccess, Downloads, Searches, CountryAccess, CommodityAccess, TarrifCodeAccess,
             Workspace, WSSLimit, Downloadfacility, Favoriteshipment, Whatstrending, Companyprofile, Contactdetails,
@@ -35,6 +34,8 @@ exports.createPlan = async (req, res) => {
             })
 
     } else {
+        const plan = await db.query(query.get_plan_by_name, [PlanName]);
+
         if (plan.rows.length > 0) {
             return res.status(422).json(error("Plan name already in the system !", res.statusCode));
         }

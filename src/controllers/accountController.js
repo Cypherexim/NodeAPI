@@ -88,8 +88,16 @@ exports.addUserByAdmin = async (req, res) => {
         , PlanId, Downloads, Searches, StartDate, EndDate, Validity, DataAccess, CountryAccess, CommodityAccess,
         TarrifCodeAccess, Workspace, WSSLimit, Downloadfacility, Favoriteshipment, Whatstrending, Companyprofile, Addonfacility, Analysis, User } = req.body;
     
+    const errors = validationResult(req);
     const date = new Date();
-   
+    if (!errors.isEmpty()) {
+        err = [];
+        errors.errors.forEach(element => {
+            err.push({ field: element.param, message: element.msg });
+        });
+        return res.status(422).json(validation(err));
+    }
+    
     const user = await db.query(query.get_user_by_email, [Email]);
     if (user.rows.length > 0) {
         return res.status(422).json(error("Email already registered !", res.statusCode));

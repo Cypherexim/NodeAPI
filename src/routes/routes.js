@@ -34,8 +34,8 @@ router.get('/getImportExportList', importController.getImportExportList);
 router.post('/addUpdateAccess', importController.addupdateAccessSideFilter);
 router.get('/getWorkSpace', importController.getWorksapce);
 router.post('/addWorkspace', importController.addWorkspace);
-router.get('/getDownloadCost',check('CountryCode').notEmpty(), importController.getDownloadCost);
-router.get('/gettotalrecords',importController.getTotalRecord);
+router.get('/getDownloadCost', check('CountryCode').notEmpty(), importController.getDownloadCost);
+router.get('/gettotalrecords', importController.getTotalRecord);
 router.post('/getSideFilterData', importController.getListofSidefilterdata);
 router.get('/getProductDesc', importController.getProductDesc);
 
@@ -58,19 +58,19 @@ router.post('/getPhilipExports', check('fromDate').notEmpty().isDate(), check('t
 // Account Controller
 router.post('/signup', check('FullName').notEmpty(), check('CompanyName').notEmpty(), body('MobileNumber').isLength({ min: 10, max: 10 }).withMessage('Mobile Number should be of 10 digit.'), check('Password').notEmpty(), check('Email').isEmail(), accountController.createUser);
 router.post('/signin', check('Password').notEmpty(), check('Email').isEmail(), accountController.postLogin);
-router.get('/getAccountDetails',accountController.getAccountDetails );
-router.post('/addUserAdmin', accountController.addUserByAdmin);
-router.get('/getAllUserList',accountController.getAllUserlist );
+router.get('/getAccountDetails', accountController.getAccountDetails);
+router.post('/addUserAdmin', check('FullName').notEmpty(), check('CompanyName').notEmpty(), body('MobileNumber').isLength({ min: 10, max: 10 }).withMessage('Mobile Number should be of 10 digit.'), check('Password').notEmpty(), check('Email').isEmail(), accountController.addUserByAdmin);
+router.get('/getAllUserList', accountController.getAllUserlist);
 
 // Country Controller
 router.get('/getContries', countryController.getCountries);
 
 // Plan Controller
 router.post('/addplan', check('PlanName').notEmpty(), planController.createPlan);
-router.get('/getallplans',planController.getPlanList);
+router.get('/getallplans', planController.getPlanList);
 
 //File Controller
-router.post('/addFiles',fileController.uploadFiletoS3 );
+router.post('/addFiles', fileController.uploadFiletoS3);
 
 // Roles Controller
 router.get('/getAllRoles', rolesController.getRoleList);
@@ -78,7 +78,7 @@ router.get('/getRolesAccessById', rolesController.getAccessByRoleId);
 
 // Download controller
 
-router.post('/savedownloadworkspace',downloadController.saveDownload );
-router.get('/getdownloadworkspace',downloadController.getDownloadworkspace )
+router.post('/savedownloadworkspace', downloadController.saveDownload);
+router.get('/getdownloadworkspace', downloadController.getDownloadworkspace)
 router.post('/getdownloadData', downloadController.getdownloaddata);
 module.exports = router;
