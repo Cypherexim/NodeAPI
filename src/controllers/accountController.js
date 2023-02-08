@@ -5,6 +5,7 @@ const { success, error, validation } = require('../../src/utils/response');
 const query = require('../../src/sql/queries');
 const bycrypt = require('bcryptjs');
 const config = require('../utils/config');
+const mail = require('../utils/mailing');
 
 
 exports.createUser = async (req, res) => {
@@ -87,7 +88,7 @@ exports.addUserByAdmin = async (req, res) => {
     const { FullName, CompanyName, MobileNumber, Email, Password, country, ParentUserId, Designation = null, Location = null, GST = null, IEC = null, RoleId
         , PlanId, Downloads, Searches, StartDate, EndDate, Validity, DataAccess, CountryAccess, CommodityAccess,
         TarrifCodeAccess, Workspace, WSSLimit, Downloadfacility, Favoriteshipment, Whatstrending, Companyprofile, Addonfacility, Analysis, User } = req.body;
-    
+
     const errors = validationResult(req);
     const date = new Date();
     if (!errors.isEmpty()) {
@@ -97,7 +98,7 @@ exports.addUserByAdmin = async (req, res) => {
         });
         return res.status(422).json(validation(err));
     }
-    
+
     const user = await db.query(query.get_user_by_email, [Email]);
     if (user.rows.length > 0) {
         return res.status(422).json(error("Email already registered !", res.statusCode));
@@ -105,6 +106,7 @@ exports.addUserByAdmin = async (req, res) => {
         bycrypt.hash(Password, 12).then(hashPassword => {
             db.query(query.add_user, [FullName, CompanyName, MobileNumber, Email, hashPassword, country, ParentUserId, Designation, Location, GST, IEC, RoleId], async (err, result) => {
                 if (!err) {
+                    mail.SendEmail(Email, config.userRegisterationmailSubject, 'Dear ' + FullName + ',\n\nYou have successfully registered with Cypher Portal.\nPlease User your email Id as user name and combination of first 5 letter of your email & last 5 number of your mobile number as password to login into system ! \n\n\nThanks,\nCypher');
                     db.query(query.add_Plan_Trasaction_by_admin, [result.rows[0].UserId, PlanId, Downloads, Searches, StartDate, EndDate,
                         Validity, DataAccess, CountryAccess, CommodityAccess, TarrifCodeAccess, Workspace, WSSLimit, Downloadfacility,
                         Favoriteshipment, Whatstrending, Companyprofile, Addonfacility, Analysis, User], (err, result) => {
