@@ -163,16 +163,16 @@ exports.getSideFilterAccess = async (req, res) => {
 
 exports.getImportExportList = async (req, res) => {
     try {
-        const { Country, type } = req.query;
+        const { Country, type, fromDate, toDate } = req.query;
         const fieldList = ["Imp_Name", "Exp_Name"];
         const availablefield = await db.query('SELECT column_name FROM information_schema.columns WHERE table_name = $1 and column_name = ANY($2)', [type.toLowerCase() + '_' + Country.toLowerCase(), fieldList]);
         if (availablefield.rows.length > 0) {
             var fields = [];
-            availablefield.rows.forEach(x=>{
-                fields.push('"'+x.column_name.toString()+'"');
+            availablefield.rows.forEach(x => {
+                fields.push('"' + x.column_name.toString() + '"');
             })
-            const query = 'SELECT DISTINCT ' + fields.join(",") + ' FROM ' + type.toLowerCase() + '_' + Country.toLowerCase()+' LIMIT 1000';
-            db.query(query, (error, results) => {
+            const query = 'SELECT DISTINCT ' + fields.join(",") + ' FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2';
+            db.query(query, [fromDate, toDate], (error, results) => {
                 return res.status(200).json(success("Ok", results.rows, res.statusCode));
             })
         }
