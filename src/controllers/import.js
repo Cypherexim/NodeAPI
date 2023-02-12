@@ -268,7 +268,7 @@ exports.getListofSidefilterdata = async (req, res) => {
             const keys = Object.keys(access.rows[0]);
             const obj = access.rows[0];
             for (let i = 0; i < keys.length; i++) {
-                if (obj[keys[i]] == true) {
+                if (obj[keys[i]] === true) {
                     selectQuery += '"' + keys[i] + '", '
                 }
             }
