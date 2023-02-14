@@ -31,7 +31,6 @@ exports.uploadFiletoS3 = async (req, res) => {
                 reject(err)
             }
             // resolve(data.Location)
-           
             return res.status(200).json(success("Ok", data, res.statusCode));
         })
     } catch (err) {

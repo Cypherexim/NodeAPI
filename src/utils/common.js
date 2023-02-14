@@ -40,7 +40,7 @@ exports.getExportData = async (fromDate, toDate, HsCode, ProductDesc, Imp_Name, 
         params.push(utility.generateParams("HsCode", "SIMILAR TO", "(" + HsCode.join("|") + ")%")) //'(300|500)%'     '(300|500)%'
     }
     if (ProductDesc != '' && ProductDesc != undefined) {
-        params.push(utility.generateParams("ProductDesc", "SIMILAR TO","(" + ProductDesc + ")%" ))
+        params.push(utility.generateParams("ProductDesc", "SIMILAR TO","%(" + ProductDesc + ")%" ))
     }
     if (Imp_Name != '' && Imp_Name != undefined) {
         params.push(utility.generateParams("Imp_Name", "ANY", Imp_Name))
