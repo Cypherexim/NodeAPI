@@ -25,6 +25,7 @@ const turkeyExportController = require('../controllers/Export/turkeyController')
 const turkeyImportController = require('../controllers/Import/turkeyController');
 const russiaExportController = require('../controllers/Export/russiaController');
 const russiaImportController = require('../controllers/Import/russiaController');
+const analysisController = require('../controllers/analysisController');
 
 // first Controller
 router.get('/getUsers', firstController.getUsers);
@@ -89,4 +90,8 @@ router.get('/getRolesAccessById', rolesController.getAccessByRoleId);
 router.post('/savedownloadworkspace', downloadController.saveDownload);
 router.get('/getdownloadworkspace', downloadController.getDownloadworkspace)
 router.post('/getdownloadData', downloadController.getdownloaddata);
+
+// Analysis Controller
+
+router.get('/getAnalysisReport', analysisController.getAnalysisData);
 module.exports = router;
