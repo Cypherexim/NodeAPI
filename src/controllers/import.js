@@ -279,8 +279,8 @@ exports.getListofSidefilterdata = async (req, res) => {
                 Mode, LoadingPort,
                 NotifyPartyName, Currency, 0, 0, selectQuery.replace(/,\s*$/, "") + ' FROM ', Direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
 
-            db.query(query[0], query[1].slice(1), (error, results) => {
-                if (!error) {
+            db.query(query[0], query[1].slice(1), (err, results) => {
+                if (!err) {
                     for (let i = 0; i < keys.length; i++) {
                         if (obj[keys[i]] == true) {
                             output[keys[i]] = [...new Set(extractValue(results.rows, keys[i]))];
@@ -290,7 +290,7 @@ exports.getListofSidefilterdata = async (req, res) => {
                     // console.log(output);
                     return res.status(200).json(success("Ok", output, res.statusCode));
                 } else {
-                    return res.status(500).json(error("Internal server error", res.statusCode));
+                    return res.status(500).json(error(err.message, res.statusCode));
                 }
             })
         }
