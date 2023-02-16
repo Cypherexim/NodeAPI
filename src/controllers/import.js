@@ -169,9 +169,9 @@ exports.getImportExportList = async (req, res) => {
         if (availablefield.rows.length > 0) {
             var fields = [];
             availablefield.rows.forEach(x => {
-                fields.push('(upper("' + x.column_name.toString() + '")) "'+x.column_name.toString()+'"');
+                fields.push('"' + x.column_name.toString() + '"');
             })
-            const query = 'SELECT DISTINCT ON ' + fields.join(",") + ' FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2';
+            const query = 'SELECT DISTINCT ' + fields.join(",") + ' FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2';
             db.query(query, [fromDate, toDate], (error, results) => {
                 return res.status(200).json(success("Ok", results.rows, res.statusCode));
             })
