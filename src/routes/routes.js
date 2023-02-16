@@ -93,5 +93,5 @@ router.post('/getdownloadData', downloadController.getdownloaddata);
 
 // Analysis Controller
 
-router.get('/getAnalysisReport', analysisController.getAnalysisData);
+router.post('/getAnalysisReport', analysisController.getAnalysisData);
 module.exports = router;
