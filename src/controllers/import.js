@@ -6,7 +6,6 @@ const query = require('../../src/sql/queries');
 const utility = require('../utils/utility');
 const common = require('../utils/common');
 
-
 // to get import data
 exports.getimport = async (req, res) => {
     //db.connect();
@@ -153,7 +152,11 @@ exports.getSideFilterAccess = async (req, res) => {
     try {
         const { Country, Direction } = req.query;
         db.query(query.get_sidefilter_Access, [Country, Direction.toUpperCase()], (error, results) => {
-            return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            if (!error) {
+                return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            } else {
+                return res.status(500).json(error(error, res.statusCode));
+            }
         })
 
     } catch (err) {
@@ -165,15 +168,32 @@ exports.getImportExportList = async (req, res) => {
     try {
         const { Country, type, fromDate, toDate } = req.query;
         const fieldList = ["Imp_Name", "Exp_Name"];
+        const result = {};
         const availablefield = await db.query('SELECT column_name FROM information_schema.columns WHERE table_name = $1 and column_name = ANY($2)', [type.toLowerCase() + '_' + Country.toLowerCase(), fieldList]);
-        if (availablefield.rows.length > 0) {
-            var fields = [];
-            availablefield.rows.forEach(x => {
-                fields.push('"' + x.column_name.toString() + '"');
-            })
-            const query = 'SELECT DISTINCT ' + fields.join(",") + ' FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2';
+        if (availablefield.rows.length == 1) {
+            //var fields = [];
+            //    await availablefield.rows.forEach(async x => {
+            //         // fields.push('"' + x.column_name.toString() + '"');
+            //         const query = 'SELECT DISTINCT "' + x.column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2';
+            //         await db.query(query, [fromDate, toDate], (error, results) => {
+            //             result[x.column_name.toString()] = results.rows;
+
+            //         })
+            //     })
+            const query = 'SELECT DISTINCT "' + availablefield.rows[0].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2';
             db.query(query, [fromDate, toDate], (error, results) => {
-                return res.status(200).json(success("Ok", results.rows, res.statusCode));
+                result[availablefield.rows[0].column_name] = results.rows;
+                return res.status(200).json(success("Ok", result, res.statusCode));
+            })
+        } else if (availablefield.rows.length == 2) {
+            const query = 'SELECT DISTINCT "' + availablefield.rows[0].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2';
+            db.query(query, [fromDate, toDate], (error, results) => {
+                result[availablefield.rows[0].column_name] = results.rows;
+                const query1 = 'SELECT DISTINCT "' + availablefield.rows[1].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2';
+                db.query(query1, [fromDate, toDate], (error, results) => {
+                    result[availablefield.rows[1].column_name] = results.rows;
+                    return res.status(200).json(success("Ok", result, res.statusCode));
+                })
             })
         }
 

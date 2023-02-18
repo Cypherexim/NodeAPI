@@ -109,7 +109,7 @@ exports.addUserByAdmin = async (req, res) => {
                     db.query(query.add_Plan_Trasaction_by_admin, [result.rows[0].UserId, PlanId, Downloads, Searches, StartDate, EndDate,
                         Validity, DataAccess, CountryAccess, CommodityAccess, TarrifCodeAccess, Workspace, WSSLimit, Downloadfacility,
                         Favoriteshipment, Whatstrending, Companyprofile, Addonfacility, Analysis, User], (err, result) => {
-                            mail.SendEmail(Email, config.userRegisterationmailSubject, 'Dear ' + FullName + ',\n\nYou have successfully registered with Cypher Portal.\nPlease User your email Id as user name and combination of first 5 letter of your email & last 5 number of your mobile number as password to login into system ! \n\n\nThanks,\nCypher');
+                            mail.SendEmail(Email, config.userRegisterationmailSubject, config.accountcreationmailBody);
                             return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
                         });
                 }

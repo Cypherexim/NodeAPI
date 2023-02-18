@@ -26,6 +26,13 @@ const turkeyImportController = require('../controllers/Import/turkeyController')
 const russiaExportController = require('../controllers/Export/russiaController');
 const russiaImportController = require('../controllers/Import/russiaController');
 const analysisController = require('../controllers/analysisController');
+const kenyaImportController = require('../controllers/Import/kenyaController');
+const lesothoImportController = require('../controllers/Import/lesothoController');
+const mexicoImportController = require('../controllers/Import/mexicoController');
+const nigeriaImportController = require('../controllers/Import/nigeriaController');
+const usaImportController = require('../controllers/Import/usaController');
+const vietnamImportController = require('../controllers/Import/vietnamController');
+
 
 // first Controller
 router.get('/getUsers', firstController.getUsers);
@@ -53,6 +60,12 @@ router.post('/getChileImports', check('fromDate').notEmpty().isDate(), check('to
 router.post('/getPhilipImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), philipImportController.getphilipImport);
 router.post('/getTurkeyImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), turkeyImportController.getturkeyImport);
 router.post('/getRussiaImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), russiaImportController.getrussiaImport);
+router.post('/getKenyaImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), kenyaImportController.getkenyaImport);
+router.post('/getLesothoImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), lesothoImportController.getlesothoImport);
+router.post('/getMexicoImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), mexicoImportController.getmexicoImport);
+router.post('/getNigeriaImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), nigeriaImportController.getnigeriaImport);
+router.post('/getUsaImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), usaImportController.getusaImport);
+router.post('/getVietnamImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), vietnamImportController.getvietnamImport);
 
 //Export controller
 router.post('/getIndiaExports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), indiaExportController.getindiaExport);
@@ -73,6 +86,7 @@ router.get('/getAllUserList', accountController.getAllUserlist);
 
 // Country Controller
 router.get('/getContries', countryController.getCountries);
+router.post('/addCountry', countryController.addCountry);
 
 // Plan Controller
 router.post('/addplan', check('PlanName').notEmpty(), planController.createPlan);

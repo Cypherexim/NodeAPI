@@ -28,7 +28,16 @@ module.exports = {
     SideFilterAccess: "SideFilterAccess",
     userdownloadtransaction: "userdownloadtransaction",
     import_philip: "import_philip",
-
+    import_usa:"import_usa",
+    import_vietnam:"import_vietnam",
+    import_kenya:"import_kenya",
+    import_lesotho:"import_lesotho",
+    import_mexico:"import_mexico",
+    import_nigeria:"import_nigeria",
+    export_kenya:"export_kenya",
+    export_lesotho:"export_lesotho",
+    export_mexico:"export_mexico",
+    export_nigeria:"export_nigeria",
     /* Select Queries */
     select_Query_for_totalrecords:'*, count(*) OVER() AS total_records FROM',
     select_Query_for_totalCounts:'COUNT(distinct  "Exp_Name") as TotalExpName, COUNT(distinct  "Imp_Name") as TotalImpName, COUNT(distinct  "HsCode") as TotalHsCode FROM',
@@ -36,5 +45,6 @@ module.exports = {
     /* Mail Configuration */
     fromEmail:'webeximpanel@gmail.com',
     fromPassword:'gayrsqtbgrlvltit',
-    userRegisterationmailSubject:'User Registered Successfully !'
+    userRegisterationmailSubject:'User Registered Successfully !',
+    accountcreationmailBody:'Congratulations! Your account has been created successfully.\nYour password is the first five letters of your first name, followed by the last five digits of your contact number.\n\ne.g Jayesh Patel 9890101234 \nso password will be Jayes01234\n\nThank you for showing your trust in our services. Your satisfaction is our priority, and we will continue to strive to provide you with the highest quality products and services. We look forward to continuing to build our relationship and for the opportunities that lie ahead. If you have any questions or concerns, please do nott hesitate to contact us.'
 }

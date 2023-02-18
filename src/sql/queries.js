@@ -19,6 +19,8 @@ module.exports = {
     get_hscode_export: 'SELECT "Hscode","HscodeDesc" FROM public."HSCodes"',
     get_hscode_export_digit: 'SELECT "Hscode" ,"HscodeDesc" FROM public."HSCodes" where length("Hscode") =$1',
     getCountry: 'SELECT * FROM public."Country"',
+    addCountry:'INSERT INTO public."Country"("Countrycode", "CountryName", "Import", "Export") VALUES ($1, $2, $3, $4)',
+    addDownloadCost:'INSERT INTO public."Dowload_cost" ("CountryCode", "CostPerRecord") VALUES ($1, $2);',
     get_plan_by_name: `SELECT * FROM public.plan WHERE "PlanName"=$1`,
     add_plan: `INSERT INTO public.plan(
         "PlanName", "Amount", "Validity", "DataAccess", "Downloads", "Searches", "CountryAccess", "CommodityAccess", "TarrifCodeAccess", "Workspace", "WSSLimit", "Downloadfacility", "Favoriteshipment", "Whatstrending", "Companyprofile", "Contactdetails", "Addonfacility", "Analysis", "User")
