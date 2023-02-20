@@ -321,7 +321,7 @@ exports.getListofSidefilterdata = async (req, res) => {
 exports.getProductDesc = async (req, res) => {
     try {
         const { product } = req.query;
-        db.query('SELECT * FROM public."Products" WHERE "Product" LIKE $1', ['' + product + '%'], (err, result) => {
+        db.query('SELECT * FROM public."Products" WHERE "Product" LIKE $1', ['%' + product.toLowerCase() + '%'], (err, result) => {
             return res.status(200).json(success("Ok", result.rows, res.statusCode));
         });
     } catch (err) {
