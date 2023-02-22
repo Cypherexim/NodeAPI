@@ -19,7 +19,7 @@ module.exports = {
     export_chile: "export_chile",
     workspace: "workspace",
     import_india: "import_data",
-    export_india: "export_data",
+    export_india: "export_india",
     export_turkey:"export_turkey",
     import_turkey:"import_turkey",
     export_russia:"export_russia",
