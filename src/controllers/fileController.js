@@ -7,7 +7,7 @@ const AWS = require('aws-sdk');
 // import AWS from 'aws-sdk'
 AWS.config.update({
     accessKeyId: process.env.AWS_ACCESS_KEY,
-    secretAccessKey: process.env.AWS_SK
+    secretAccessKey: 'Wdj+25O1ZMzkAl1P6a59meMFoq97BAjCnWAWfdHT'
     });
 // const s3 = new AWS.s3({
 //     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -18,7 +18,7 @@ const s3 = new AWS.S3();
 exports.uploadFiletoS3 = async (req, res) => {
     try {
         const filename = 'the-file-name'
-        const fileContent = fs.readFileSync('E:/projects/Cypher/EC2Detils.txt')
+        const fileContent = fs.readFileSync('G:/projects/Cypher/deploy.txt')
 
         const params = {
             Bucket: process.env.AWS_BUCKET_NAME,
