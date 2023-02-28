@@ -166,35 +166,71 @@ exports.getSideFilterAccess = async (req, res) => {
 
 exports.getImportExportList = async (req, res) => {
     try {
-        const { Country, type, fromDate, toDate } = req.query;
+        const { Country, type, fromDate, toDate, text = null } = req.query;
         const fieldList = ["Imp_Name", "Exp_Name"];
         const result = {};
         const availablefield = await db.query('SELECT column_name FROM information_schema.columns WHERE table_name = $1 and column_name = ANY($2)', [type.toLowerCase() + '_' + Country.toLowerCase(), fieldList]);
         if (availablefield.rows.length == 1) {
-            //var fields = [];
-            //    await availablefield.rows.forEach(async x => {
-            //         // fields.push('"' + x.column_name.toString() + '"');
-            //         const query = 'SELECT DISTINCT "' + x.column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2';
-            //         await db.query(query, [fromDate, toDate], (error, results) => {
-            //             result[x.column_name.toString()] = results.rows;
-
-            //         })
-            //     })
-            const query = 'SELECT DISTINCT "' + availablefield.rows[0].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2';
-            db.query(query, [fromDate, toDate], (error, results) => {
-                result[availablefield.rows[0].column_name] = results.rows;
-                return res.status(200).json(success("Ok", result, res.statusCode));
-            })
-        } else if (availablefield.rows.length == 2) {
-            const query = 'SELECT DISTINCT "' + availablefield.rows[0].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2';
-            db.query(query, [fromDate, toDate], (error, results) => {
-                result[availablefield.rows[0].column_name] = results.rows;
-                const query1 = 'SELECT DISTINCT "' + availablefield.rows[1].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2';
-                db.query(query1, [fromDate, toDate], (error, results) => {
-                    result[availablefield.rows[1].column_name] = results.rows;
-                    return res.status(200).json(success("Ok", result, res.statusCode));
+            if (text != null) {
+                const query = 'SELECT DISTINCT "' + availablefield.rows[0].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2 AND "' + availablefield.rows[0].column_name.toString() + '" LIKE $3';
+                db.query(query, [fromDate, toDate, text + '%'], (error, results) => {
+                    if (!error) {
+                        result[availablefield.rows[0].column_name] = results.rows;
+                        return res.status(200).json(success("Ok", result, res.statusCode));
+                    } else {
+                        return res.status(200).json(success("Ok", error.message, res.statusCode));
+                    }
                 })
-            })
+
+            } else {
+                const query = 'SELECT DISTINCT "' + availablefield.rows[0].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2 limit 1000';
+                db.query(query, [fromDate, toDate], (error, results) => {
+                    if (!error) {
+                        result[availablefield.rows[0].column_name] = results.rows;
+                        return res.status(200).json(success("Ok", result, res.statusCode));
+                    } else {
+                        return res.status(200).json(success("Ok", error.message, res.statusCode));
+                    }
+                })
+            }
+        } else if (availablefield.rows.length == 2) {
+            if (text != null) {
+                const query = 'SELECT DISTINCT "' + availablefield.rows[0].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2 AND "' + availablefield.rows[0].column_name.toString() + '" LIKE $3';
+                db.query(query, [fromDate, toDate, text + '%'], (error, results) => {
+                    if (!error) {
+                        result[availablefield.rows[0].column_name] = results.rows;
+                        const query1 = 'SELECT DISTINCT "' + availablefield.rows[1].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2 "' + availablefield.rows[1].column_name.toString() + '" LIKE $3';
+                        db.query(query1, [fromDate, toDate, text + '%'], (error, results) => {
+                            if (!error) {
+                                result[availablefield.rows[1].column_name] = results.rows;
+                                return res.status(200).json(success("Ok", result, res.statusCode));
+                            } else {
+                                return res.status(200).json(success("Ok", error.message, res.statusCode));
+                            }
+                        })
+                    } else {
+                        return res.status(200).json(success("Ok", error.message, res.statusCode));
+                    }
+                })
+            } else {
+                const query = 'SELECT DISTINCT "' + availablefield.rows[0].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2 limit 1000';
+                db.query(query, [fromDate, toDate], (error, results) => {
+                    if (!error) {
+                        result[availablefield.rows[0].column_name] = results.rows;
+                        const query1 = 'SELECT DISTINCT "' + availablefield.rows[1].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2 limit 1000';
+                        db.query(query1, [fromDate, toDate], (error, results) => {
+                            if (!error) {
+                                result[availablefield.rows[1].column_name] = results.rows;
+                                return res.status(200).json(success("Ok", result, res.statusCode));
+                            } else {
+                                return res.status(200).json(success("Ok", error.message, res.statusCode));
+                            }
+                        })
+                    } else {
+                        return res.status(200).json(success("Ok", error.message, res.statusCode));
+                    }
+                })
+            }
         }
 
     } catch (err) {
@@ -321,7 +357,7 @@ exports.getListofSidefilterdata = async (req, res) => {
 exports.getProductDesc = async (req, res) => {
     try {
         const { product } = req.query;
-        db.query('SELECT * FROM public."Products" WHERE "Product" LIKE $1', ['%' + product+ '%'], (err, result) => {
+        db.query('SELECT * FROM public."Products" WHERE "Product" LIKE $1', [product + '%'], (err, result) => {
             return res.status(200).json(success("Ok", result.rows, res.statusCode));
         });
     } catch (err) {

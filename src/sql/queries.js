@@ -13,14 +13,18 @@ module.exports = {
     add_user: `INSERT INTO public."Cypher"(
         "FullName", "CompanyName", "MobileNumber", "Email", "Password", "CountryCode", "ParentUserId", "Designation", "Location", "GST", "IEC","RoleId")
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING public."Cypher"."UserId";;`,
+    update_user: `UPDATE public."Cypher"
+	SET "FullName"=$1, "CompanyName"=$2, "MobileNumber"=$3, "Email"=$4, "Password"=$5, "CountryCode"=$6,
+    "Designation"=$7, "Location"=$8, "GST"=$9, "IEC"=$10, "RoleId"=$11 WHERE "UserId"=$12`,
     get_user_by_email: `SELECT *,("EndDate"- now()::date) AS Remainingdays FROM public."Cypher" inner join public.userplantransaction on "Cypher"."UserId" = "userplantransaction"."UserId" inner join public.plan on "userplantransaction"."PlanId" = "plan"."PlanId" inner join "Role" on "Cypher"."RoleId" = "Role"."RoleId"
     where "Email"=$1`,
+    get_user_email:`SELECT * FROM public."Cypher" WHERE "Email"=$1`,
     get_hscode_import: 'SELECT * FROM public.HSCodes',
     get_hscode_export: 'SELECT "Hscode","HscodeDesc" FROM public."HSCodes"',
     get_hscode_export_digit: 'SELECT "Hscode" ,"HscodeDesc" FROM public."HSCodes" where length("Hscode") =$1',
     getCountry: 'SELECT * FROM public."Country"',
-    addCountry:'INSERT INTO public."Country"("Countrycode", "CountryName", "Import", "Export") VALUES ($1, $2, $3, $4)',
-    addDownloadCost:'INSERT INTO public."Dowload_cost" ("CountryCode", "CostPerRecord") VALUES ($1, $2);',
+    addCountry: 'INSERT INTO public."Country"("Countrycode", "CountryName", "Import", "Export") VALUES ($1, $2, $3, $4)',
+    addDownloadCost: 'INSERT INTO public."Dowload_cost" ("CountryCode", "CostPerRecord") VALUES ($1, $2);',
     get_plan_by_name: `SELECT * FROM public.plan WHERE "PlanName"=$1`,
     add_plan: `INSERT INTO public.plan(
         "PlanName", "Amount", "Validity", "DataAccess", "Downloads", "Searches", "CountryAccess", "CommodityAccess", "TarrifCodeAccess", "Workspace", "WSSLimit", "Downloadfacility", "Favoriteshipment", "Whatstrending", "Companyprofile", "Contactdetails", "Addonfacility", "Analysis", "User")
@@ -36,6 +40,9 @@ module.exports = {
     add_Plan_Trasaction_by_admin: `INSERT INTO public.userplantransaction(
         "UserId", "PlanId", "Downloads", "Searches", "StartDate", "EndDate", "Validity", "DataAccess", "CountryAccess", "CommodityAccess", "TarrifCodeAccess", "Workspace", "WSSLimit", "Downloadfacility", "Favoriteshipment", "Whatstrending", "Companyprofile", "Addonfacility", "Analysis", "User")
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20);`,
+    update_Plan_Trasaction_by_admin: `UPDATE public.userplantransaction
+	SET "PlanId"=$1, "Downloads"=$2, "Searches"=$3, "StartDate"=$4, "EndDate"=$5, "Validity"=$6, "DataAccess"=$7, "CountryAccess"=$8, "CommodityAccess"=$9, "TarrifCodeAccess"=$10, "Workspace"=$11, "WSSLimit"=$12, "Downloadfacility"=$13, "Favoriteshipment"=$14, "Whatstrending"=$15, "Companyprofile"=$16, "Addonfacility"=$17, "Analysis"=$18, "User"=$19
+	WHERE "UserId"=$20`,
     get_Plan_By_UserId: `SELECT * FROM public.userplantransaction WHERE "UserId"=$1`,
     update_Plan_transaction: `UPDATE public.userplantransaction SET "Searches" = $1 WHERE "UserId"= $2`,
 
@@ -78,9 +85,15 @@ module.exports = {
 
     getRoleswithAccess: `SELECT * FROM "Role" inner join "RoleAccess" on "Role"."RoleId" = "RoleAccess"."RoleId" WHERE "Role"."RoleId" =$1`,
 
-    get_userlist:`SELECT * FROM public."Cypher" 
+    get_userlist: `SELECT * FROM public."Cypher" 
     inner join "Role" on "Cypher"."RoleId" = "Role"."RoleId"
     inner join public.userplantransaction on "Cypher"."UserId" = "userplantransaction"."UserId"
     inner join public.plan  on "plan"."PlanId" = "userplantransaction"."PlanId"
+    ORDER BY "Cypher"."UserId" DESC`,
+    get_user_By_Userid: `SELECT * FROM public."Cypher" 
+    inner join "Role" on "Cypher"."RoleId" = "Role"."RoleId"
+    inner join public.userplantransaction on "Cypher"."UserId" = "userplantransaction"."UserId"
+    inner join public.plan  on "plan"."PlanId" = "userplantransaction"."PlanId"
+    WHERE "UserId"=$1
     ORDER BY "Cypher"."UserId" DESC`
 };

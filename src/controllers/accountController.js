@@ -119,6 +119,43 @@ exports.addUserByAdmin = async (req, res) => {
     }
 }
 
+exports.updateUserByAdmin = async (req, res) => {
+    const { FullName, CompanyName, MobileNumber, Email, Password, country, UserId, Designation = null, Location = null, GST = null, IEC = null, RoleId
+        , PlanId, Downloads, Searches, StartDate, EndDate, Validity, DataAccess, CountryAccess, CommodityAccess,
+        TarrifCodeAccess, Workspace, WSSLimit, Downloadfacility, Favoriteshipment, Whatstrending, Companyprofile, Addonfacility, Analysis, User } = req.body;
+
+    const errors = validationResult(req);
+    const date = new Date();
+    if (!errors.isEmpty()) {
+        err = [];
+        errors.errors.forEach(element => {
+            err.push({ field: element.param, message: element.msg });
+        });
+        return res.status(422).json(validation(err));
+    }
+
+    const user = await db.query(query.get_user_by_email, [Email]);
+    if (user.rows.length > 0) {
+        bycrypt.hash(Password, 12).then(hashPassword => {
+            db.query(query.update_user, [FullName, CompanyName, MobileNumber, Email, hashPassword, country, Designation, Location, GST, IEC, RoleId, UserId], async (err, result) => {
+                if (!err) {
+                    db.query(query.update_Plan_Trasaction_by_admin, [PlanId, Downloads, Searches, StartDate, EndDate,
+                        Validity, DataAccess, CountryAccess, CommodityAccess, TarrifCodeAccess, Workspace, WSSLimit, Downloadfacility,
+                        Favoriteshipment, Whatstrending, Companyprofile, Addonfacility, Analysis, User, UserId], (err, result) => {
+                            if (!err) {
+                                mail.SendEmail(Email, config.userUpdatemailSubject, config.accountcreationmailBody);
+                                return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
+                            } else {
+                                return res.status(201).json(success("Ok", err.message, res.statusCode));
+                            }
+                        });
+                }
+                else { return res.status(500).json(error(err.message, res.statusCode)); }
+            })
+        });
+    } else { return res.status(500).json(error("User not found", res.statusCode)); }
+}
+
 exports.getAllUserlist = async (req, res) => {
     try {
         db.query(query.get_userlist, (error, results) => {
@@ -128,3 +165,14 @@ exports.getAllUserlist = async (req, res) => {
         return res.status(500).json(error(err, res.statusCode));
     };
 }
+
+// exports.getUserById = async (req, res) => {
+//     try {
+//         const {UserId} = req.query;
+//         db.query(query.get_user_By_Userid,[UserId], (error, results) => {
+//             return res.status(200).json(success("Ok", results.rows, res.statusCode));
+//         })
+//     } catch (err) {
+//         return res.status(500).json(error(err, res.statusCode));
+//     };
+// }
