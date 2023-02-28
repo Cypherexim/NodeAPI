@@ -46,5 +46,6 @@ module.exports = {
     fromEmail:'webeximpanel@gmail.com',
     fromPassword:'gayrsqtbgrlvltit',
     userRegisterationmailSubject:'User Registered Successfully !',
+    userUpdatemailSubject:'User Updated Successfully !',
     accountcreationmailBody:'Congratulations! Your account has been created successfully.\nYour password is the first five letters of your first name, followed by the last five digits of your contact number.\n\ne.g Jayesh Patel 9890101234 \nso password will be Jayes01234\n\nThank you for showing your trust in our services. Your satisfaction is our priority, and we will continue to strive to provide you with the highest quality products and services. We look forward to continuing to build our relationship and for the opportunities that lie ahead. If you have any questions or concerns, please do nott hesitate to contact us.'
 }
