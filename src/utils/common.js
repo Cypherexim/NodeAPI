@@ -5,7 +5,7 @@ const utility = require('../utils/utility');
 
 exports.deductSearches = async (UserId, IsWorkspaceSearch) => {
     const planDetails = await db.query(queries.get_Plan_By_UserId, [UserId]);
-    console.log(JSON.parse(IsWorkspaceSearch));
+    
     if (!JSON.parse(IsWorkspaceSearch)) {
         if (planDetails.rows[0] != null) {
             if (planDetails.rows[0].Searches > 0 || planDetails.rows[0].Searches == 'Unlimited') {

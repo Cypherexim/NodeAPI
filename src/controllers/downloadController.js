@@ -52,7 +52,7 @@ exports.getDownloadworkspace = async (req, res) => {
 exports.getdownloaddata = async (req, res) => {
     try {
         const { direction, recordIds, country } = req.body;
-        db.query('SELECT * FROM public.' + direction.toLowerCase() + '_' + country.toLowerCase() + ' WHERE RecordID" IN (' + recordIds.toString() + ')', (err, result) => {
+        db.query('SELECT * FROM public.' + direction.toLowerCase() + '_' + country.toLowerCase() + ' WHERE "RecordID" IN (' + recordIds.toString() + ')', (err, result) => {
             return res.status(200).json(success("Ok", result.rows, res.statusCode));
         });
     } catch (err) {
