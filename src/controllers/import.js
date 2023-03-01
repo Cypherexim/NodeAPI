@@ -199,7 +199,7 @@ exports.getImportExportList = async (req, res) => {
                 db.query(query, [fromDate, toDate, text + '%'], (error, results) => {
                     if (!error) {
                         result[availablefield.rows[0].column_name] = results.rows;
-                        const query1 = 'SELECT DISTINCT "' + availablefield.rows[1].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2 "' + availablefield.rows[1].column_name.toString() + '" LIKE $3';
+                        const query1 = 'SELECT DISTINCT "' + availablefield.rows[1].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2 AND "' + availablefield.rows[1].column_name.toString() + '" LIKE $3';
                         db.query(query1, [fromDate, toDate, text + '%'], (error, results) => {
                             if (!error) {
                                 result[availablefield.rows[1].column_name] = results.rows;
