@@ -45,7 +45,11 @@ exports.getimports = async (req, res) => {
         }
         const { fromDate, toDate, HSCODE, HSCodeDesc, Importer_Name, EXPORTER_NAME } = req.body;
         db.query(query.get_import_search, [fromDate, toDate, `%${HSCODE}%`, `%${HSCodeDesc}%`, `%${Importer_Name}%`, `%${EXPORTER_NAME}%`], (error, results) => {
-            return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            if (!error) {
+                return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            } else {
+                return res.status(200).json(success("Ok", error.message, res.statusCode));
+            }
         })
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
@@ -80,7 +84,7 @@ exports.getimportwithsearch = async (req, res) => {
         }
 
         const querytoexecute = utility.generateFilterQuery(params, 'import_india');
-        
+
         await db.query(querytoexecute[0], querytoexecute[1], (error, results) => {
             return res.status(200).json(success("Ok", results.rows, res.statusCode));
         })
@@ -117,7 +121,7 @@ exports.getexporttwithsearch = async (req, res) => {
         }
 
         const querytoexecute = utility.generateFilterQuery(params, 'export_india');
-        
+
         await db.query(querytoexecute[0], querytoexecute[1], (error, results) => {
             return res.status(200).json(success("Ok", results.rows, res.statusCode));
         })
@@ -183,7 +187,7 @@ exports.getImportExportList = async (req, res) => {
                 })
 
             } else {
-                const query = 'SELECT DISTINCT "' + availablefield.rows[0].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2 limit 1000';
+                const query = 'SELECT DISTINCT "' + availablefield.rows[0].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2 limit 500';
                 db.query(query, [fromDate, toDate], (error, results) => {
                     if (!error) {
                         result[availablefield.rows[0].column_name] = results.rows;
@@ -213,11 +217,11 @@ exports.getImportExportList = async (req, res) => {
                     }
                 })
             } else {
-                const query = 'SELECT DISTINCT "' + availablefield.rows[0].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2 limit 1000';
+                const query = 'SELECT DISTINCT "' + availablefield.rows[0].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2 limit 500';
                 db.query(query, [fromDate, toDate], (error, results) => {
                     if (!error) {
                         result[availablefield.rows[0].column_name] = results.rows;
-                        const query1 = 'SELECT DISTINCT "' + availablefield.rows[1].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2 limit 1000';
+                        const query1 = 'SELECT DISTINCT "' + availablefield.rows[1].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2 limit 500';
                         db.query(query1, [fromDate, toDate], (error, results) => {
                             if (!error) {
                                 result[availablefield.rows[1].column_name] = results.rows;
@@ -269,7 +273,11 @@ exports.getWorksapce = async (req, res) => {
     try {
         const { UserId } = req.query;
         db.query(query.get_workspace, [UserId], (error, results) => {
-            return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            if (!error) {
+                return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            } else {
+                return res.status(200).json(success("Ok", error.message, res.statusCode));
+            }
         })
 
     } catch (err) {
@@ -281,7 +289,9 @@ exports.addWorkspace = async (req, res) => {
     try {
         const { UserId, Searchbar, Sidefilter } = req.body;
         db.query(query.add_workspace, [UserId, Searchbar, Sidefilter], (err, result) => {
-            return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
+            if (!err) {
+                return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
+            }
         });
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
@@ -292,7 +302,11 @@ exports.getDownloadCost = async (req, res) => {
     try {
         const { CountryCode } = req.query;
         db.query(query.get_download_cost, [CountryCode], (err, result) => {
-            return res.status(200).json(success("Ok", result.rows, res.statusCode));
+            if (!err) {
+                return res.status(200).json(success("Ok", result.rows, res.statusCode));
+            } else {
+                return res.status(200).json(success("Ok", err.message, res.statusCode));
+            }
         });
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));

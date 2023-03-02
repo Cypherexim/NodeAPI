@@ -77,7 +77,11 @@ exports.getAccountDetails = async (req, res) => {
     try {
         const { UserId } = req.query;
         db.query(query.get_Searches_By_UserId, [UserId], (error, results) => {
-            return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            if (!error) {
+                return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            } else {
+                return res.status(200).json(success("Ok", error.message, res.statusCode));
+            }
         })
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
@@ -109,8 +113,12 @@ exports.addUserByAdmin = async (req, res) => {
                     db.query(query.add_Plan_Trasaction_by_admin, [result.rows[0].UserId, PlanId, Downloads, Searches, StartDate, EndDate,
                         Validity, DataAccess, CountryAccess, CommodityAccess, TarrifCodeAccess, Workspace, WSSLimit, Downloadfacility,
                         Favoriteshipment, Whatstrending, Companyprofile, Addonfacility, Analysis, User], (err, result) => {
-                            mail.SendEmail(Email, config.userRegisterationmailSubject, config.accountcreationmailBody);
-                            return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
+                            if (!err) {
+                                mail.SendEmail(Email, config.userRegisterationmailSubject, config.accountcreationmailBody);
+                                return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
+                            } else {
+                                return res.status(201).json(success("Ok", err.message + " Successful.", res.statusCode));
+                            }
                         });
                 }
                 else { return res.status(500).json(error(err.message, res.statusCode)); }
@@ -159,7 +167,11 @@ exports.updateUserByAdmin = async (req, res) => {
 exports.getAllUserlist = async (req, res) => {
     try {
         db.query(query.get_userlist, (error, results) => {
+            if(!error){
             return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            }else {
+                return res.status(200).json(success("Ok", error.message, res.statusCode));
+            }
         })
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));

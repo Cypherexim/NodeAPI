@@ -9,7 +9,11 @@ exports.getCountries = async (req, res) => {
     //db.connect();
     try {
         db.query(query.getCountry, (error, results) => {
+            if(!error){
             return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            }else {
+                return res.status(200).json(success("Ok", error.message, res.statusCode));
+            }
         })
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
