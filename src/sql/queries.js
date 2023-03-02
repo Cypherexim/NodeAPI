@@ -18,7 +18,7 @@ module.exports = {
     "Designation"=$7, "Location"=$8, "GST"=$9, "IEC"=$10, "RoleId"=$11 WHERE "UserId"=$12`,
     get_user_by_email: `SELECT *,("EndDate"- now()::date) AS Remainingdays FROM public."Cypher" inner join public.userplantransaction on "Cypher"."UserId" = "userplantransaction"."UserId" inner join public.plan on "userplantransaction"."PlanId" = "plan"."PlanId" inner join "Role" on "Cypher"."RoleId" = "Role"."RoleId"
     where "Email"=$1`,
-    get_user_email:`SELECT * FROM public."Cypher" WHERE "Email"=$1`,
+    get_user_email: `SELECT * FROM public."Cypher" WHERE "Email"=$1`,
     get_hscode_import: 'SELECT * FROM public.HSCodes',
     get_hscode_export: 'SELECT "Hscode","HscodeDesc" FROM public."HSCodes"',
     get_hscode_export_digit: 'SELECT "Hscode" ,"HscodeDesc" FROM public."HSCodes" where length("Hscode") =$1',
@@ -85,10 +85,19 @@ module.exports = {
 
     getRoleswithAccess: `SELECT * FROM "Role" inner join "RoleAccess" on "Role"."RoleId" = "RoleAccess"."RoleId" WHERE "Role"."RoleId" =$1`,
 
-    get_userlist: `SELECT * FROM public."Cypher" 
-    inner join "Role" on "Cypher"."RoleId" = "Role"."RoleId"
-    inner join public.userplantransaction on "Cypher"."UserId" = "userplantransaction"."UserId"
-    inner join public.plan  on "plan"."PlanId" = "userplantransaction"."PlanId"
+    get_userlist: `SELECT "FullName", "CompanyName", "MobileNumber", "Email", "Cypher"."UserId", "CountryCode", "ParentUserId", "Designation",
+    "Location", "GST", "IEC", "Cypher"."RoleId","userplantransaction"."Downloads", "userplantransaction"."Searches", 
+    "userplantransaction"."StartDate", "userplantransaction"."EndDate", "userplantransaction"."Validity", 
+    "userplantransaction"."DataAccess", "userplantransaction"."CountryAccess", "userplantransaction"."CommodityAccess", 
+    "userplantransaction"."TarrifCodeAccess", "userplantransaction"."Workspace", "userplantransaction"."WSSLimit", 
+    "userplantransaction"."Downloadfacility", "userplantransaction"."Favoriteshipment", "userplantransaction"."Whatstrending", 
+    "userplantransaction"."Companyprofile", "userplantransaction"."Addonfacility", "userplantransaction"."Analysis", 
+    "userplantransaction"."User"
+    ,"plan"."PlanId", "plan"."PlanName"
+    FROM public."Cypher" 
+        inner join "Role" on "Cypher"."RoleId" = "Role"."RoleId"
+        inner join public.userplantransaction on "Cypher"."UserId" = "userplantransaction"."UserId"
+        inner join public.plan  on "plan"."PlanId" = "userplantransaction"."PlanId"
     ORDER BY "Cypher"."UserId" DESC`,
     get_user_By_Userid: `SELECT * FROM public."Cypher" 
     inner join "Role" on "Cypher"."RoleId" = "Role"."RoleId"
