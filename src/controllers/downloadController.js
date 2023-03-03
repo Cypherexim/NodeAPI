@@ -9,11 +9,12 @@ const Stream = require('stream');
 const ExcelJs = require('exceljs');
 const AWS = require('aws-sdk');
 // require('dotenv').config()
+const region = "us-east-1";
 
-AWS.config.update({
-    accessKeyId: process.env.AWS_ACCESS_KEY,
-    secretAccessKey: process.env.AWS_SK
-});
+// Creating a Secrets Manager client
+const client = new AWS.SecretsManager({ region: region });
+
+
 const s3 = new AWS.S3();
 
 exports.saveDownload = async (req, res) => {
@@ -24,11 +25,11 @@ exports.saveDownload = async (req, res) => {
         if (workspace.rows.length == 0) {
             const recordtobill = await db.query('select Count(elements) as totalrecordtobill from (select unnest(array[' + recordIds.toString() + ']) except select unnest("recordIds") FROM public.userdownloadtransaction where "userId"=$1) t (elements)', [userId]);
 
-            db.query(query.add_download_workspace, [countrycode, userId, direction.toUpperCase(), recordIds, workspacename, datetime,''], async (err, result) => {
-                if(!err){
-                await Deductdownload(recordtobill.rows[0].totalrecordtobill, countrycode, userId);
-                return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
-                }else {
+            db.query(query.add_download_workspace, [countrycode, userId, direction.toUpperCase(), recordIds, workspacename, datetime, ''], async (err, result) => {
+                if (!err) {
+                    await Deductdownload(recordtobill.rows[0].totalrecordtobill, countrycode, userId);
+                    return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
+                } else {
                     return res.status(201).json(success("Ok", err.message, res.statusCode));
                 }
             });
@@ -46,9 +47,9 @@ exports.getDownloadworkspace = async (req, res) => {
     try {
         const { userId } = req.query;
         db.query(query.get_download_Workspace, [userId], (err, result) => {
-            if(!err){
-            return res.status(200).json(success("Ok", result.rows, res.statusCode));
-            }else {
+            if (!err) {
+                return res.status(200).json(success("Ok", result.rows, res.statusCode));
+            } else {
                 return res.status(200).json(success("Ok", err.message, res.statusCode));
             }
         });
@@ -61,9 +62,9 @@ exports.getdownloaddata = async (req, res) => {
     try {
         const { direction, recordIds, country } = req.body;
         db.query('SELECT * FROM public.' + direction.toLowerCase() + '_' + country.toLowerCase() + ' WHERE "RecordID" IN (' + recordIds.toString() + ')', (err, result) => {
-            if(!err){
-            return res.status(200).json(success("Ok", result.rows, res.statusCode));
-            }else {
+            if (!err) {
+                return res.status(200).json(success("Ok", result.rows, res.statusCode));
+            } else {
                 return res.status(200).json(success("Ok", err.message, res.statusCode));
             }
         });
@@ -79,7 +80,14 @@ exports.generateDownloadfiles = async (req, res) => {
         PortofDestination,
         Mode, LoadingPort,
         NotifyPartyName, UserId, recordIds, CountryCode, CountryName, direction, filename } = req.body;
-
+    // Getting secret value from ASM
+    const secret = await client.getSecretValue({ SecretId: `prod-secret-key` }).promise();
+    // Prasing SecretString into javascript object
+    const secretData = JSON.parse(secret.SecretString);
+    AWS.config.update({
+        accessKeyId: secretData.AccessKey,
+        secretAccessKey: secretData.Secretaccesskey
+    });
     const planDetails = await db.query(query.get_Plan_By_UserId, [UserId]);
     const datetime = new Date();
     if (planDetails.rows[0] != null) {
@@ -98,7 +106,7 @@ exports.generateDownloadfiles = async (req, res) => {
                     });
                     // Define worksheet
                     const worksheet = workbook.addWorksheet('Data');
-    
+
                     // Set column headers
                     worksheet.columns = getDataHeaders(result.rows[0]);
                     result.rows.forEach((row) => {
@@ -108,9 +116,9 @@ exports.generateDownloadfiles = async (req, res) => {
                     worksheet.commit();
                     workbook.commit();
                     // Upload to s3
-    
+
                     const params = {
-                        Bucket: process.env.AWS_BUCKET_NAME,
+                        Bucket: 'cypher-download-files',
                         Key: `${filename}.xlsx`,
                         Body: stream
                     }
@@ -121,7 +129,7 @@ exports.generateDownloadfiles = async (req, res) => {
                         // resolve(data.Location)
                         const recordtobill = await GetRecordToBill(recordIds, UserId);
                         await Deductdownload(recordtobill.rows[0].totalrecordtobill, CountryCode, UserId);
-                        db.query(query.add_download_workspace, [CountryCode, UserId, direction.toUpperCase(), recordIds, filename, datetime,data.Location], async (err, result) => {
+                        db.query(query.add_download_workspace, [CountryCode, UserId, direction.toUpperCase(), recordIds, filename, datetime, data.Location], async (err, result) => {
                             return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
                         });
                     })
@@ -149,7 +157,7 @@ exports.generateDownloadfiles = async (req, res) => {
                 // Upload to s3
 
                 const params = {
-                    Bucket: process.env.AWS_BUCKET_NAME,
+                    Bucket: 'cypher-download-files',
                     Key: `${filename}.xlsx`,
                     Body: stream
                 }
@@ -172,12 +180,12 @@ async function Deductdownload(recordtobill, countrycode, userId) {
     const planDetails = await db.query(query.get_Plan_By_UserId, [userId]);
     if (planDetails.rows[0] != null) {
         db.query(query.get_download_cost, [countrycode], (err, result) => {
-            if(!err){
-            const totalpointtodeduct = (planDetails.rows[0].Downloads - (result.rows[0].CostPerRecord * recordtobill));
-            db.query(query.update_download_count, [totalpointtodeduct, userId], (err, result) => {
+            if (!err) {
+                const totalpointtodeduct = (planDetails.rows[0].Downloads - (result.rows[0].CostPerRecord * recordtobill));
+                db.query(query.update_download_count, [totalpointtodeduct, userId], (err, result) => {
 
-            });
-        }
+                });
+            }
         });
     }
 
@@ -208,7 +216,7 @@ async function uploadSingleSheetToS3(excelData, filename) {
     // Upload to s3
 
     const params = {
-        Bucket: process.env.AWS_BUCKET_NAME,
+        Bucket: 'cypher-download-files',
         Key: `${filename}.xlsx`,
         Body: stream
     }
