@@ -260,7 +260,7 @@ exports.getImportList = async (req, res) => {
                 })
 
             } else {
-                const query = 'SELECT DISTINCT "' + availablefield.rows[0].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2 limit 100';
+                const query = 'SELECT DISTINCT "' + availablefield.rows[0].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' limit 500';
                 db.query(query, [fromDate, toDate], (error, results) => {
                     if (!error) {
                         result[availablefield.rows[0].column_name] = results.rows;
