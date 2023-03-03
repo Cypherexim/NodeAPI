@@ -261,7 +261,7 @@ exports.getImportList = async (req, res) => {
 
             } else {
                 const query = 'SELECT DISTINCT "' + availablefield.rows[0].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' limit 500';
-                db.query(query, [fromDate, toDate], (error, results) => {
+                db.query(query, (error, results) => {
                     if (!error) {
                         result[availablefield.rows[0].column_name] = results.rows;
                         return res.status(200).json(success("Ok", result, res.statusCode));
