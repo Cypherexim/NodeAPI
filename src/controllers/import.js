@@ -249,8 +249,8 @@ exports.getImportList = async (req, res) => {
         const availablefield = await db.query('SELECT column_name FROM information_schema.columns WHERE table_name = $1 and column_name = ANY($2)', [type.toLowerCase() + '_' + Country.toLowerCase(), fieldList]);
         if (availablefield.rows.length == 1) {
             if (text != null) {
-                const query = 'SELECT DISTINCT "' + availablefield.rows[0].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2 AND "' + availablefield.rows[0].column_name.toString() + '" LIKE $3';
-                db.query(query, [fromDate, toDate, text + '%'], (error, results) => {
+                const query = 'SELECT DISTINCT "' + availablefield.rows[0].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "' + availablefield.rows[0].column_name.toString() + '" LIKE $3';
+                db.query(query, [ text + '%'], (error, results) => {
                     if (!error) {
                         result[availablefield.rows[0].column_name] = results.rows;
                         return res.status(200).json(success("Ok", result, res.statusCode));
@@ -260,7 +260,7 @@ exports.getImportList = async (req, res) => {
                 })
 
             } else {
-                const query = 'SELECT DISTINCT "' + availablefield.rows[0].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' limit 500';
+                const query = 'SELECT DISTINCT "' + availablefield.rows[0].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' limit 1000';
                 db.query(query, (error, results) => {
                     if (!error) {
                         result[availablefield.rows[0].column_name] = results.rows;
@@ -287,8 +287,8 @@ exports.getExportList = async (req, res) => {
         const availablefield = await db.query('SELECT column_name FROM information_schema.columns WHERE table_name = $1 and column_name = ANY($2)', [type.toLowerCase() + '_' + Country.toLowerCase(), fieldList]);
         if (availablefield.rows.length == 1) {
             if (text != null) {
-                const query = 'SELECT DISTINCT "' + availablefield.rows[0].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2 AND "' + availablefield.rows[0].column_name.toString() + '" LIKE $3';
-                db.query(query, [fromDate, toDate, text + '%'], (error, results) => {
+                const query = 'SELECT DISTINCT "' + availablefield.rows[0].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "' + availablefield.rows[0].column_name.toString() + '" LIKE $3';
+                db.query(query, [ text + '%'], (error, results) => {
                     if (!error) {
                         result[availablefield.rows[0].column_name] = results.rows;
                         return res.status(200).json(success("Ok", result, res.statusCode));
@@ -298,8 +298,8 @@ exports.getExportList = async (req, res) => {
                 })
 
             } else {
-                const query = 'SELECT DISTINCT "' + availablefield.rows[0].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "Date" >= $1 AND "Date" <= $2 limit 100';
-                db.query(query, [fromDate, toDate], (error, results) => {
+                const query = 'SELECT DISTINCT "' + availablefield.rows[0].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' limit 1000';
+                db.query(query, (error, results) => {
                     if (!error) {
                         result[availablefield.rows[0].column_name] = results.rows;
                         return res.status(200).json(success("Ok", result, res.statusCode));
