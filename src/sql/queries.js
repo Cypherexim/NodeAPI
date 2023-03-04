@@ -46,7 +46,7 @@ module.exports = {
     get_Plan_By_UserId: `SELECT * FROM public.userplantransaction WHERE "UserId"=$1`,
     update_Plan_transaction: `UPDATE public.userplantransaction SET "Searches" = $1 WHERE "UserId"= $2`,
 
-    get_Searches_By_UserId: `SELECT "Downloads","Searches",("EndDate"- now()::date) AS Remainingdays FROM public.userplantransaction WHERE "UserId"=$1`,
+    get_Searches_By_UserId: `SELECT *, "Downloads","Searches",("EndDate"- now()::date) AS Remainingdays FROM public.userplantransaction WHERE "UserId"=$1`,
 
     get_sidefilter_Access: `SELECT * FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
 
