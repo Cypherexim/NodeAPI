@@ -41,7 +41,7 @@ module.exports = {
     /* Select Queries */
     select_Query_for_totalrecords:'*, count(*) OVER() AS total_records FROM',
     select_Query_for_totalCounts:'COUNT(distinct  "Exp_Name") as TotalExpName, COUNT(distinct  "Imp_Name") as TotalImpName, COUNT(distinct  "HsCode") as TotalHsCode FROM',
-
+    select_all_to_download:'* FROM',
     /* Mail Configuration */
     fromEmail:'webeximpanel@gmail.com',
     fromPassword:'gayrsqtbgrlvltit',

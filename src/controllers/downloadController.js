@@ -5,6 +5,7 @@ const { success, error, validation } = require('../../src/utils/response');
 const query = require('../../src/sql/queries');
 const utility = require('../utils/utility');
 const common = require('../utils/common');
+const config = require('../utils/config');
 const Stream = require('stream');
 const ExcelJs = require('exceljs');
 const AWS = require('aws-sdk');
@@ -81,7 +82,7 @@ exports.generateDownloadfiles = async (req, res) => {
         Mode, LoadingPort,
         NotifyPartyName, UserId, recordIds, CountryCode, CountryName, direction, filename } = req.body;
     // Getting secret value from ASM
-    const secret = await client.getSecretValue({ SecretId: `prod-secret-key` }).promise();
+    const secret = await client.getSecretValue({ SecretId: `cypher-access-key` }).promise();
     // Prasing SecretString into javascript object
     const secretData = JSON.parse(secret.SecretString);
     AWS.config.update({
@@ -92,87 +93,129 @@ exports.generateDownloadfiles = async (req, res) => {
     const datetime = new Date();
     if (planDetails.rows[0] != null) {
         if (recordIds.length == 0) {
-            const query = await common.getExportData(fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
+            const finalquery = await common.getExportData(fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
                 CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
                 PortofDestination,
                 Mode, LoadingPort,
-                NotifyPartyName, Currency, page, itemperpage, config.select_Query_for_totalrecords, direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
+                NotifyPartyName, Currency, 0, 0, config.select_all_to_download, direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
 
-            db.query(query[0], query[1].slice(1), (error, result) => {
-                db.query(qry, async (err, result) => {
-                    const stream = new Stream.PassThrough();
-                    const workbook = new ExcelJs.stream.xlsx.WorkbookWriter({
-                        stream: stream,
-                    });
-                    // Define worksheet
-                    const worksheet = workbook.addWorksheet('Data');
+            db.query(finalquery[0], finalquery[1].slice(1), async (error, result) => {
 
-                    // Set column headers
-                    worksheet.columns = getDataHeaders(result.rows[0]);
-                    result.rows.forEach((row) => {
-                        worksheet.addRow(row).commit();
-                    });
-                    // Commit all changes
-                    worksheet.commit();
-                    workbook.commit();
-                    // Upload to s3
+                if (!error) {
+                    const recordIds = result.rows.map(x => x.RecordID);
 
-                    const params = {
-                        Bucket: 'cypher-download-files',
-                        Key: `${filename}.xlsx`,
-                        Body: stream
-                    }
-                    await s3.upload(params, async (err, data) => {
-                        if (err) {
-                            reject(err)
-                        }
-                        // resolve(data.Location)
-                        const recordtobill = await GetRecordToBill(recordIds, UserId);
-                        await Deductdownload(recordtobill.rows[0].totalrecordtobill, CountryCode, UserId);
-                        db.query(query.add_download_workspace, [CountryCode, UserId, direction.toUpperCase(), recordIds, filename, datetime, data.Location], async (err, result) => {
-                            return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
+                    const recordtobill = await GetRecordToBill(recordIds, UserId);
+                    //const pointdeducted = await Deductdownload(recordtobill.rows[0].totalrecordtobill, CountryCode, UserId);
+                    const planDetails = await db.query(query.get_Plan_By_UserId, [UserId]);
+                    if (planDetails.rows[0] != null) {
+                        db.query(query.get_download_cost, [CountryCode], async (err, results) => {
+                            if (!err) {
+                                const totalpointtodeduct = (parseInt(planDetails.rows[0].Downloads) - (parseInt(results.rows[0].CostPerRecord) * parseInt(recordtobill.rows[0].totalrecordtobill)));
+
+                                if (totalpointtodeduct > 0) {
+
+                                    const stream = new Stream.PassThrough();
+                                    const workbook = new ExcelJs.stream.xlsx.WorkbookWriter({
+                                        stream: stream,
+                                    });
+                                    // Define worksheet
+                                    const worksheet = workbook.addWorksheet('Data');
+
+                                    // Set column headers
+                                    worksheet.columns = getDataHeaders(result.rows[0]);
+                                    result.rows.forEach((row) => {
+                                        // recordIds.push(row.RecordID);
+                                        worksheet.addRow(row).commit();
+                                    });
+                                    // Commit all changes
+                                    worksheet.commit();
+                                    workbook.commit();
+                                    // Upload to s3
+
+                                    const params = {
+                                        Bucket: 'cypher-download-files',
+                                        Key: `${filename}.xlsx`,
+                                        Body: stream
+                                    }
+                                    await s3.upload(params, async (err, data) => {
+                                        if (err) {
+                                            reject(err)
+                                        }
+                                        // resolve(data.Location)
+                                        db.query(query.update_download_count, [totalpointtodeduct, UserId], (err, result) => {
+
+                                        });
+                                        db.query(query.add_download_workspace, [CountryCode, UserId, direction.toUpperCase(), recordIds, filename, datetime, data.Location], async (err, result) => {
+                                            return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
+                                        });
+                                    })
+                                } else {
+                                    return res.status(201).json(success("Ok", "Don't have enough balance to download these records !", res.statusCode));
+                                }
+                            }
                         });
-                    })
-                })
-
+                    }
+                } else {
+                    return res.status(201).json(success("Ok", "No Record found to download", res.statusCode));
+                }
             })
+
         } else {
             const qry = 'select * from ' + direction.toLowerCase() + '_' + CountryName.toLowerCase() + ' where "RecordID" IN (' + recordIds + ')';
             db.query(qry, async (err, result) => {
-                const stream = new Stream.PassThrough();
-                const workbook = new ExcelJs.stream.xlsx.WorkbookWriter({
-                    stream: stream,
-                });
-                // Define worksheet
-                const worksheet = workbook.addWorksheet('Data');
+                const recordtobill = await GetRecordToBill(recordIds, UserId);
+                //const pointdeducted = await Deductdownload(recordtobill.rows[0].totalrecordtobill, CountryCode, UserId);
+                const planDetails = await db.query(query.get_Plan_By_UserId, [UserId]);
+                if (planDetails.rows[0] != null) {
+                    db.query(query.get_download_cost, [CountryCode], async (err, results) => {
+                        if (!err) {
+                            const totalpointtodeduct = (parseInt(planDetails.rows[0].Downloads) - (parseInt(results.rows[0].CostPerRecord) * parseInt(recordtobill.rows[0].totalrecordtobill)));
 
-                // Set column headers
-                worksheet.columns = getDataHeaders(result.rows[0]);
-                result.rows.forEach((row) => {
-                    worksheet.addRow(row).commit();
-                });
-                // Commit all changes
-                worksheet.commit();
-                workbook.commit();
-                // Upload to s3
+                            if (totalpointtodeduct > 0) {
 
-                const params = {
-                    Bucket: 'cypher-download-files',
-                    Key: `${filename}.xlsx`,
-                    Body: stream
-                }
-                await s3.upload(params, async (err, data) => {
-                    if (err) {
-                        reject(err)
-                    }
-                    // resolve(data.Location)
-                    const recordtobill = await GetRecordToBill(recordIds, UserId);
-                    await Deductdownload(recordtobill.rows[0].totalrecordtobill, CountryCode, UserId);
-                    db.query(query.add_download_workspace, [CountryCode, UserId, direction.toUpperCase(), recordIds, filename, datetime, data.Location], async (err, result) => {
-                        return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
+                                const stream = new Stream.PassThrough();
+                                const workbook = new ExcelJs.stream.xlsx.WorkbookWriter({
+                                    stream: stream,
+                                });
+                                // Define worksheet
+                                const worksheet = workbook.addWorksheet('Data');
+
+                                // Set column headers
+                                worksheet.columns = getDataHeaders(result.rows[0]);
+                                result.rows.forEach((row) => {
+                                    // recordIds.push(row.RecordID);
+                                    worksheet.addRow(row).commit();
+                                });
+                                // Commit all changes
+                                worksheet.commit();
+                                workbook.commit();
+                                // Upload to s3
+
+                                const params = {
+                                    Bucket: 'cypher-download-files',
+                                    Key: `${filename}.xlsx`,
+                                    Body: stream
+                                }
+                                await s3.upload(params, async (err, data) => {
+                                    if (err) {
+                                        reject(err)
+                                    }
+                                    // resolve(data.Location)
+                                    db.query(query.update_download_count, [totalpointtodeduct, UserId], (err, result) => {
+
+                                    });
+                                    db.query(query.add_download_workspace, [CountryCode, UserId, direction.toUpperCase(), recordIds, filename, datetime, data.Location], async (err, result) => {
+                                        return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
+                                    });
+                                })
+                            } else {
+                                return res.status(201).json(success("Ok", "Don't have enough balance to download these records !", res.statusCode));
+                            }
+                        }
                     });
-                })
+                }
             })
+
         }
     }
 }
@@ -188,7 +231,6 @@ async function Deductdownload(recordtobill, countrycode, userId) {
             }
         });
     }
-
 }
 
 async function GetRecordToBill(recordIds, userId) {
