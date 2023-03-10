@@ -97,7 +97,7 @@ exports.generateDownloadfiles = async (req, res) => {
                 CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
                 PortofDestination,
                 Mode, LoadingPort,
-                NotifyPartyName, Currency, 0, 0, config.select_all_to_download, direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
+                NotifyPartyName, Currency, 0, 0, getquery(direction, CountryCode), direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
 
             db.query(finalquery[0], finalquery[1].slice(1), async (error, result) => {
 
@@ -137,7 +137,7 @@ exports.generateDownloadfiles = async (req, res) => {
                                         Key: `${filename}.xlsx`,
                                         Body: stream
                                     }
-                                    await s3.upload(params, async (err, data) => {
+                                    s3.upload(params, async (err, data) => {
                                         if (err) {
                                             reject(err)
                                         }
@@ -161,7 +161,7 @@ exports.generateDownloadfiles = async (req, res) => {
             })
 
         } else {
-            const qry = 'select * from ' + direction.toLowerCase() + '_' + CountryName.toLowerCase() + ' where "RecordID" IN (' + recordIds + ')';
+            const qry = 'select ' + getquery(direction, CountryCode) + ' ' + direction.toLowerCase() + '_' + CountryName.toLowerCase() + ' where "RecordID" IN (' + recordIds + ')';
             db.query(qry, async (err, result) => {
                 const recordtobill = await GetRecordToBill(recordIds, UserId);
                 //const pointdeducted = await Deductdownload(recordtobill.rows[0].totalrecordtobill, CountryCode, UserId);
@@ -232,7 +232,17 @@ async function Deductdownload(recordtobill, countrycode, userId) {
         });
     }
 }
-
+function getquery(direction, CountryCode) {
+    if (CountryCode == 'IND') {
+        if (direction.toLowerCase() == 'export') {
+            return config.india_export_query;
+        } else {
+            return config.india_import_query;
+        }
+    } else {
+        return config.select_all_to_download;
+    }
+}
 async function GetRecordToBill(recordIds, userId) {
     const query = 'select Count(elements) as totalrecordtobill from (select unnest(array[' + recordIds.toString() + ']) except select unnest("recordIds") FROM public.userdownloadtransaction where "userId"=$1) t (elements)';
     const recordtobill = await db.query(query, [userId]);
