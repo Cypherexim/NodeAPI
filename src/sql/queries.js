@@ -76,7 +76,7 @@ module.exports = {
         VALUES ($1, $2, $3, $4, $5, $6,$7);`,
 
     get_download_Workspace: `SELECT "Id", countrycode as CountryName, "userId", direction,cardinality("recordIds") as totalrecords
-    ,"recordIds", workspacename, datetime,"filePath"
+    , workspacename, datetime,"filePath"
         FROM public.userdownloadtransaction WHERE "userId"=$1`,
 
     update_download_count: `UPDATE public.userplantransaction SET "Downloads" = $1 WHERE "UserId"= $2`,
