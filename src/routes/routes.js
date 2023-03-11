@@ -52,6 +52,10 @@ router.get('/getDownloadCost', check('CountryCode').notEmpty(), importController
 router.get('/gettotalrecords', importController.getTotalRecord);
 router.post('/getSideFilterData', importController.getListofSidefilterdata);
 router.get('/getProductDesc', importController.getProductDesc);
+router.get('/getimporterexportindia',importController.getimporterexportindia)
+router.get('/getimporterimportindia',importController.getimporterimportindia)
+router.get('/getexporterexportindia',importController.getexporterexportindia)
+router.get('/getexporterimportindia',importController.getexporterimportindia)
 
 //Import controller
 router.post('/getIndiaImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), indiaImportController.getindiaImport);

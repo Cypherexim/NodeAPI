@@ -316,6 +316,65 @@ exports.getExportList = async (req, res) => {
         return res.status(500).json(error(err, res.statusCode));
     };
 }
+
+
+exports.getimporterexportindia = async (req, res) => {
+    try {
+        db.query(query.getimporter_export_india, (error, results) => {
+            if (!error) {
+                return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            } else {
+                return res.status(500).json(error(error, res.statusCode));
+            }
+        })
+
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
+exports.getimporterimportindia = async (req, res) => {
+    try {
+        db.query(query.getimporter_import_india, (error, results) => {
+            if (!error) {
+                return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            } else {
+                return res.status(500).json(error(error, res.statusCode));
+            }
+        })
+
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
+exports.getexporterexportindia = async (req, res) => {
+    try {
+        db.query(query.getexporter_export_india, (error, results) => {
+            if (!error) {
+                return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            } else {
+                return res.status(500).json(error(error, res.statusCode));
+            }
+        })
+
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
+
+exports.getexporterimportindia = async (req, res) => {
+    try {
+        db.query(query.getexporter_import_india, (error, results) => {
+            if (!error) {
+                return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            } else {
+                return res.status(500).json(error(error, res.statusCode));
+            }
+        })
+
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
 exports.addupdateAccessSideFilter = async (req, res) => {
     try {
         const { HsCode, ProductDesc, Exp_Name, Imp_Name, CountryofDestination, CountryofOrigin, PortofOrigin,
