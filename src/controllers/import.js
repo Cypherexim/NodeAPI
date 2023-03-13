@@ -250,7 +250,7 @@ exports.getImportList = async (req, res) => {
         if (availablefield.rows.length == 1) {
             if (text != null) {
                 const query = 'SELECT DISTINCT "' + availablefield.rows[0].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "' + availablefield.rows[0].column_name.toString() + '" LIKE $3';
-                db.query(query, [ text + '%'], (error, results) => {
+                db.query(query, [text + '%'], (error, results) => {
                     if (!error) {
                         result[availablefield.rows[0].column_name] = results.rows;
                         return res.status(200).json(success("Ok", result, res.statusCode));
@@ -288,7 +288,7 @@ exports.getExportList = async (req, res) => {
         if (availablefield.rows.length == 1) {
             if (text != null) {
                 const query = 'SELECT DISTINCT "' + availablefield.rows[0].column_name.toString() + '" FROM ' + type.toLowerCase() + '_' + Country.toLowerCase() + ' WHERE "' + availablefield.rows[0].column_name.toString() + '" LIKE $3';
-                db.query(query, [ text + '%'], (error, results) => {
+                db.query(query, [text + '%'], (error, results) => {
                     if (!error) {
                         result[availablefield.rows[0].column_name] = results.rows;
                         return res.status(200).json(success("Ok", result, res.statusCode));
@@ -320,13 +320,24 @@ exports.getExportList = async (req, res) => {
 
 exports.getimporterexportindia = async (req, res) => {
     try {
-        db.query(query.getimporter_export_india, (error, results) => {
-            if (!error) {
-                return res.status(200).json(success("Ok", results.rows, res.statusCode));
-            } else {
-                return res.status(500).json(error(error, res.statusCode));
-            }
-        })
+        const { text = null } = req.query;
+        if (text == null) {
+            db.query(query.getimporter_export_india, (error, results) => {
+                if (!error) {
+                    return res.status(200).json(success("Ok", results.rows, res.statusCode));
+                } else {
+                    return res.status(500).json(error(error, res.statusCode));
+                }
+            })
+        } else {
+            db.query(query.getimporter_export_india_search, [text + '%'], (error, results) => {
+                if (!error) {
+                    return res.status(200).json(success("Ok", results.rows, res.statusCode));
+                } else {
+                    return res.status(500).json(error(error, res.statusCode));
+                }
+            })
+        }
 
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
@@ -334,47 +345,79 @@ exports.getimporterexportindia = async (req, res) => {
 }
 exports.getimporterimportindia = async (req, res) => {
     try {
-        db.query(query.getimporter_import_india, (error, results) => {
-            if (!error) {
-                return res.status(200).json(success("Ok", results.rows, res.statusCode));
-            } else {
-                return res.status(500).json(error(error, res.statusCode));
-            }
-        })
+        const { text = null } = req.query;
+        if (text == null) {
+            db.query(query.getimporter_import_india, (error, results) => {
+                if (!error) {
+                    return res.status(200).json(success("Ok", results.rows, res.statusCode));
+                } else {
+                    return res.status(500).json(error(error, res.statusCode));
+                }
+            })
+        } else {
+            db.query(query.getimporter_import_india_search, [text + '%'], (error, results) => {
+                if (!error) {
+                    return res.status(200).json(success("Ok", results.rows, res.statusCode));
+                } else {
+                    return res.status(500).json(error(error, res.statusCode));
+                }
+            })
+        }
 
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
+
 }
 exports.getexporterexportindia = async (req, res) => {
     try {
-        db.query(query.getexporter_export_india, (error, results) => {
-            if (!error) {
-                return res.status(200).json(success("Ok", results.rows, res.statusCode));
-            } else {
-                return res.status(500).json(error(error, res.statusCode));
-            }
-        })
-
+        const { text = null } = req.query;
+        if (text == null) {
+            db.query(query.getexporter_export_india, (error, results) => {
+                if (!error) {
+                    return res.status(200).json(success("Ok", results.rows, res.statusCode));
+                } else {
+                    return res.status(500).json(error(error, res.statusCode));
+                }
+            })
+        } else {
+            db.query(query.getexporter_export_india_search, [text + '%'], (error, results) => {
+                if (!error) {
+                    return res.status(200).json(success("Ok", results.rows, res.statusCode));
+                } else {
+                    return res.status(500).json(error(error, res.statusCode));
+                }
+            })
+        }
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
 }
-
 exports.getexporterimportindia = async (req, res) => {
     try {
-        db.query(query.getexporter_import_india, (error, results) => {
-            if (!error) {
-                return res.status(200).json(success("Ok", results.rows, res.statusCode));
-            } else {
-                return res.status(500).json(error(error, res.statusCode));
-            }
-        })
-
+        const { text = null } = req.query;
+        if (text == null) {
+            db.query(query.getexporter_import_india, (error, results) => {
+                if (!error) {
+                    return res.status(200).json(success("Ok", results.rows, res.statusCode));
+                } else {
+                    return res.status(500).json(error(error, res.statusCode));
+                }
+            })
+        } else {
+            db.query(query.getexporter_import_india_search, [text + '%'], (error, results) => {
+                if (!error) {
+                    return res.status(200).json(success("Ok", results.rows, res.statusCode));
+                } else {
+                    return res.status(500).json(error(error, res.statusCode));
+                }
+            })
+        }
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
 }
+
 exports.addupdateAccessSideFilter = async (req, res) => {
     try {
         const { HsCode, ProductDesc, Exp_Name, Imp_Name, CountryofDestination, CountryofOrigin, PortofOrigin,
