@@ -17,12 +17,12 @@ exports.getAnalysisData = async (req, res) => {
         const Requestedfield = [fieldName];
         const requestedfieldavailable = await db.query('SELECT column_name FROM information_schema.columns WHERE table_name = $1 and column_name = ANY($2)', [direction.toLowerCase() + '_' + countryname.toLowerCase(), Requestedfield]);
         if (requestedfieldavailable.rows.length > 0) {
-            const fieldList = ["Quantity", "ValueInUSD", "UnitPriceUSD"];
+            const fieldList = ["Quantity", "ValueInUSD", "UnitPriceUSD","UnitPriceFC"];
             const availablefield = await db.query('SELECT column_name FROM information_schema.columns WHERE table_name = $1 and column_name = ANY($2)', [direction.toLowerCase() + '_' + countryname.toLowerCase(), fieldList]);
             if (availablefield.rows.length > 0) {
                 var fields = [];
                 availablefield.rows.forEach(x => {
-                    if (x.column_name.toString() != "UnitPriceUSD") {
+                    if (x.column_name.toString() != "UnitPriceUSD" && x.column_name.toString() != "UnitPriceFC") {
                         fields.push('ROUND(SUM("' + x.column_name.toString() + '")::numeric,2) as ' + x.column_name.toString());
                     } else {
                         fields.push('ROUND(AVG("' + x.column_name.toString() + '")::numeric,2) as ' + x.column_name.toString());
