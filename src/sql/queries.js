@@ -18,6 +18,8 @@ module.exports = {
     "Designation"=$7, "Location"=$8, "GST"=$9, "IEC"=$10, "RoleId"=$11 WHERE "UserId"=$12`,
     get_user_by_email: `SELECT *,("EndDate"- now()::date) AS Remainingdays FROM public."Cypher" inner join public.userplantransaction on "Cypher"."UserId" = "userplantransaction"."UserId" inner join public.plan on "userplantransaction"."PlanId" = "plan"."PlanId" inner join "Role" on "Cypher"."RoleId" = "Role"."RoleId"
     where "Email"=$1`,
+    get_user_by_email_forchangepassword: `SELECT * FROM public."Cypher" where "Email"=$1`,
+    update_password:`UPDATE public."Cypher" SET "Password"=$1 WHERE "UserId"=$2`,
     get_user_email: `SELECT * FROM public."Cypher" WHERE "Email"=$1`,
     get_hscode_import: 'SELECT * FROM public.HSCodes',
     get_hscode_export: 'SELECT "Hscode","HscodeDesc" FROM public."HSCodes"',

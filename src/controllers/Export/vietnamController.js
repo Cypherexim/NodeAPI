@@ -9,7 +9,7 @@ const config = require('../../utils/config');
 
 
 // to get import with search data
-exports.getturkeyExport = async (req, res) => {
+exports.getvietnamExport = async (req, res) => {
     try {
         const { fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
             CountryofDestination, Month, Year, Currency, uqc, Quantity, PortofOrigin,

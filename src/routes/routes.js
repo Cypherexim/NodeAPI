@@ -32,6 +32,12 @@ const mexicoImportController = require('../controllers/Import/mexicoController')
 const nigeriaImportController = require('../controllers/Import/nigeriaController');
 const usaImportController = require('../controllers/Import/usaController');
 const vietnamImportController = require('../controllers/Import/vietnamController');
+const kenyaExportController = require('../controllers/Export/kenyaController');
+const lesothoExportController = require('../controllers/Export/lesothoController');
+const mexicoExportController = require('../controllers/Export/mexicoController');
+const nigeriaExportController = require('../controllers/Export/nigeriaController');
+const usaExportController = require('../controllers/Export/usaController');
+const vietnamExportController = require('../controllers/Export/vietnamController');
 
 
 // first Controller
@@ -82,6 +88,12 @@ router.post('/getChileExports', check('fromDate').notEmpty().isDate(), check('to
 router.post('/getPhilipExports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), philipExportController.getphilipExport);
 router.post('/getTurkeyExports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), turkeyExportController.getturkeyExport);
 router.post('/getRussiaExports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), russiaExportController.getrussiaExport);
+router.post('/getKenyaExports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), kenyaExportController.getkenyaExport);
+router.post('/getLesothoExports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), lesothoExportController.getlesothoExport);
+router.post('/getMexicoExports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), mexicoExportController.getmexicoExport);
+router.post('/getNigeriaExports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), nigeriaExportController.getnigeriaExport);
+router.post('/getUsaExports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), usaExportController.getusaExport);
+router.post('/getVietnamExports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), vietnamExportController.getvietnamExport);
 
 // Account Controller
 router.post('/signup', check('FullName').notEmpty(), check('CompanyName').notEmpty(), body('MobileNumber').isLength({ min: 10, max: 10 }).withMessage('Mobile Number should be of 10 digit.'), check('Password').notEmpty(), check('Email').isEmail(), accountController.createUser);
@@ -90,6 +102,7 @@ router.get('/getAccountDetails', accountController.getAccountDetails);
 router.post('/addUserAdmin', check('FullName').notEmpty(), check('CompanyName').notEmpty(), body('MobileNumber').isLength({ min: 10, max: 10 }).withMessage('Mobile Number should be of 10 digit.'), check('Password').notEmpty(), check('Email').isEmail(), accountController.addUserByAdmin);
 router.post('/updateUserAdmin', check('FullName').notEmpty(), check('CompanyName').notEmpty(), body('MobileNumber').isLength({ min: 10, max: 10 }).withMessage('Mobile Number should be of 10 digit.'), check('Password').notEmpty(), check('Email').isEmail(), accountController.updateUserByAdmin);
 router.get('/getAllUserList', accountController.getAllUserlist);
+router.post('/changePassword', check('NewPassword').notEmpty(),check('CurrentPassword').notEmpty(), check('Email').isEmail(), accountController.changePassword);
 
 // Country Controller
 router.get('/getContries', countryController.getCountries);

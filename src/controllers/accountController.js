@@ -72,7 +72,45 @@ exports.postLogin = async (req, res) => {
     }
     ////db.end;
 }
+exports.changePassword = async (req, res) => {
+    // //db.connect();
+    const { Email, CurrentPassword, NewPassword } = req.body;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        err = [];
+        errors.errors.forEach(element => {
+            err.push({ field: element.param, message: element.msg });
+        });
+        return res.status(422).json(validation(err));
+    }
 
+    const user = await db.query(query.get_user_by_email_forchangepassword, [Email]);
+    if (user?.rows.length > 0) {
+        bycrypt.compare(CurrentPassword, user.rows[0].Password)
+            .then(doMatch => {
+                if (doMatch) {
+                    bycrypt.hash(NewPassword, 12).then(hashPassword => {
+                        db.query(query.update_password, [hashPassword, user.rows[0].UserId], (error, results) => {
+                            if(!error){
+                                return res.status(200).json(success("Password changed Successfully !", res.statusCode));
+                            }else {
+                                return res.status(500).json(error("Internal server Error", res.statusCode));
+                            }
+                        })
+                    })
+                    
+                } else {
+                    return res.status(200).json(error("Incorrect Current password !", res.statusCode));
+                }
+            })
+            .catch(err => {
+                return res.status(500).json(error(err, res.statusCode));
+            })
+    } else {
+        return res.status(200).json(error("Email not found !", res.statusCode));
+    }
+    ////db.end;
+}
 exports.getAccountDetails = async (req, res) => {
     try {
         const { UserId } = req.query;
