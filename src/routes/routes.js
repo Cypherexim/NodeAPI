@@ -107,6 +107,8 @@ router.post('/changePassword', check('NewPassword').notEmpty(),check('CurrentPas
 // Country Controller
 router.get('/getContries', countryController.getCountries);
 router.post('/addCountry', countryController.addCountry);
+router.get('/getlatestdate', countryController.getlatestDate);
+router.post('/addimporteddatahistory', countryController.addDataHistory);
 
 // Plan Controller
 router.post('/addplan', check('PlanName').notEmpty(), planController.createPlan);

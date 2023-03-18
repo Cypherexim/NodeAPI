@@ -9,9 +9,9 @@ exports.getCountries = async (req, res) => {
     //db.connect();
     try {
         db.query(query.getCountry, (error, results) => {
-            if(!error){
-            return res.status(200).json(success("Ok", results.rows, res.statusCode));
-            }else {
+            if (!error) {
+                return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            } else {
                 return res.status(200).json(success("Ok", error.message, res.statusCode));
             }
         })
@@ -36,4 +36,34 @@ exports.addCountry = async (req, res) => {
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
+}
+
+exports.addDataHistory = async (req, res) => {
+    const { countryName, direction, latestDate } = req.body;
+    try {
+        db.query(query.addDataHistory, [countryName, direction, latestDate], (error, results) => {
+            if (!error) {
+                return res.status(200).json(success("Ok", result.command + " Successful.", res.statusCode));
+            }
+        })
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
+
+exports.getlatestDate = async (req, res) => {
+    //db.connect();
+    try {
+        const { countryName, direction} = req.query;
+        db.query(query.getLatestDate,[countryName,direction], (error, results) => {
+            if (!error) {
+                return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            } else {
+                return res.status(200).json(success("Ok", error.message, res.statusCode));
+            }
+        })
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+    //db.end;
 }

@@ -25,7 +25,11 @@ module.exports = {
     get_hscode_export: 'SELECT "Hscode","HscodeDesc" FROM public."HSCodes"',
     get_hscode_export_digit: 'SELECT "Hscode" ,"HscodeDesc" FROM public."HSCodes" where length("Hscode") =$1',
     getCountry: 'SELECT * FROM public."Country"',
+    getLatestDate:`SELECT "LatestDate" FROM public.datauploadhistorybydate where "CountryName"=$1 AND "Direction"=$2;`,
     addCountry: 'INSERT INTO public."Country"("Countrycode", "CountryName", "Import", "Export") VALUES ($1, $2, $3, $4)',
+    addDataHistory:`INSERT INTO public.datauploadhistorybydate(
+        "CountryName", "Direction", "LatestDate")
+        VALUES ($1, $2, $3);`,
     addDownloadCost: 'INSERT INTO public."Dowload_cost" ("CountryCode", "CostPerRecord") VALUES ($1, $2);',
     get_plan_by_name: `SELECT * FROM public.plan WHERE "PlanName"=$1`,
     add_plan: `INSERT INTO public.plan(
