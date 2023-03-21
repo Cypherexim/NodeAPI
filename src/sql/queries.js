@@ -30,6 +30,7 @@ module.exports = {
     addDataHistory:`INSERT INTO public.datauploadhistorybydate(
         "CountryName", "Direction", "LatestDate")
         VALUES ($1, $2, $3);`,
+    updateDataHistory:`UPDATE public.datauploadhistorybydate SET "LatestDate"=$1 WHERE "CountryName"=$2 AND "Direction"=$3;`,
     addDownloadCost: 'INSERT INTO public."Dowload_cost" ("CountryCode", "CostPerRecord") VALUES ($1, $2);',
     get_plan_by_name: `SELECT * FROM public.plan WHERE "PlanName"=$1`,
     add_plan: `INSERT INTO public.plan(

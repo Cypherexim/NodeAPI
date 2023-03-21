@@ -41,11 +41,24 @@ exports.addCountry = async (req, res) => {
 exports.addDataHistory = async (req, res) => {
     const { countryName, direction, latestDate } = req.body;
     try {
-        db.query(query.addDataHistory, [countryName, direction, latestDate], (error, results) => {
-            if (!error) {
-                return res.status(200).json(success("Ok", result.command + " Successful.", res.statusCode));
-            }
-        })
+        const values = await db.query(query.getLatestDate, [countryName, direction]);
+        if (values.rows.length > 0) {
+            db.query(query.updateDataHistory, [latestDate, countryName, direction], (error, results) => {
+                if (!error) {
+                    return res.status(200).json(success("Ok", results.command + " Successful.", res.statusCode));
+                } else {
+                    return res.status(500).json(success("Ok", "Internal server error !", res.statusCode));
+                }
+            })
+        } else {
+            db.query(query.addDataHistory, [countryName, direction, latestDate], (error, results) => {
+                if (!error) {
+                    return res.status(200).json(success("Ok", results.command + " Successful.", res.statusCode));
+                } else {
+                    return res.status(500).json(success("Ok", "Internal server error !", res.statusCode));
+                }
+            })
+        }
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
@@ -54,8 +67,8 @@ exports.addDataHistory = async (req, res) => {
 exports.getlatestDate = async (req, res) => {
     //db.connect();
     try {
-        const { countryName, direction} = req.query;
-        db.query(query.getLatestDate,[countryName,direction], (error, results) => {
+        const { countryName, direction } = req.query;
+        db.query(query.getLatestDate, [countryName, direction], (error, results) => {
             if (!error) {
                 return res.status(200).json(success("Ok", results.rows, res.statusCode));
             } else {
