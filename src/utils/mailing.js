@@ -3,7 +3,10 @@ const config = require('../utils/config');
 
 exports.SendEmail = async (toEmail, Subject, Message) => {
     var transporter = nodemailer.createTransport({
-        service: 'gmail',
+        //service: 'gmail',
+        host:'mail.myeximpanel.com',
+        port:465,
+        secure:true,
         auth: {
             user: config.fromEmail,
             pass: config.fromPassword
