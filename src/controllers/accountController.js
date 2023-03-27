@@ -126,6 +126,19 @@ exports.getAccountDetails = async (req, res) => {
     };
 }
 
+exports.enabledisableuser = async (req, res) => {
+    const { enable, UserId } = req.body;
+    try {
+        db.query(query.enable_disable_user, [enable, UserId], (error, results) => {
+            if (!error) {
+                return res.status(200).json(success("Ok", results.command + " Successful.", res.statusCode));
+            }
+        })
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
+
 exports.addUserByAdmin = async (req, res) => {
     const { FullName, CompanyName, MobileNumber, Email, Password, country, ParentUserId, Designation = null, Location = null, GST = null, IEC = null, RoleId
         , PlanId, Downloads, Searches, StartDate, EndDate, Validity, DataAccess, CountryAccess, CommodityAccess,

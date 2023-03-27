@@ -103,6 +103,7 @@ router.post('/addUserAdmin', check('FullName').notEmpty(), check('CompanyName').
 router.post('/updateUserAdmin', check('FullName').notEmpty(), check('CompanyName').notEmpty(), body('MobileNumber').isLength({ min: 10, max: 10 }).withMessage('Mobile Number should be of 10 digit.'), check('Password').notEmpty(), check('Email').isEmail(), accountController.updateUserByAdmin);
 router.get('/getAllUserList', accountController.getAllUserlist);
 router.post('/changePassword', check('NewPassword').notEmpty(),check('CurrentPassword').notEmpty(), check('Email').isEmail(), accountController.changePassword);
+router.post('/enabledisableuser', accountController.enabledisableuser);
 
 // Country Controller
 router.get('/getContries', countryController.getCountries);

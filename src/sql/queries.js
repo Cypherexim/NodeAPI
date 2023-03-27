@@ -16,6 +16,7 @@ module.exports = {
     update_user: `UPDATE public."Cypher"
 	SET "FullName"=$1, "CompanyName"=$2, "MobileNumber"=$3, "Email"=$4, "Password"=$5, "CountryCode"=$6,
     "Designation"=$7, "Location"=$8, "GST"=$9, "IEC"=$10, "RoleId"=$11 WHERE "UserId"=$12`,
+    enable_disable_user:`UPDATE public."Cypher" SET "Enable"=$1 WHERE "UserId"= $2;`,
     get_user_by_email: `SELECT *,("EndDate"- now()::date) AS Remainingdays FROM public."Cypher" inner join public.userplantransaction on "Cypher"."UserId" = "userplantransaction"."UserId" inner join public.plan on "userplantransaction"."PlanId" = "plan"."PlanId" inner join "Role" on "Cypher"."RoleId" = "Role"."RoleId"
     where "Email"=$1`,
     get_user_by_email_forchangepassword: `SELECT * FROM public."Cypher" where "Email"=$1`,
@@ -24,7 +25,7 @@ module.exports = {
     get_hscode_import: 'SELECT * FROM public.HSCodes',
     get_hscode_export: 'SELECT "Hscode","HscodeDesc" FROM public."HSCodes"',
     get_hscode_export_digit: 'SELECT "Hscode" ,"HscodeDesc" FROM public."HSCodes" where length("Hscode") =$1',
-    getCountry: 'SELECT * FROM public."Country"',
+    getCountry: 'SELECT * FROM public."Country" ORDER BY "CountryName"',
     getLatestDate:`SELECT "LatestDate" FROM public.datauploadhistorybydate where "CountryName"=$1 AND "Direction"=$2;`,
     addCountry: 'INSERT INTO public."Country"("Countrycode", "CountryName", "Import", "Export") VALUES ($1, $2, $3, $4)',
     addDataHistory:`INSERT INTO public.datauploadhistorybydate(

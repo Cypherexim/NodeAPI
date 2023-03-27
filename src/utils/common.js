@@ -86,7 +86,7 @@ exports.getExportData = async (fromDate, toDate, HsCode, ProductDesc, Imp_Name, 
     }
 
     const querytoexecute = utility.generateFilterQuery(params, selectQuery, tablename);
-    const finalQuery = querytoexecute[0] + (isOrderBy ? ' LIMIT ' + parseInt(itemperpage) + ' OFFSET ' + (parseInt(page) - 1) * parseInt(itemperpage) : '')
+    const finalQuery = querytoexecute[0] + (isOrderBy ? ' ORDER BY "Date" DESC LIMIT ' + parseInt(itemperpage) + ' OFFSET ' + (parseInt(page) - 1) * parseInt(itemperpage) : '')
 
     return [finalQuery, querytoexecute[1]];
 }

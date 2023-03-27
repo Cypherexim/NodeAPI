@@ -120,7 +120,8 @@ exports.generateDownloadfiles = async (req, res) => {
                                     });
                                     // Define worksheet
                                     const worksheet = workbook.addWorksheet('Data');
-
+                                    // remove recordID from array 
+                                    result.rows.forEach(function (tmp) { delete tmp.RecordID });
                                     // Set column headers
                                     worksheet.columns = getDataHeaders(result.rows[0]);
                                     result.rows.forEach((row) => {
@@ -179,7 +180,8 @@ exports.generateDownloadfiles = async (req, res) => {
                                 });
                                 // Define worksheet
                                 const worksheet = workbook.addWorksheet('Data');
-
+                                // remove recordID from array 
+                                result.rows.forEach(function (tmp) { delete tmp.RecordID });
                                 // Set column headers
                                 worksheet.columns = getDataHeaders(result.rows[0]);
                                 result.rows.forEach((row) => {
