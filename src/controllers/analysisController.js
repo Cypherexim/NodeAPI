@@ -17,7 +17,7 @@ exports.getAnalysisData = async (req, res) => {
         const Requestedfield = [fieldName];
         const requestedfieldavailable = await db.query('SELECT column_name FROM information_schema.columns WHERE table_name = $1 and column_name = ANY($2)', [direction.toLowerCase() + '_' + countryname.toLowerCase(), Requestedfield]);
         if (requestedfieldavailable.rows.length > 0) {
-            const fieldList = ["Quantity", "ValueInUSD", "UnitPriceUSD","UnitPriceFC"];
+            const fieldList = ["Quantity", "ValueInUSD", "UnitPriceUSD","UnitPriceFC","Asset_Value_USD"];
             const availablefield = await db.query('SELECT column_name FROM information_schema.columns WHERE table_name = $1 and column_name = ANY($2)', [direction.toLowerCase() + '_' + countryname.toLowerCase(), fieldList]);
             if (availablefield.rows.length > 0) {
                 var fields = [];
