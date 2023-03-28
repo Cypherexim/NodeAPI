@@ -103,7 +103,7 @@ module.exports = {
     getRoleswithAccess: `SELECT * FROM "Role" inner join "RoleAccess" on "Role"."RoleId" = "RoleAccess"."RoleId" WHERE "Role"."RoleId" =$1`,
 
     get_userlist: `SELECT "FullName", "CompanyName", "MobileNumber", "Email", "Cypher"."UserId", "CountryCode", "ParentUserId", "Designation",
-    "Location", "GST", "IEC", "Cypher"."RoleId","userplantransaction"."Downloads", "userplantransaction"."Searches", 
+    "Location", "GST", "IEC", "Cypher"."RoleId","Cypher"."Enable","userplantransaction"."Downloads", "userplantransaction"."Searches", 
     "userplantransaction"."StartDate", "userplantransaction"."EndDate", "userplantransaction"."Validity", 
     "userplantransaction"."DataAccess", "userplantransaction"."CountryAccess", "userplantransaction"."CommodityAccess", 
     "userplantransaction"."TarrifCodeAccess", "userplantransaction"."Workspace", "userplantransaction"."WSSLimit", 
