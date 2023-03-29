@@ -57,6 +57,7 @@ module.exports = {
     get_Searches_By_UserId: `SELECT *, "Downloads","Searches",("EndDate"- now()::date) AS Remainingdays FROM public.userplantransaction WHERE "UserId"=$1`,
 
     get_sidefilter_Access: `SELECT * FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
+    get_all_sidefilter_Access: `SELECT * FROM public."SideFilterAccess"`,
     getimporter_export_india:`SELECT * FROM public.importer_export_india ORDER BY "Imp_Name" limit 500`,
     getimporter_import_india:`SELECT * FROM public.importer_import_india ORDER BY "Imp_Name" limit 500`,
     getexporter_export_india:`SELECT * FROM public.exporter_export_india ORDER BY "Exp_Name" limit 500`,

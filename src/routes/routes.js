@@ -48,6 +48,7 @@ router.post('/addUser', check('email').isEmail(), firstController.createtUser);
 router.get('/fetchImport', importController.getimport);
 router.get('/gethscode', importController.getHscode);
 router.get('/getSideFilterAccess', importController.getSideFilterAccess);
+router.get('/getAllSideFilterAccess', importController.getAllSideFilterAccess);
 router.get('/getImportExportList', importController.getImportExportList);
 router.get('/getImportList', importController.getImportList);
 router.get('/getExportList', importController.getExportList);

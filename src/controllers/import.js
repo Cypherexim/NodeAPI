@@ -167,7 +167,20 @@ exports.getSideFilterAccess = async (req, res) => {
         return res.status(500).json(error(err, res.statusCode));
     };
 }
+exports.getAllSideFilterAccess = async (req, res) => {
+    try {
+        db.query(query.get_all_sidefilter_Access, (error, results) => {
+            if (!error) {
+                return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            } else {
+                return res.status(500).json(error(error, res.statusCode));
+            }
+        })
 
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
 exports.getImportExportList = async (req, res) => {
     try {
         const { Country, type, fromDate, toDate, text = null } = req.query;
