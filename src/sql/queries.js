@@ -7,6 +7,7 @@ module.exports = {
     AND ("HSCODE"::text ILIKE $3) OR ("HSCodeDesc" ILIKE $4) 
     OR ("Importer_Name" ILIKE $5) OR ("EXPORTER_NAME" ILIKE $6) 
     order by "RecordID" limit 1000000`,
+    update_country:`UPDATE public."Country" SET  "Import"=$1, "Export"=$2 WHERE "Countrycode"=$3;`,
     add_user_by_admin: `INSERT INTO public."Cypher"(
         "FullName", "CompanyName", "MobileNumber", "Email", "Password","CountryCode","ParentUserId")
         VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING public."Cypher"."UserId";`,
@@ -17,7 +18,16 @@ module.exports = {
 	SET "FullName"=$1, "CompanyName"=$2, "MobileNumber"=$3, "Email"=$4, "Password"=$5, "CountryCode"=$6,
     "Designation"=$7, "Location"=$8, "GST"=$9, "IEC"=$10, "RoleId"=$11 WHERE "UserId"=$12`,
     enable_disable_user:`UPDATE public."Cypher" SET "Enable"=$1 WHERE "UserId"= $2;`,
-    get_user_by_email: `SELECT *,("EndDate"- now()::date) AS Remainingdays FROM public."Cypher" inner join public.userplantransaction on "Cypher"."UserId" = "userplantransaction"."UserId" inner join public.plan on "userplantransaction"."PlanId" = "plan"."PlanId" inner join "Role" on "Cypher"."RoleId" = "Role"."RoleId"
+    get_user_by_email: `SELECT "FullName", "CompanyName", "MobileNumber", "Email", "Password","RoleName", "Cypher"."UserId", "CountryCode", "ParentUserId", "Designation", "Location", "GST", "IEC", "Cypher"."RoleId", "Enable", public.userplantransaction."PlanId", public.userplantransaction."Downloads", public.userplantransaction."Searches", 
+    public.userplantransaction."StartDate", public.userplantransaction."EndDate", public.userplantransaction."Validity",
+    public.userplantransaction."DataAccess", public.userplantransaction."CountryAccess", 
+    public.userplantransaction."CommodityAccess", public.userplantransaction."TarrifCodeAccess", 
+    public.userplantransaction."Workspace", public.userplantransaction."WSSLimit", public.userplantransaction."Downloadfacility",
+    public.userplantransaction."Favoriteshipment", public.userplantransaction."Whatstrending", public.userplantransaction."Companyprofile", 
+    public.userplantransaction."Addonfacility", public.userplantransaction."Analysis", public.userplantransaction."User",("EndDate"- now()::date) AS Remainingdays FROM public."Cypher" 
+    inner join public.userplantransaction on "Cypher"."UserId" = "userplantransaction"."UserId" 
+    inner join public.plan on "userplantransaction"."PlanId" = "plan"."PlanId" 
+    inner join "Role" on "Cypher"."RoleId" = "Role"."RoleId"
     where "Email"=$1`,
     get_user_by_email_forchangepassword: `SELECT * FROM public."Cypher" where "Email"=$1`,
     update_password:`UPDATE public."Cypher" SET "Password"=$1 WHERE "UserId"=$2`,

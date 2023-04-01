@@ -38,6 +38,19 @@ exports.addCountry = async (req, res) => {
     };
 }
 
+exports.updateCountry = async (req, res) => {
+    const { countryCode, imp, exp } = req.body;
+    try {
+        db.query(query.update_country, [imp, exp, countryCode], (error, results) => {
+            if (!error) {
+                return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            }
+        })
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
+
 exports.addDataHistory = async (req, res) => {
     const { countryName, direction, latestDate } = req.body;
     try {

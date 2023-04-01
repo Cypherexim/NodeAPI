@@ -109,6 +109,7 @@ router.post('/enabledisableuser', accountController.enabledisableuser);
 // Country Controller
 router.get('/getContries', countryController.getCountries);
 router.post('/addCountry', countryController.addCountry);
+router.post('/updateCountry', countryController.updateCountry);
 router.get('/getlatestdate', countryController.getlatestDate);
 router.post('/addimporteddatahistory', countryController.addDataHistory);
 
