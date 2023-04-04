@@ -134,4 +134,5 @@ router.post('/generatedownloadfiles',downloadController.generateDownloadfiles);
 // Analysis Controller
 
 router.post('/getAnalysisReport', analysisController.getAnalysisData);
+router.get('/getwhatstrending', analysisController.getWhatsTrending);
 module.exports = router;

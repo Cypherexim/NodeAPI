@@ -17,7 +17,7 @@ exports.getAnalysisData = async (req, res) => {
         const Requestedfield = [fieldName];
         const requestedfieldavailable = await db.query('SELECT column_name FROM information_schema.columns WHERE table_name = $1 and column_name = ANY($2)', [direction.toLowerCase() + '_' + countryname.toLowerCase(), Requestedfield]);
         if (requestedfieldavailable.rows.length > 0) {
-            const fieldList = ["Quantity", "ValueInUSD", "UnitPriceUSD","UnitPriceFC","Asset_Value_USD"];
+            const fieldList = ["Quantity", "ValueInUSD", "UnitPriceUSD", "UnitPriceFC", "Asset_Value_USD"];
             const availablefield = await db.query('SELECT column_name FROM information_schema.columns WHERE table_name = $1 and column_name = ANY($2)', [direction.toLowerCase() + '_' + countryname.toLowerCase(), fieldList]);
             if (availablefield.rows.length > 0) {
                 var fields = [];
@@ -50,4 +50,20 @@ exports.getAnalysisData = async (req, res) => {
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
+}
+
+
+exports.getWhatsTrending = async (req, res) => {
+    const { country, direction, year } = req.query;
+
+    const fromDate = year + '-01-01';
+    const toDate = year + '-12-31';
+
+    db.query('SELECT ROUND(SUM("ValueInUSD")::numeric,2) FROM ' + direction.toLowerCase() + '_' + country.toLowerCase() + ' where "Date" >= $1  AND "Date" <=$2', [fromDate, toDate], (err, result) => {
+        if (!err) {
+            return res.status(200).json(success("Ok", result.rows, res.statusCode));
+        } else {
+            return res.status(200).json(success("Ok", err.message, res.statusCode));
+        }
+    });
 }
