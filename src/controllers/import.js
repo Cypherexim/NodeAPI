@@ -557,6 +557,182 @@ exports.getListofSidefilterdata = async (req, res) => {
         return res.status(500).json(error(err, res.statusCode));
     };
 }
+exports.getfirstListofSidefilterdata = async (req, res) => {
+    try {
+        const { fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
+            CountryofDestination, Month, Year, Currency, uqc, Quantity, PortofOrigin,
+            PortofDestination,
+            Mode, LoadingPort,
+            NotifyPartyName, CountryCode, CountryName, Direction } = req.body;
+        const access = await db.query(query.get_first_sidefilter_Access, [CountryCode, Direction.toUpperCase()]);
+        var selectQuery = 'Distinct ';
+        var output = {};
+        if (access.rows.length > 0) {
+            const keys = Object.keys(access.rows[0]);
+            const obj = access.rows[0];
+            for (let i = 0; i < keys.length; i++) {
+                if (obj[keys[i]] === true) {
+                    selectQuery += '"' + keys[i] + '", '
+                }
+            }
+
+            const query = await common.getExportData(fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
+                CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
+                PortofDestination,
+                Mode, LoadingPort,
+                NotifyPartyName, Currency, 0, 0, selectQuery.replace(/,\s*$/, "") + ' FROM ', Direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
+
+            db.query(query[0], query[1].slice(1), (err, results) => {
+                if (!err) {
+                    for (let i = 0; i < keys.length; i++) {
+                        if (obj[keys[i]] == true) {
+                            output[keys[i]] = [...new Set(extractValue(results.rows, keys[i]))];
+                        }
+                    }
+                    // output.HSCODE = extractValue(results.rows,'HsCode');
+                    // console.log(output);
+                    return res.status(200).json(success("Ok", output, res.statusCode));
+                } else {
+                    return res.status(500).json(error(err.message, res.statusCode));
+                }
+            })
+        }
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
+exports.getsecondListofSidefilterdata = async (req, res) => {
+    try {
+        const { fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
+            CountryofDestination, Month, Year, Currency, uqc, Quantity, PortofOrigin,
+            PortofDestination,
+            Mode, LoadingPort,
+            NotifyPartyName, CountryCode, CountryName, Direction } = req.body;
+        const access = await db.query(query.get_second_sidefilter_Access, [CountryCode, Direction.toUpperCase()]);
+        var selectQuery = 'Distinct ';
+        var output = {};
+        if (access.rows.length > 0) {
+            const keys = Object.keys(access.rows[0]);
+            const obj = access.rows[0];
+            for (let i = 0; i < keys.length; i++) {
+                if (obj[keys[i]] === true) {
+                    selectQuery += '"' + keys[i] + '", '
+                }
+            }
+
+            const query = await common.getExportData(fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
+                CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
+                PortofDestination,
+                Mode, LoadingPort,
+                NotifyPartyName, Currency, 0, 0, selectQuery.replace(/,\s*$/, "") + ' FROM ', Direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
+
+            db.query(query[0], query[1].slice(1), (err, results) => {
+                if (!err) {
+                    for (let i = 0; i < keys.length; i++) {
+                        if (obj[keys[i]] == true) {
+                            output[keys[i]] = [...new Set(extractValue(results.rows, keys[i]))];
+                        }
+                    }
+                    // output.HSCODE = extractValue(results.rows,'HsCode');
+                    // console.log(output);
+                    return res.status(200).json(success("Ok", output, res.statusCode));
+                } else {
+                    return res.status(500).json(error(err.message, res.statusCode));
+                }
+            })
+        }
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
+exports.getthirdListofSidefilterdata = async (req, res) => {
+    try {
+        const { fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
+            CountryofDestination, Month, Year, Currency, uqc, Quantity, PortofOrigin,
+            PortofDestination,
+            Mode, LoadingPort,
+            NotifyPartyName, CountryCode, CountryName, Direction } = req.body;
+        const access = await db.query(query.get_third_sidefilter_Access, [CountryCode, Direction.toUpperCase()]);
+        var selectQuery = 'Distinct ';
+        var output = {};
+        if (access.rows.length > 0) {
+            const keys = Object.keys(access.rows[0]);
+            const obj = access.rows[0];
+            for (let i = 0; i < keys.length; i++) {
+                if (obj[keys[i]] === true) {
+                    selectQuery += '"' + keys[i] + '", '
+                }
+            }
+
+            const query = await common.getExportData(fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
+                CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
+                PortofDestination,
+                Mode, LoadingPort,
+                NotifyPartyName, Currency, 0, 0, selectQuery.replace(/,\s*$/, "") + ' FROM ', Direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
+
+            db.query(query[0], query[1].slice(1), (err, results) => {
+                if (!err) {
+                    for (let i = 0; i < keys.length; i++) {
+                        if (obj[keys[i]] == true) {
+                            output[keys[i]] = [...new Set(extractValue(results.rows, keys[i]))];
+                        }
+                    }
+                    // output.HSCODE = extractValue(results.rows,'HsCode');
+                    // console.log(output);
+                    return res.status(200).json(success("Ok", output, res.statusCode));
+                } else {
+                    return res.status(500).json(error(err.message, res.statusCode));
+                }
+            })
+        }
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
+exports.getfourthListofSidefilterdata = async (req, res) => {
+    try {
+        const { fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
+            CountryofDestination, Month, Year, Currency, uqc, Quantity, PortofOrigin,
+            PortofDestination,
+            Mode, LoadingPort,
+            NotifyPartyName, CountryCode, CountryName, Direction } = req.body;
+        const access = await db.query(query.get_fourth_sidefilter_Access, [CountryCode, Direction.toUpperCase()]);
+        var selectQuery = 'Distinct ';
+        var output = {};
+        if (access.rows.length > 0) {
+            const keys = Object.keys(access.rows[0]);
+            const obj = access.rows[0];
+            for (let i = 0; i < keys.length; i++) {
+                if (obj[keys[i]] === true) {
+                    selectQuery += '"' + keys[i] + '", '
+                }
+            }
+
+            const query = await common.getExportData(fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
+                CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
+                PortofDestination,
+                Mode, LoadingPort,
+                NotifyPartyName, Currency, 0, 0, selectQuery.replace(/,\s*$/, "") + ' FROM ', Direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
+
+            db.query(query[0], query[1].slice(1), (err, results) => {
+                if (!err) {
+                    for (let i = 0; i < keys.length; i++) {
+                        if (obj[keys[i]] == true) {
+                            output[keys[i]] = [...new Set(extractValue(results.rows, keys[i]))];
+                        }
+                    }
+                    // output.HSCODE = extractValue(results.rows,'HsCode');
+                    // console.log(output);
+                    return res.status(200).json(success("Ok", output, res.statusCode));
+                } else {
+                    return res.status(500).json(error(err.message, res.statusCode));
+                }
+            })
+        }
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
 exports.getProductDesc = async (req, res) => {
     try {
         const { product } = req.query;

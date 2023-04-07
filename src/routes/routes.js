@@ -63,6 +63,10 @@ router.get('/getimporterexportindia',importController.getimporterexportindia)
 router.get('/getimporterimportindia',importController.getimporterimportindia)
 router.get('/getexporterexportindia',importController.getexporterexportindia)
 router.get('/getexporterimportindia',importController.getexporterimportindia)
+router.post('/getfirstSideFilterData', importController.getfirstListofSidefilterdata);
+router.post('/getsecondSideFilterData', importController.getsecondListofSidefilterdata);
+router.post('/getthirdSideFilterData', importController.getthirdListofSidefilterdata);
+router.post('/getfourthSideFilterData', importController.getfourthListofSidefilterdata);
 
 //Import controller
 router.post('/getIndiaImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), indiaImportController.getindiaImport);
