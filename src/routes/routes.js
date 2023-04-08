@@ -67,6 +67,8 @@ router.post('/getfirstSideFilterData', importController.getfirstListofSidefilter
 router.post('/getsecondSideFilterData', importController.getsecondListofSidefilterdata);
 router.post('/getthirdSideFilterData', importController.getthirdListofSidefilterdata);
 router.post('/getfourthSideFilterData', importController.getfourthListofSidefilterdata);
+router.post('/getimportSideFilterData', importController.getImportListofSidefilterdata);
+router.post('/getexportSideFilterData', importController.getExportListofSidefilterdata);
 
 //Import controller
 router.post('/getIndiaImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), indiaImportController.getindiaImport);

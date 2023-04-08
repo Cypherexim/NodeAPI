@@ -67,7 +67,9 @@ module.exports = {
     get_Searches_By_UserId: `SELECT *, "Downloads","Searches",("EndDate"- now()::date) AS Remainingdays FROM public.userplantransaction WHERE "UserId"=$1`,
 
     get_sidefilter_Access: `SELECT * FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
-    get_first_sidefilter_Access: `SELECT "HsCode", "ProductDesc", "Exp_Name", "Imp_Name" FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
+    get_first_sidefilter_Access: `SELECT "HsCode", "ProductDesc" FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
+    get_Import_sidefilter_Access: `SELECT "Imp_Name" FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
+    get_Export_sidefilter_Access: `SELECT "Exp_Name" FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
     get_second_sidefilter_Access: `SELECT "CountryofDestination", "CountryofOrigin", "PortofOrigin", "Mode" FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
     get_third_sidefilter_Access: `SELECT uqc, "Quantity", "Month", "Year" FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
     get_fourth_sidefilter_Access: `SELECT  "PortofDestination", "LoadingPort", "Currency", "NotifyPartyName" FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
