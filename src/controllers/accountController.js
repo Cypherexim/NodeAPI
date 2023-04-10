@@ -21,18 +21,20 @@ exports.createUser = async (req, res) => {
         return res.status(422).json(validation(err));
     }
 
-    const user = await db.query(query.get_user_by_email, [Email]);
+    const user = await db.query(query.get_user_email, [Email]);
     if (user.rows.length > 0) {
         return res.status(422).json(error("Email already registered !", res.statusCode));
     } else {
         bycrypt.hash(Password, 12).then(hashPassword => {
             db.query(query.add_user, [FullName, CompanyName, MobileNumber, Email, hashPassword, country, ParentUserId, '', '', '', '', config.DefaultRole], async (err, result) => {
                 if (!err) {
-                    const planDetails = await db.query(query.get_plan_by_name, [config.DefaultPlan]);
-                    if (planDetails != null) {
-                        db.query(query.add_Plan_Trasaction, [result.rows[0].UserId, planDetails.rows[0].PlanId, planDetails.rows[0].Downloads, planDetails.rows[0].Searches, date.toISOString()], (err, result) => {
-                            return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
-                        });
+                    if (ParentUserId == null || ParentUserId == '' || ParentUserId == undefined) {
+                        const planDetails = await db.query(query.get_plan_by_name, [config.DefaultPlan]);
+                        if (planDetails != null) {
+                            db.query(query.add_Plan_Trasaction, [result.rows[0].UserId, planDetails.rows[0].PlanId, planDetails.rows[0].Downloads, planDetails.rows[0].Searches, date.toISOString()], (err, result) => {
+                                return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
+                            });
+                        }
                     }
                 }
                 else { return res.status(500).json(error("Somthing went wrong", res.statusCode)); }
@@ -91,14 +93,14 @@ exports.changePassword = async (req, res) => {
                 if (doMatch) {
                     bycrypt.hash(NewPassword, 12).then(hashPassword => {
                         db.query(query.update_password, [hashPassword, user.rows[0].UserId], (error, results) => {
-                            if(!error){
+                            if (!error) {
                                 return res.status(200).json(success("Password changed Successfully !", res.statusCode));
-                            }else {
+                            } else {
                                 return res.status(500).json(error("Internal server Error", res.statusCode));
                             }
                         })
                     })
-                    
+
                 } else {
                     return res.status(200).json(error("Incorrect Current password !", res.statusCode));
                 }
@@ -218,9 +220,9 @@ exports.updateUserByAdmin = async (req, res) => {
 exports.getAllUserlist = async (req, res) => {
     try {
         db.query(query.get_userlist, (error, results) => {
-            if(!error){
-            return res.status(200).json(success("Ok", results.rows, res.statusCode));
-            }else {
+            if (!error) {
+                return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            } else {
                 return res.status(200).json(success("Ok", error.message, res.statusCode));
             }
         })
