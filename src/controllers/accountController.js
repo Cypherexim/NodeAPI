@@ -35,6 +35,9 @@ exports.createUser = async (req, res) => {
                                 return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
                             });
                         }
+                    } else {
+                        mail.SendEmail(Email, config.userRegisterationmailSubject, config.accountcreationmailBody);
+                        return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
                     }
                 }
                 else { return res.status(500).json(error("Somthing went wrong", res.statusCode)); }
