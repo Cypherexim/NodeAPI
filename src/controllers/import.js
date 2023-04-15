@@ -785,6 +785,15 @@ exports.getImportListofSidefilterdata = async (req, res) => {
         if (access.rows.length > 0) {
             const keys = Object.keys(access.rows[0]);
             const obj = access.rows[0];
+            if (Object.values(access.rows[0])
+                .every(item => item === false)) {
+                for (let i = 0; i < keys.length; i++) {
+                    if (obj[keys[i]] == false) {
+                        output[keys[i]] = [];
+                    }
+                }
+                return res.status(200).json(success("Ok", output, res.statusCode));
+            } else {
             for (let i = 0; i < keys.length; i++) {
                 if (obj[keys[i]] === true) {
                     selectQuery += '"' + keys[i] + '", '
@@ -812,6 +821,7 @@ exports.getImportListofSidefilterdata = async (req, res) => {
                 }
             })
         }
+        }
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
@@ -829,6 +839,15 @@ exports.getExportListofSidefilterdata = async (req, res) => {
         if (access.rows.length > 0) {
             const keys = Object.keys(access.rows[0]);
             const obj = access.rows[0];
+            if (Object.values(access.rows[0])
+                .every(item => item === false)) {
+                for (let i = 0; i < keys.length; i++) {
+                    if (obj[keys[i]] == false) {
+                        output[keys[i]] = [];
+                    }
+                }
+                return res.status(200).json(success("Ok", output, res.statusCode));
+            } else {
             for (let i = 0; i < keys.length; i++) {
                 if (obj[keys[i]] === true) {
                     selectQuery += '"' + keys[i] + '", '
@@ -855,6 +874,7 @@ exports.getExportListofSidefilterdata = async (req, res) => {
                     return res.status(500).json(error(err.message, res.statusCode));
                 }
             })
+        }
         }
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
