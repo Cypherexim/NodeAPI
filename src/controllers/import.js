@@ -794,33 +794,33 @@ exports.getImportListofSidefilterdata = async (req, res) => {
                 }
                 return res.status(200).json(success("Ok", output, res.statusCode));
             } else {
-            for (let i = 0; i < keys.length; i++) {
-                if (obj[keys[i]] === true) {
-                    selectQuery += '"' + keys[i] + '", '
-                }
-            }
-
-            const query = await common.getExportData(fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
-                CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
-                PortofDestination,
-                Mode, LoadingPort,
-                NotifyPartyName, Currency, 0, 0, selectQuery.replace(/,\s*$/, "") + ' FROM ', Direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
-
-            db.query(query[0], query[1].slice(1), (err, results) => {
-                if (!err) {
-                    for (let i = 0; i < keys.length; i++) {
-                        if (obj[keys[i]] == true) {
-                            output[keys[i]] = [...new Set(extractValue(results.rows, keys[i]))];
-                        }
+                for (let i = 0; i < keys.length; i++) {
+                    if (obj[keys[i]] === true) {
+                        selectQuery += '"' + keys[i] + '", '
                     }
-                    // output.HSCODE = extractValue(results.rows,'HsCode');
-                    // console.log(output);
-                    return res.status(200).json(success("Ok", output, res.statusCode));
-                } else {
-                    return res.status(500).json(error(err.message, res.statusCode));
                 }
-            })
-        }
+
+                const query = await common.getExportData(fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
+                    CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
+                    PortofDestination,
+                    Mode, LoadingPort,
+                    NotifyPartyName, Currency, 0, 0, selectQuery.replace(/,\s*$/, "") + ' FROM ', Direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
+
+                db.query(query[0], query[1].slice(1), (err, results) => {
+                    if (!err) {
+                        for (let i = 0; i < keys.length; i++) {
+                            if (obj[keys[i]] == true) {
+                                output[keys[i]] = [...new Set(extractValue(results.rows, keys[i]))];
+                            }
+                        }
+                        // output.HSCODE = extractValue(results.rows,'HsCode');
+                        // console.log(output);
+                        return res.status(200).json(success("Ok", output, res.statusCode));
+                    } else {
+                        return res.status(500).json(error(err.message, res.statusCode));
+                    }
+                })
+            }
         }
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
@@ -848,33 +848,33 @@ exports.getExportListofSidefilterdata = async (req, res) => {
                 }
                 return res.status(200).json(success("Ok", output, res.statusCode));
             } else {
-            for (let i = 0; i < keys.length; i++) {
-                if (obj[keys[i]] === true) {
-                    selectQuery += '"' + keys[i] + '", '
-                }
-            }
-
-            const query = await common.getExportData(fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
-                CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
-                PortofDestination,
-                Mode, LoadingPort,
-                NotifyPartyName, Currency, 0, 0, selectQuery.replace(/,\s*$/, "") + ' FROM ', Direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
-
-            db.query(query[0], query[1].slice(1), (err, results) => {
-                if (!err) {
-                    for (let i = 0; i < keys.length; i++) {
-                        if (obj[keys[i]] == true) {
-                            output[keys[i]] = [...new Set(extractValue(results.rows, keys[i]))];
-                        }
+                for (let i = 0; i < keys.length; i++) {
+                    if (obj[keys[i]] === true) {
+                        selectQuery += '"' + keys[i] + '", '
                     }
-                    // output.HSCODE = extractValue(results.rows,'HsCode');
-                    // console.log(output);
-                    return res.status(200).json(success("Ok", output, res.statusCode));
-                } else {
-                    return res.status(500).json(error(err.message, res.statusCode));
                 }
-            })
-        }
+
+                const query = await common.getExportData(fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
+                    CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
+                    PortofDestination,
+                    Mode, LoadingPort,
+                    NotifyPartyName, Currency, 0, 0, selectQuery.replace(/,\s*$/, "") + ' FROM ', Direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
+
+                db.query(query[0], query[1].slice(1), (err, results) => {
+                    if (!err) {
+                        for (let i = 0; i < keys.length; i++) {
+                            if (obj[keys[i]] == true) {
+                                output[keys[i]] = [...new Set(extractValue(results.rows, keys[i]))];
+                            }
+                        }
+                        // output.HSCODE = extractValue(results.rows,'HsCode');
+                        // console.log(output);
+                        return res.status(200).json(success("Ok", output, res.statusCode));
+                    } else {
+                        return res.status(500).json(error(err.message, res.statusCode));
+                    }
+                })
+            }
         }
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
@@ -886,6 +886,31 @@ exports.getProductDesc = async (req, res) => {
         db.query('SELECT * FROM public."Products" WHERE "Product" LIKE $1', [product + '%'], (err, result) => {
             return res.status(200).json(success("Ok", result.rows, res.statusCode));
         });
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
+
+exports.getexportlistbyAlphabet = async (req, res) => {
+    try {
+        const { alphabet, countryname, direction, columnname } = req.body;
+        const fieldList = ["Imp_Name", "Exp_Name"];
+        const availablefield = await db.query('SELECT column_name FROM information_schema.columns WHERE table_name = $1 and column_name = ANY($2)', [direction.toLowerCase() + '_' + countryname.toLowerCase(), fieldList]);
+        if (availablefield.rows.length > 0) {
+            if (columnname == 'Imp_Name') {
+                db.query('SELECT "Imp_Name" FROM ' + direction.toLowerCase() + '_' + countryname.toLowerCase() + ' WHERE "Imp_Name" LIKE  $1 LIMIT 500' , [alphabet + '%'], (err, result) => {
+                    return res.status(200).json(success("Ok", result.rows, res.statusCode));
+                });
+            } else if (columnname == 'Exp_Name') {
+                db.query('SELECT "Exp_Name" FROM ' + direction.toLowerCase() + '_' + countryname.toLowerCase() + ' WHERE "Exp_Name" LIKE  $1 LIMIT 500', [alphabet + '%'], (err, result) => {
+                    return res.status(200).json(success("Ok", result.rows, res.statusCode));
+                });
+            } else {
+                return res.status(200).json(success("Ok", "Field not available", res.statusCode));
+            }
+        } else {
+            return res.status(200).json(success("Ok", "This Field not available", res.statusCode));
+        }
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
