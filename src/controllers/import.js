@@ -898,13 +898,26 @@ exports.getexportlistbyAlphabet = async (req, res) => {
         const availablefield = await db.query('SELECT column_name FROM information_schema.columns WHERE table_name = $1 and column_name = ANY($2)', [direction.toLowerCase() + '_' + countryname.toLowerCase(), fieldList]);
         if (availablefield.rows.length > 0) {
             if (columnname == 'Imp_Name') {
-                db.query('SELECT "Imp_Name" FROM ' + direction.toLowerCase() + '_' + countryname.toLowerCase() + ' WHERE "Imp_Name" LIKE  $1 LIMIT 500' , [alphabet + '%'], (err, result) => {
-                    return res.status(200).json(success("Ok", result.rows, res.statusCode));
-                });
+                if(direction.toLowerCase() == 'import'){
+                    db.query(query.getimporter_import_india_search , [alphabet + '%'], (err, result) => {
+                        return res.status(200).json(success("Ok", result.rows, res.statusCode));
+                    });
+                } else {
+                    db.query(query.getimporter_export_india_search , [alphabet + '%'], (err, result) => {
+                        return res.status(200).json(success("Ok", result.rows, res.statusCode));
+                    });
+                }
+                
             } else if (columnname == 'Exp_Name') {
-                db.query('SELECT "Exp_Name" FROM ' + direction.toLowerCase() + '_' + countryname.toLowerCase() + ' WHERE "Exp_Name" LIKE  $1 LIMIT 500', [alphabet + '%'], (err, result) => {
-                    return res.status(200).json(success("Ok", result.rows, res.statusCode));
-                });
+                if(direction.toLowerCase() == 'import'){
+                    db.query(query.getexporter_import_india_search , [alphabet + '%'], (err, result) => {
+                        return res.status(200).json(success("Ok", result.rows, res.statusCode));
+                    });
+                } else {
+                    db.query(query.getexporter_export_india_search , [alphabet + '%'], (err, result) => {
+                        return res.status(200).json(success("Ok", result.rows, res.statusCode));
+                    });
+                }
             } else {
                 return res.status(200).json(success("Ok", "Field not available", res.statusCode));
             }
