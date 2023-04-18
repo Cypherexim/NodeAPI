@@ -30,7 +30,7 @@ exports.createUser = async (req, res) => {
                 if (!err) {
                     if (ParentUserId == null || ParentUserId == '' || ParentUserId == undefined) {
                         const planDetails = await db.query(query.get_plan_by_name, [config.DefaultPlan]);
-                        if (planDetails != null) {
+                        if (planDetails.rows.length > 0) {
                             db.query(query.add_Plan_Trasaction, [result.rows[0].UserId, planDetails.rows[0].PlanId, planDetails.rows[0].Downloads, planDetails.rows[0].Searches, date.toISOString()], (err, result) => {
                                 return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
                             });
