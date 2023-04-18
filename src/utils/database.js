@@ -16,7 +16,9 @@ const pool = new Pool({
     host: '18.214.151.123',
     database:'exim_portal_db',
     password: 'api123',
-    port:5432
+    port:5432,
+    keepAlive: true,
+    keepAliveInitialDelayMillis: 10000
 })
 
 // const pool = new Pool({
