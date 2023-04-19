@@ -486,7 +486,18 @@ exports.addWorkspace = async (req, res) => {
         return res.status(500).json(error(err, res.statusCode));
     };
 }
-
+exports.deleteWorkspace = async (req, res) => {
+    try {
+        const { visibility, Id } = req.body;
+        db.query(query.delete_Workspace, [visibility, Id], (err, result) => {
+            if (!err) {
+                return res.status(201).json(success("Ok", "workspace deleted Successfully.", res.statusCode));
+            }
+        });
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
 exports.getDownloadCost = async (req, res) => {
     try {
         const { CountryCode } = req.query;

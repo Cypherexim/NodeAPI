@@ -102,11 +102,13 @@ module.exports = {
     update_sidefilter_Access: `UPDATE public."SideFilterAccess"
 	SET  "HsCode"=$2, "ProductDesc"=$3, "Exp_Name"=$4, "Imp_Name"=$5, "CountryofDestination"=$6, "CountryofOrigin"=$7, "PortofOrigin"=$8, "Mode"=$9, "uqc"=$10, "Quantity"=$11, "Month"=$12, "Year"=$13, "PortofDestination"=$14, "LoadingPort"=$15, "Currency"=$16, "NotifyPartyName"=$17
 	WHERE "Country"=$1 AND "Direction"=$18`,
-    get_workspace: `SELECT * FROM public.workspace WHERE "UserId"=$1`,
+    get_workspace: `SELECT * FROM public.workspace WHERE "UserId"=$1 AND visible = true`,
 
     add_workspace: `INSERT INTO public.workspace(
         "UserId", "Searchbar", "Sidefilter")
         VALUES ($1, $2, $3);`,
+
+    delete_Workspace:`UPDATE public.workspace SET visible=$1 WHERE "Id"=$2;`,
 
     get_download_cost: `SELECT * FROM public."Dowload_cost" WHERE "CountryCode"=$1`,
 

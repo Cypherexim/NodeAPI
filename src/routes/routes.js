@@ -55,6 +55,7 @@ router.get('/getExportList', importController.getExportList);
 router.post('/addUpdateAccess', importController.addupdateAccessSideFilter);
 router.get('/getWorkSpace', importController.getWorksapce);
 router.post('/addWorkspace', importController.addWorkspace);
+router.post('/deleteWorkspace',importController.deleteWorkspace);
 router.get('/getDownloadCost', check('CountryCode').notEmpty(), importController.getDownloadCost);
 router.get('/gettotalrecords', importController.getTotalRecord);
 router.post('/getSideFilterData', importController.getListofSidefilterdata);
