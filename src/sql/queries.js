@@ -120,7 +120,7 @@ module.exports = {
     update_download_workspace: `UPDATE public.userdownloadtransaction SET "recordIds"= $1, "filePath"= $2, "status"= $3, "errorlog"= $4 WHERE "Id"= $5;`,
 
     get_download_Workspace: `SELECT "Id", countrycode as CountryName, "userId", direction,cardinality("recordIds") as totalrecords
-    , workspacename, datetime,"filePath"
+    , workspacename, datetime,"filePath","status","errorlog" 
         FROM public.userdownloadtransaction WHERE "userId"=$1`,
 
     update_download_count: `UPDATE public.userplantransaction SET "Downloads" = $1 WHERE "UserId"= $2`,
