@@ -298,7 +298,7 @@ exports.generateDownloadbigfiles = async (req, res) => {
                                     db.query(query.update_download_count, [totalpointtodeduct, UserId], (err, result) => {
 
                                     });
-                                    db.query(query.add_download_workspace, [CountryCode, UserId, direction.toUpperCase(), recordIds, filename, datetime, data.Location], async (err, result) => {
+                                    db.query(query.add_download_workspace, [CountryCode, UserId, direction.toUpperCase(), recordIds, filename, datetime, data.Location,'Completed',''], async (err, result) => {
                                         return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
                                     });
                                 })
