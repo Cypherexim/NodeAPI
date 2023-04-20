@@ -137,7 +137,8 @@ router.get('/getRolesAccessById', rolesController.getAccessByRoleId);
 router.post('/savedownloadworkspace', downloadController.saveDownload);
 router.get('/getdownloadworkspace', downloadController.getDownloadworkspace)
 router.post('/getdownloadData', downloadController.getdownloaddata);
-router.post('/generatedownloadfiles',downloadController.generateDownloadfiles);
+router.post('/generatedownloadfiles',downloadController.generateDownloadbigfiles);
+router.post('/generatedownloadbigfiles',downloadController.generateDownloadbigfiles);
 
 // Analysis Controller
 

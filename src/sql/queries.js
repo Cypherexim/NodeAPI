@@ -7,7 +7,7 @@ module.exports = {
     AND ("HSCODE"::text ILIKE $3) OR ("HSCodeDesc" ILIKE $4) 
     OR ("Importer_Name" ILIKE $5) OR ("EXPORTER_NAME" ILIKE $6) 
     order by "RecordID" limit 1000000`,
-    update_country:`UPDATE public."Country" SET  "Import"=$1, "Export"=$2 WHERE "Countrycode"=$3;`,
+    update_country: `UPDATE public."Country" SET  "Import"=$1, "Export"=$2 WHERE "Countrycode"=$3;`,
     add_user_by_admin: `INSERT INTO public."Cypher"(
         "FullName", "CompanyName", "MobileNumber", "Email", "Password","CountryCode","ParentUserId")
         VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING public."Cypher"."UserId";`,
@@ -15,9 +15,9 @@ module.exports = {
         "FullName", "CompanyName", "MobileNumber", "Email", "Password", "CountryCode", "ParentUserId", "Designation", "Location", "GST", "IEC","RoleId")
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING public."Cypher"."UserId";;`,
     update_user: `UPDATE public."Cypher"
-	SET "FullName"=$1, "CompanyName"=$2, "MobileNumber"=$3, "Email"=$4, "Password"=$5, "CountryCode"=$6,
-    "Designation"=$7, "Location"=$8, "GST"=$9, "IEC"=$10, "RoleId"=$11 WHERE "UserId"=$12`,
-    enable_disable_user:`UPDATE public."Cypher" SET "Enable"=$1 WHERE "UserId"= $2;`,
+	SET "FullName"=$1, "CompanyName"=$2, "MobileNumber"=$3, "Email"=$4, "CountryCode"=$5,
+    "Designation"=$6, "Location"=$7, "GST"=$8, "IEC"=$9, "RoleId"=$10 WHERE "UserId"=$11`,
+    enable_disable_user: `UPDATE public."Cypher" SET "Enable"=$1 WHERE "UserId"= $2;`,
     get_user_by_email: `SELECT "FullName", "CompanyName", "MobileNumber", "Email", "Password","RoleName", "Cypher"."UserId", "CountryCode", "ParentUserId", "Designation", "Location", "GST", "IEC", "Cypher"."RoleId", "Enable", public.userplantransaction."PlanId", public.userplantransaction."Downloads", public.userplantransaction."Searches", 
     public.userplantransaction."StartDate", public.userplantransaction."EndDate", public.userplantransaction."Validity",
     public.userplantransaction."DataAccess", public.userplantransaction."CountryAccess", 
@@ -29,20 +29,20 @@ module.exports = {
     inner join public.plan on "userplantransaction"."PlanId" = "plan"."PlanId" 
     inner join "Role" on "Cypher"."RoleId" = "Role"."RoleId"
     where "Email"=$1`,
-    get_user_email:`SELECT * FROM public."Cypher" where "Email"=$1`,
+    get_user_email: `SELECT * FROM public."Cypher" where "Email"=$1`,
     get_user_by_email_forchangepassword: `SELECT * FROM public."Cypher" where "Email"=$1`,
-    update_password:`UPDATE public."Cypher" SET "Password"=$1 WHERE "UserId"=$2`,
+    update_password: `UPDATE public."Cypher" SET "Password"=$1 WHERE "UserId"=$2`,
     get_user_email: `SELECT * FROM public."Cypher" WHERE "Email"=$1`,
     get_hscode_import: 'SELECT * FROM public.HSCodes',
     get_hscode_export: 'SELECT "Hscode","HscodeDesc" FROM public."HSCodes"',
     get_hscode_export_digit: 'SELECT "Hscode" ,"HscodeDesc" FROM public."HSCodes" where length("Hscode") =$1',
     getCountry: 'SELECT * FROM public."Country" ORDER BY "CountryName"',
-    getLatestDate:`SELECT "LatestDate" FROM public.datauploadhistorybydate where "CountryName"=$1 AND "Direction"=$2;`,
+    getLatestDate: `SELECT "LatestDate" FROM public.datauploadhistorybydate where "CountryName"=$1 AND "Direction"=$2;`,
     addCountry: 'INSERT INTO public."Country"("Countrycode", "CountryName", "Import", "Export") VALUES ($1, $2, $3, $4)',
-    addDataHistory:`INSERT INTO public.datauploadhistorybydate(
+    addDataHistory: `INSERT INTO public.datauploadhistorybydate(
         "CountryName", "Direction", "LatestDate")
         VALUES ($1, $2, $3);`,
-    updateDataHistory:`UPDATE public.datauploadhistorybydate SET "LatestDate"=$1 WHERE "CountryName"=$2 AND "Direction"=$3;`,
+    updateDataHistory: `UPDATE public.datauploadhistorybydate SET "LatestDate"=$1 WHERE "CountryName"=$2 AND "Direction"=$3;`,
     addDownloadCost: 'INSERT INTO public."Dowload_cost" ("CountryCode", "CostPerRecord") VALUES ($1, $2);',
     get_plan_by_name: `SELECT * FROM public.plan WHERE "PlanName"=$1`,
     add_plan: `INSERT INTO public.plan(
@@ -81,15 +81,15 @@ module.exports = {
     get_third_sidefilter_Access: `SELECT uqc, "Quantity", "Month", "Year" FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
     get_fourth_sidefilter_Access: `SELECT  "PortofDestination", "LoadingPort", "Currency", "NotifyPartyName" FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
     get_all_sidefilter_Access: `SELECT * FROM public."SideFilterAccess"`,
-    getimporter_export_india:`SELECT * FROM public.importer_export_india ORDER BY "Imp_Name" limit 500`,
-    getimporter_import_india:`SELECT * FROM public.importer_import_india ORDER BY "Imp_Name" limit 500`,
-    getexporter_export_india:`SELECT * FROM public.exporter_export_india ORDER BY "Exp_Name" limit 500`,
-    getexporter_import_india:`SELECT * FROM public.exporter_import_india ORDER BY "Exp_Name" limit 500`,
+    getimporter_export_india: `SELECT * FROM public.importer_export_india ORDER BY "Imp_Name" limit 500`,
+    getimporter_import_india: `SELECT * FROM public.importer_import_india ORDER BY "Imp_Name" limit 500`,
+    getexporter_export_india: `SELECT * FROM public.exporter_export_india ORDER BY "Exp_Name" limit 500`,
+    getexporter_import_india: `SELECT * FROM public.exporter_import_india ORDER BY "Exp_Name" limit 500`,
 
-    getimporter_export_india_search:`SELECT * FROM public.importer_export_india WHERE "Imp_Name" like $1 ORDER BY "Imp_Name" limit 500`,
-    getimporter_import_india_search:`SELECT * FROM public.importer_import_india WHERE "Imp_Name" like $1 ORDER BY "Imp_Name" limit 500`,
-    getexporter_export_india_search:`SELECT * FROM public.exporter_export_india WHERE "Exp_Name" like $1 ORDER BY "Exp_Name" limit 500`,
-    getexporter_import_india_search:`SELECT * FROM public.exporter_import_india WHERE "Exp_Name" like $1 ORDER BY "Exp_Name" limit 500`,
+    getimporter_export_india_search: `SELECT * FROM public.importer_export_india WHERE "Imp_Name" like $1 ORDER BY "Imp_Name" limit 500`,
+    getimporter_import_india_search: `SELECT * FROM public.importer_import_india WHERE "Imp_Name" like $1 ORDER BY "Imp_Name" limit 500`,
+    getexporter_export_india_search: `SELECT * FROM public.exporter_export_india WHERE "Exp_Name" like $1 ORDER BY "Exp_Name" limit 500`,
+    getexporter_import_india_search: `SELECT * FROM public.exporter_import_india WHERE "Exp_Name" like $1 ORDER BY "Exp_Name" limit 500`,
 
     get_importer_list: `SELECT DISTINCT "Imp_Name", "Exp_Name" FROM public.import_$1 limit 1000`,
     get_exporter_list: `SELECT DISTINCT "Imp_Name", "Exp_Name" FROM public.export_$1 limit 1000`,
@@ -108,15 +108,16 @@ module.exports = {
         "UserId", "Searchbar", "Sidefilter")
         VALUES ($1, $2, $3);`,
 
-    delete_Workspace:`UPDATE public.workspace SET visible=$1 WHERE "Id"=$2;`,
+    delete_Workspace: `UPDATE public.workspace SET visible=$1 WHERE "Id"=$2;`,
 
     get_download_cost: `SELECT * FROM public."Dowload_cost" WHERE "CountryCode"=$1`,
 
     check_download_workspancename: `SELECT * FROM public.userdownloadtransaction  where "workspacename"=$1`,
 
     add_download_workspace: `INSERT INTO public.userdownloadtransaction(
-        "countrycode", "userId", direction, "recordIds", workspacename,datetime,"filePath")
-        VALUES ($1, $2, $3, $4, $5, $6,$7);`,
+        "countrycode", "userId", direction, "recordIds", workspacename,datetime,"filePath","status","errorlog")
+        VALUES ($1, $2, $3, $4, $5, $6,$7,$8,$9) RETURNING public."userdownloadtransaction"."Id";`,
+    update_download_workspace: `UPDATE public.userdownloadtransaction SET "recordIds"= $1, "filePath"= $2, "status"= $3, "errorlog"= $4 WHERE "Id"= $5;`,
 
     get_download_Workspace: `SELECT "Id", countrycode as CountryName, "userId", direction,cardinality("recordIds") as totalrecords
     , workspacename, datetime,"filePath"

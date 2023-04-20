@@ -200,8 +200,8 @@ exports.updateUserByAdmin = async (req, res) => {
 
     const user = await db.query(query.get_user_by_email, [Email]);
     if (user.rows.length > 0) {
-        bycrypt.hash(Password, 12).then(hashPassword => {
-            db.query(query.update_user, [FullName, CompanyName, MobileNumber, Email, hashPassword, country, Designation, Location, GST, IEC, RoleId, UserId], async (err, result) => {
+       //bycrypt.hash(Password, 12).then(hashPassword => {
+            db.query(query.update_user, [FullName, CompanyName, MobileNumber, Email, country, Designation, Location, GST, IEC, RoleId, UserId], async (err, result) => {
                 if (!err) {
                     db.query(query.update_Plan_Trasaction_by_admin, [PlanId, Downloads, Searches, StartDate, EndDate,
                         Validity, DataAccess, CountryAccess, CommodityAccess, TarrifCodeAccess, Workspace, WSSLimit, Downloadfacility,
@@ -216,7 +216,7 @@ exports.updateUserByAdmin = async (req, res) => {
                 }
                 else { return res.status(500).json(error(err.message, res.statusCode)); }
             })
-        });
+        //});
     } else { return res.status(500).json(error("User not found", res.statusCode)); }
 }
 
