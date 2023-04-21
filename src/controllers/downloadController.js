@@ -315,8 +315,9 @@ exports.generateDownloadbigfiles = async (req, res) => {
 }
 
 async function calllongquery(finalquery, UserId, CountryCode, direction, filename, datetime, id) {
+    console.log('line 318 executed '+UserId);
     db.query(finalquery[0], finalquery[1].slice(1), async (error, result) => {
-        console.log('line 319 executed');
+        console.log('line 320 executed');
         if (!error) {
             console.log('line 321 executed');
             if (result.rows.length < 500000) {
