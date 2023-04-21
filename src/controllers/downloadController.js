@@ -390,7 +390,7 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
             }
         } else {
             db.query(query.update_download_workspace, [{}, '', 'Error', error, id], async (err, result) => {
-                console.log('line no 389 '+err);
+                console.log('line no 389 '+error);
             });
         }
     })
