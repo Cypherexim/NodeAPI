@@ -369,24 +369,24 @@ function calllongquery(finalquery, UserId, CountryCode, direction, filename, dat
                                 })
                             } else {
                                 db.query(query.update_download_workspace, [{}, '', 'Error', 'Dont have enough balance to download these records !', id], async (err, result) => {
-                                    console.log(err);
+                                    console.log('line no 372 '+err);
                                 });
                             }
                         } else {
                             db.query(query.update_download_workspace, [{}, '', 'Error', err, id], async (err, result) => {
-                                console.log(err);
+                                console.log('line no 377 '+ err);
                             });
                         }
                     });
                 }
             } else {
                 db.query(query.update_download_workspace, [{}, '', 'Error', 'Can not download more than 5 Lacs records', id], async (err, result) => {
-                    console.log(err);
+                    console.log('line no 384 '+err);
                 });
             }
         } else {
             db.query(query.update_download_workspace, [{}, '', 'Error', error, id], async (err, result) => {
-                console.log(err);
+                console.log('line no 389 '+err);
             });
         }
     })
