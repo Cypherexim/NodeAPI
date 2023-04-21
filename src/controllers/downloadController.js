@@ -249,7 +249,7 @@ exports.generateDownloadbigfiles = async (req, res) => {
 
 
             db.query(query.add_download_workspace, [CountryCode, UserId, direction.toUpperCase(), {}, filename, datetime, '', 'In-Progress', ''], async (err, result) => {
-                calllongquery(finalquery, UserId, CountryCode, direction, filename, datetime, result.rows[0].Id);
+                await calllongquery(finalquery, UserId, CountryCode, direction, filename, datetime, result.rows[0].Id);
                 return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
             });
             // return res.status(201).json(success("Ok", " insert Successful.", res.statusCode));
@@ -314,11 +314,13 @@ exports.generateDownloadbigfiles = async (req, res) => {
     }
 }
 
-function calllongquery(finalquery, UserId, CountryCode, direction, filename, datetime, id) {
+async function calllongquery(finalquery, UserId, CountryCode, direction, filename, datetime, id) {
     db.query(finalquery[0], finalquery[1].slice(1), async (error, result) => {
-
+        console.log('line 319 executed');
         if (!error) {
+            console.log('line 321 executed');
             if (result.rows.length < 500000) {
+                console.log('line 323 executed');
                 const recordIds = result.rows.map(x => x.RecordID);
 
                 const recordtobill = await GetRecordToBill(recordIds, UserId);
@@ -359,6 +361,7 @@ function calllongquery(finalquery, UserId, CountryCode, direction, filename, dat
                                     if (err) {
                                         reject(err)
                                     }
+                                    console.log('line 364 executed');
                                     // resolve(data.Location)
                                     db.query(query.update_download_count, [totalpointtodeduct, UserId], (err, result) => {
 
