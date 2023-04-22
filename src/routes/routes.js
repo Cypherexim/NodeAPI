@@ -109,7 +109,7 @@ router.post('/signup', check('FullName').notEmpty(), check('CompanyName').notEmp
 router.post('/signin', check('Password').notEmpty(), check('Email').isEmail(), accountController.postLogin);
 router.get('/getAccountDetails', accountController.getAccountDetails);
 router.post('/addUserAdmin', check('FullName').notEmpty(), check('CompanyName').notEmpty(), body('MobileNumber').isLength({ min: 10, max: 10 }).withMessage('Mobile Number should be of 10 digit.'), check('Password').notEmpty(), check('Email').isEmail(), accountController.addUserByAdmin);
-router.post('/updateUserAdmin', check('FullName').notEmpty(), check('CompanyName').notEmpty(), body('MobileNumber').isLength({ min: 10, max: 10 }).withMessage('Mobile Number should be of 10 digit.'), check('Password').notEmpty(), check('Email').isEmail(), accountController.updateUserByAdmin);
+router.post('/updateUserAdmin', check('FullName').notEmpty(), check('CompanyName').notEmpty(), body('MobileNumber').isLength({ min: 10, max: 10 }).withMessage('Mobile Number should be of 10 digit.'), check('Email').isEmail(), accountController.updateUserByAdmin);
 router.get('/getAllUserList', accountController.getAllUserlist);
 router.post('/changePassword', check('NewPassword').notEmpty(),check('CurrentPassword').notEmpty(), check('Email').isEmail(), accountController.changePassword);
 router.post('/enabledisableuser', accountController.enabledisableuser);
