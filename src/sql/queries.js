@@ -62,6 +62,14 @@ module.exports = {
     update_Plan_Trasaction_by_admin: `UPDATE public.userplantransaction
 	SET "PlanId"=$1, "Downloads"=$2, "Searches"=$3, "StartDate"=$4, "EndDate"=$5, "Validity"=$6, "DataAccess"=$7, "CountryAccess"=$8, "CommodityAccess"=$9, "TarrifCodeAccess"=$10, "Workspace"=$11, "WSSLimit"=$12, "Downloadfacility"=$13, "Favoriteshipment"=$14, "Whatstrending"=$15, "Companyprofile"=$16, "Addonfacility"=$17, "Analysis"=$18, "User"=$19
 	WHERE "UserId"=$20`,
+    update_user_Access:`UPDATE public."UserAccess"
+	SET "AddUser"=$2, "EditUser"=$3, "DeleteUser"=$4, "AddPlan"=$5, 
+	"EditPlan"=$6, "DeletePlan"=$7, "Downloads"=$8, "Search"=$9, "EnableId"=$10, "DisableId"=$11, 
+	"BlockUser"=$12, "UnblockUser"=$13, "ClientList"=$14, "PlanList"=$15
+	WHERE "UserId"=$1;`,
+    add_user_Access:`INSERT INTO public."UserAccess"(
+        "AddUser", "EditUser", "DeleteUser", "AddPlan", "EditPlan", "DeletePlan", "Downloads", "Search", "EnableId", "DisableId", "BlockUser", "UnblockUser", "ClientList", "PlanList", "UserId")
+        VALUES ( $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15);`,
     get_Plan_By_UserId: `SELECT * FROM public.userplantransaction WHERE "UserId"=$1`,
     update_Plan_transaction: `UPDATE public.userplantransaction SET "Searches" = $1 WHERE "UserId"= $2`,
 

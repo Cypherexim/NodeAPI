@@ -147,7 +147,8 @@ exports.enabledisableuser = async (req, res) => {
 exports.addUserByAdmin = async (req, res) => {
     const { FullName, CompanyName, MobileNumber, Email, Password, country, ParentUserId, Designation = null, Location = null, GST = null, IEC = null, RoleId
         , PlanId, Downloads, Searches, StartDate, EndDate, Validity, DataAccess, CountryAccess, CommodityAccess,
-        TarrifCodeAccess, Workspace, WSSLimit, Downloadfacility, Favoriteshipment, Whatstrending, Companyprofile, Addonfacility, Analysis, User } = req.body;
+        TarrifCodeAccess, Workspace, WSSLimit, Downloadfacility, Favoriteshipment, Whatstrending, Companyprofile, Addonfacility, Analysis, User,
+        AddUser, EditUser, DeleteUser, AddPlan, EditPlan, DeletePlan, DownloadsAccess, Search, EnableId, DisableId, BlockUser, UnblockUser, ClientList, PlanList } = req.body;
 
     const errors = validationResult(req);
     const date = new Date();
@@ -168,10 +169,13 @@ exports.addUserByAdmin = async (req, res) => {
                 if (!err) {
                     db.query(query.add_Plan_Trasaction_by_admin, [result.rows[0].UserId, PlanId, Downloads, Searches, StartDate, EndDate,
                         Validity, DataAccess, CountryAccess, CommodityAccess, TarrifCodeAccess, Workspace, WSSLimit, Downloadfacility,
-                        Favoriteshipment, Whatstrending, Companyprofile, Addonfacility, Analysis, User], (err, result) => {
+                        Favoriteshipment, Whatstrending, Companyprofile, Addonfacility, Analysis, User], (err, reslt) => {
                             if (!err) {
+                                db.query(query.add_user_Access, [AddUser, EditUser, DeleteUser, AddPlan, EditPlan, DeletePlan, DownloadsAccess, Search, EnableId, DisableId, BlockUser, UnblockUser, ClientList, PlanList, result.rows[0].UserId], (error, result) => {
+                                    console.log(error)
+                                })
                                 mail.SendEmail(Email, config.userRegisterationmailSubject, config.accountcreationmailBody);
-                                return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
+                                return res.status(201).json(success("Ok", reslt.command + " Successful.", res.statusCode));
                             } else {
                                 return res.status(201).json(success("Ok", err.message + " Successful.", res.statusCode));
                             }
@@ -186,7 +190,8 @@ exports.addUserByAdmin = async (req, res) => {
 exports.updateUserByAdmin = async (req, res) => {
     const { FullName, CompanyName, MobileNumber, Email, Password, country, UserId, Designation = null, Location = null, GST = null, IEC = null, RoleId
         , PlanId, Downloads, Searches, StartDate, EndDate, Validity, DataAccess, CountryAccess, CommodityAccess,
-        TarrifCodeAccess, Workspace, WSSLimit, Downloadfacility, Favoriteshipment, Whatstrending, Companyprofile, Addonfacility, Analysis, User } = req.body;
+        TarrifCodeAccess, Workspace, WSSLimit, Downloadfacility, Favoriteshipment, Whatstrending, Companyprofile, Addonfacility, Analysis, User,
+        AddUser, EditUser, DeleteUser, AddPlan, EditPlan, DeletePlan, DownloadsAccess, Search, EnableId, DisableId, BlockUser, UnblockUser, ClientList, PlanList } = req.body;
 
     const errors = validationResult(req);
     const date = new Date();
@@ -200,22 +205,25 @@ exports.updateUserByAdmin = async (req, res) => {
 
     const user = await db.query(query.get_user_by_email, [Email]);
     if (user.rows.length > 0) {
-       //bycrypt.hash(Password, 12).then(hashPassword => {
-            db.query(query.update_user, [FullName, CompanyName, MobileNumber, Email, country, Designation, Location, GST, IEC, RoleId, UserId], async (err, result) => {
-                if (!err) {
-                    db.query(query.update_Plan_Trasaction_by_admin, [PlanId, Downloads, Searches, StartDate, EndDate,
-                        Validity, DataAccess, CountryAccess, CommodityAccess, TarrifCodeAccess, Workspace, WSSLimit, Downloadfacility,
-                        Favoriteshipment, Whatstrending, Companyprofile, Addonfacility, Analysis, User, UserId], (err, result) => {
-                            if (!err) {
-                                mail.SendEmail(Email, config.userUpdatemailSubject, config.accountcreationmailBody);
-                                return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
-                            } else {
-                                return res.status(201).json(success("Ok", err.message, res.statusCode));
-                            }
-                        });
-                }
-                else { return res.status(500).json(error(err.message, res.statusCode)); }
-            })
+        //bycrypt.hash(Password, 12).then(hashPassword => {
+        db.query(query.update_user, [FullName, CompanyName, MobileNumber, Email, country, Designation, Location, GST, IEC, RoleId, UserId], async (err, result) => {
+            if (!err) {
+                db.query(query.update_Plan_Trasaction_by_admin, [PlanId, Downloads, Searches, StartDate, EndDate,
+                    Validity, DataAccess, CountryAccess, CommodityAccess, TarrifCodeAccess, Workspace, WSSLimit, Downloadfacility,
+                    Favoriteshipment, Whatstrending, Companyprofile, Addonfacility, Analysis, User, UserId], (err, result) => {
+                        if (!err) {
+                            db.query(query.update_user_Access, [UserId, AddUser, EditUser, DeleteUser, AddPlan, EditPlan, DeletePlan, DownloadsAccess, Search, EnableId, DisableId, BlockUser, UnblockUser, ClientList, PlanList ], (error, result) => {
+
+                            })
+                            mail.SendEmail(Email, config.userUpdatemailSubject, config.accountcreationmailBody);
+                            return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
+                        } else {
+                            return res.status(201).json(success("Ok", err.message, res.statusCode));
+                        }
+                    });
+            }
+            else { return res.status(500).json(error(err.message, res.statusCode)); }
+        })
         //});
     } else { return res.status(500).json(error("User not found", res.statusCode)); }
 }
