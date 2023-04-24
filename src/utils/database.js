@@ -18,7 +18,7 @@ const pool = new Pool({
     password: 'api123',
     port:5432,
     keepAlive: true,
-    keepAliveInitialDelayMillis: 1000000,
+    keepAliveInitialDelayMillis: 10000,
     idleTimeoutMillis: 20000,
     connectionTimeoutMillis: 20000
 })
