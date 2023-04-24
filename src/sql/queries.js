@@ -65,11 +65,11 @@ module.exports = {
     update_user_Access:`UPDATE public."UserAccess"
 	SET "AddUser"=$2, "EditUser"=$3, "DeleteUser"=$4, "AddPlan"=$5, 
 	"EditPlan"=$6, "DeletePlan"=$7, "Downloads"=$8, "Search"=$9, "EnableId"=$10, "DisableId"=$11, 
-	"BlockUser"=$12, "UnblockUser"=$13, "ClientList"=$14, "PlanList"=$15
+	"BlockUser"=$12, "UnblockUser"=$13, "ClientList"=$14, "PlanList"=$15, "Share"=$16
 	WHERE "UserId"=$1;`,
     add_user_Access:`INSERT INTO public."UserAccess"(
-        "AddUser", "EditUser", "DeleteUser", "AddPlan", "EditPlan", "DeletePlan", "Downloads", "Search", "EnableId", "DisableId", "BlockUser", "UnblockUser", "ClientList", "PlanList", "UserId")
-        VALUES ( $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15);`,
+        "AddUser", "EditUser", "DeleteUser", "AddPlan", "EditPlan", "DeletePlan", "Downloads", "Search", "EnableId", "DisableId", "BlockUser", "UnblockUser", "ClientList", "PlanList", "UserId","Share")
+        VALUES ( $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16);`,
     get_Plan_By_UserId: `SELECT * FROM public.userplantransaction WHERE "UserId"=$1`,
     update_Plan_transaction: `UPDATE public.userplantransaction SET "Searches" = $1 WHERE "UserId"= $2`,
 
@@ -78,8 +78,12 @@ module.exports = {
     "userplantransaction"."Validity", "userplantransaction"."DataAccess", 
     "userplantransaction"."CountryAccess", "userplantransaction"."CommodityAccess", "userplantransaction"."TarrifCodeAccess", "userplantransaction"."Workspace", 
     "userplantransaction"."WSSLimit", "userplantransaction"."Downloadfacility", "userplantransaction"."Favoriteshipment", "userplantransaction"."Whatstrending", "userplantransaction"."Companyprofile", 
-    "userplantransaction"."Addonfacility", "userplantransaction"."Analysis", "userplantransaction"."User","userplantransaction"."Downloads","plan"."PlanName","userplantransaction"."Searches",("EndDate"- now()::date) AS Remainingdays 
-    FROM public.userplantransaction inner join "plan" on "plan"."PlanId" = "userplantransaction"."PlanId" WHERE "UserId"=$1`,
+    "userplantransaction"."Addonfacility", "userplantransaction"."Analysis", "userplantransaction"."User","userplantransaction"."Downloads","plan"."PlanName","userplantransaction"."Searches",("EndDate"- now()::date) AS Remainingdays,
+	"AddUser", "EditUser", "DeleteUser", "AddPlan", "EditPlan", "DeletePlan", "UserAccess"."Downloads", "Search", "EnableId", "DisableId", "BlockUser", "UnblockUser", "ClientList", "PlanList", "Share"
+    FROM public.userplantransaction 
+	inner join "plan" on "plan"."PlanId" = "userplantransaction"."PlanId" 
+	inner join "UserAccess" on "UserAccess"."UserId" = "userplantransaction"."UserId"
+	WHERE "userplantransaction"."UserId"=$1`,
 
     get_sidefilter_Access: `SELECT * FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
     get_first_sidefilter_Access: `SELECT "HsCode", "ProductDesc" FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
@@ -149,6 +153,7 @@ module.exports = {
     FROM public."Cypher" 
         inner join "Role" on "Cypher"."RoleId" = "Role"."RoleId"
         inner join public.userplantransaction on "Cypher"."UserId" = "userplantransaction"."UserId"
+        inner join public."UserAccess" on "Cypher"."UserId" = "UserAccess"."UserId"
         inner join public.plan  on "plan"."PlanId" = "userplantransaction"."PlanId"
     ORDER BY "Cypher"."UserId" DESC`,
     get_user_By_Userid: `SELECT * FROM public."Cypher" 
