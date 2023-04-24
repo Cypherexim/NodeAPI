@@ -79,7 +79,7 @@ module.exports = {
     "userplantransaction"."CountryAccess", "userplantransaction"."CommodityAccess", "userplantransaction"."TarrifCodeAccess", "userplantransaction"."Workspace", 
     "userplantransaction"."WSSLimit", "userplantransaction"."Downloadfacility", "userplantransaction"."Favoriteshipment", "userplantransaction"."Whatstrending", "userplantransaction"."Companyprofile", 
     "userplantransaction"."Addonfacility", "userplantransaction"."Analysis", "userplantransaction"."User","userplantransaction"."Downloads","plan"."PlanName","userplantransaction"."Searches",("EndDate"- now()::date) AS Remainingdays,
-	"AddUser", "EditUser", "DeleteUser", "AddPlan", "EditPlan", "DeletePlan", "UserAccess"."Downloads", "Search", "EnableId", "DisableId", "BlockUser", "UnblockUser", "ClientList", "PlanList", "Share"
+	"AddUser", "EditUser", "DeleteUser", "AddPlan", "EditPlan", "DeletePlan", "UserAccess"."Downloads" as Dwnlds, "Search", "EnableId", "DisableId", "BlockUser", "UnblockUser", "ClientList", "PlanList", "Share"
     FROM public.userplantransaction 
 	inner join "plan" on "plan"."PlanId" = "userplantransaction"."PlanId" 
 	inner join "UserAccess" on "UserAccess"."UserId" = "userplantransaction"."UserId"
