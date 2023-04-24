@@ -130,7 +130,20 @@ exports.getAccountDetails = async (req, res) => {
         return res.status(500).json(error(err, res.statusCode));
     };
 }
-
+exports.getuserlistbyParentId = async (req, res) => {
+    try {
+        const { ParentUserId } = req.query;
+        db.query(query.get_user_by_ParentId, [ParentUserId], (error, results) => {
+            if (!error) {
+                return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            } else {
+                return res.status(200).json(success("Ok", error.message, res.statusCode));
+            }
+        })
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
 exports.enabledisableuser = async (req, res) => {
     const { enable, UserId } = req.body;
     try {

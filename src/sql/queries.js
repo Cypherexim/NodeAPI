@@ -84,7 +84,7 @@ module.exports = {
 	inner join "plan" on "plan"."PlanId" = "userplantransaction"."PlanId" 
 	inner join "UserAccess" on "UserAccess"."UserId" = "userplantransaction"."UserId"
 	WHERE "userplantransaction"."UserId"=$1`,
-
+    get_user_by_ParentId:`SELECT * FROM public."Cypher" where "ParentUserId"=$1`,
     get_sidefilter_Access: `SELECT * FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
     get_first_sidefilter_Access: `SELECT "HsCode", "ProductDesc" FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
     get_Import_sidefilter_Access: `SELECT "Imp_Name" FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
