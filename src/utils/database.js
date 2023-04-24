@@ -19,8 +19,8 @@ const pool = new Pool({
     port:5432,
     keepAlive: true,
     keepAliveInitialDelayMillis: 10000,
-    idleTimeoutMillis: 2000000,
-    connectionTimeoutMillis: 2000000
+    idleTimeoutMillis: 2000,
+    connectionTimeoutMillis: 2000
 })
 
 // const pool = new Pool({
