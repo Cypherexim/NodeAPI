@@ -149,7 +149,8 @@ module.exports = {
     "userplantransaction"."Downloadfacility", "userplantransaction"."Favoriteshipment", "userplantransaction"."Whatstrending", 
     "userplantransaction"."Companyprofile", "userplantransaction"."Addonfacility", "userplantransaction"."Analysis", 
     "userplantransaction"."User"
-    ,"plan"."PlanId", "plan"."PlanName"
+    ,"plan"."PlanId", "plan"."PlanName",
+	"AddUser", "EditUser", "DeleteUser", "AddPlan", "EditPlan", "DeletePlan", "UserAccess"."Downloads", "Search", "EnableId", "DisableId", "BlockUser", "UnblockUser", "ClientList", "PlanList", "Share"
     FROM public."Cypher" 
         inner join "Role" on "Cypher"."RoleId" = "Role"."RoleId"
         inner join public.userplantransaction on "Cypher"."UserId" = "userplantransaction"."UserId"
