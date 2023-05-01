@@ -161,7 +161,7 @@ exports.addUserByAdmin = async (req, res) => {
     const { FullName, CompanyName, MobileNumber, Email, Password, country, ParentUserId, Designation = null, Location = null, GST = null, IEC = null, RoleId
         , PlanId, Downloads, Searches, StartDate, EndDate, Validity, DataAccess, CountryAccess, CommodityAccess,
         TarrifCodeAccess, Workspace, WSSLimit, Downloadfacility, Favoriteshipment, Whatstrending, Companyprofile, Addonfacility, Analysis, User,
-        AddUser, EditUser, DeleteUser, AddPlan, EditPlan, DeletePlan, DownloadsAccess, Search, EnableId, DisableId, BlockUser, UnblockUser, ClientList, PlanList } = req.body;
+        AddUser, EditUser, DeleteUser, AddPlan, EditPlan, DeletePlan, DownloadsAccess, Search, EnableId, DisableId, BlockUser, UnblockUser, ClientList, PlanList, Share } = req.body;
 
     const errors = validationResult(req);
     const date = new Date();
@@ -182,7 +182,7 @@ exports.addUserByAdmin = async (req, res) => {
                 if (!err) {
                     db.query(query.add_Plan_Trasaction_by_admin, [result.rows[0].UserId, PlanId, Downloads, Searches, StartDate, EndDate,
                         Validity, DataAccess, CountryAccess, CommodityAccess, TarrifCodeAccess, Workspace, WSSLimit, Downloadfacility,
-                        Favoriteshipment, Whatstrending, Companyprofile, Addonfacility, Analysis,Share, User], (err, reslt) => {
+                        Favoriteshipment, Whatstrending, Companyprofile, Addonfacility, Analysis, User], (err, reslt) => {
                             if (!err) {
                                 db.query(query.add_user_Access, [AddUser, EditUser, DeleteUser, AddPlan, EditPlan, DeletePlan, DownloadsAccess, Search, EnableId, DisableId, BlockUser, UnblockUser, ClientList, PlanList, result.rows[0].UserId, Share], (error, result) => {
                                     console.log(error)
