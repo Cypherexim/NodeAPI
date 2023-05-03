@@ -58,7 +58,20 @@ exports.getDownloadworkspace = async (req, res) => {
         return res.status(500).json(error(err, res.statusCode));
     };
 }
-
+exports.sharedownloadfile = async(req,res) =>{
+    try {
+        const {WorkspaceId, UserId} = req.body;
+        db.query(query.share_download_files,[UserId, WorkspaceId], (err, result) => {
+            if (!err) {
+                return res.status(200).json(success("Ok", result.command + " Successful.", res.statusCode));
+            } else {
+                return res.status(200).json(success("Ok", err.message, res.statusCode));
+            }
+        });
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
 exports.getdownloaddata = async (req, res) => {
     try {
         const { direction, recordIds, country } = req.body;

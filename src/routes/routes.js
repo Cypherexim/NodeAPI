@@ -140,6 +140,7 @@ router.get('/getdownloadworkspace', downloadController.getDownloadworkspace)
 router.post('/getdownloadData', downloadController.getdownloaddata);
 router.post('/generatedownloadfiles',downloadController.generateDownloadbigfiles);
 router.post('/generatedownloadbigfiles',downloadController.generateDownloadbigfiles);
+router.post('/sharedownloadtransaction',downloadController.sharedownloadfile);
 
 // Analysis Controller
 

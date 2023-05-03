@@ -57,7 +57,7 @@ exports.getWhatsTrending = async (req, res) => {
     const { country, direction, year } = req.query;
 
     const fromDate = year + '-01-01';
-    const toDate = year + '-12-31';
+    const toDate = year + '-02-02';
     
     db.query('SELECT ROUND(SUM("ValueInUSD")::numeric,2) as LastYearTrend FROM ' + direction.toLowerCase() + '_' + country.toLowerCase() + ' where "Date" >= $1  AND "Date" <= $2', [fromDate, toDate], (err, result) => {
         if (!err) {
