@@ -60,10 +60,16 @@ exports.getDownloadworkspace = async (req, res) => {
 }
 exports.sharedownloadfile = async(req,res) =>{
     try {
-        const {WorkspaceId, UserId} = req.body;
-        db.query(query.share_download_files,[UserId, WorkspaceId], (err, result) => {
+        const {WorkspaceId, UserIdto, UserIdBy} = req.body;
+        const datetime = new Date();
+        db.query(query.share_download_files,[UserIdto, WorkspaceId, datetime], (err, result) => {
             if (!err) {
-                return res.status(200).json(success("Ok", result.command + " Successful.", res.statusCode));
+                // db.query(query.insert_share_history,[UserIdBy, UserIdto, datetime,WorkspaceId], (err, result) => {
+                //     if (!err) {
+                    return res.status(200).json(success("Ok", result.command + " Successful.", res.statusCode));
+                //     }
+                // })
+                
             } else {
                 return res.status(200).json(success("Ok", err.message, res.statusCode));
             }

@@ -72,8 +72,9 @@ module.exports = {
         VALUES ( $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16);`,
     get_Plan_By_UserId: `SELECT * FROM public.userplantransaction WHERE "UserId"=$1`,
     share_download_files:`INSERT INTO public.userdownloadtransaction(countrycode, "userId", direction, workspacename, datetime, "recordIds", "filePath", status, errorlog)
-    select "countrycode", $1,direction, workspacename, datetime, "recordIds", "filePath", status, errorlog
+    select "countrycode", $1,direction, workspacename, $3, "recordIds", "filePath", status, errorlog
     from public.userdownloadtransaction where "Id"=$2`,
+    insert_share_history:`INSERT INTO sharehistory(shareby, shareto, date, "workspaceId") VALUES ($1, $2, $3, $4);`,
     update_Plan_transaction: `UPDATE public.userplantransaction SET "Searches" = $1 WHERE "UserId"= $2`,
 
     get_Searches_By_UserId: `SELECT "userplantransaction"."UserId", "userplantransaction"."PlanId", "userplantransaction"."Downloads", 
