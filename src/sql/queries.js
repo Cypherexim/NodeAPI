@@ -36,13 +36,15 @@ module.exports = {
     get_hscode_import: 'SELECT * FROM public.HSCodes',
     get_hscode_export: 'SELECT "Hscode","HscodeDesc" FROM public."HSCodes"',
     get_hscode_export_digit: 'SELECT "Hscode" ,"HscodeDesc" FROM public."HSCodes" where length("Hscode") =$1',
-    getCountry: 'SELECT * FROM public."Country" ORDER BY "CountryName"',
-    getLatestDate: `SELECT "LatestDate" FROM public.datauploadhistorybydate where "CountryName"=$1 AND "Direction"=$2;`,
+    getCountry: `SELECT "Countrycode", "CountryName", "Import", "Export","LatestDate", "StartDate"  FROM public."Country" inner join public.datauploadhistorybydate on
+    public.datauploadhistorybydate."CountryCode" = public."Country"."Countrycode"
+    ORDER BY "CountryName"`,
+    getLatestDate: `SELECT "LatestDate" FROM public.datauploadhistorybydate where "CountryCode"=$1 AND "Direction"=$2;`,
     addCountry: 'INSERT INTO public."Country"("Countrycode", "CountryName", "Import", "Export") VALUES ($1, $2, $3, $4)',
     addDataHistory: `INSERT INTO public.datauploadhistorybydate(
-        "CountryName", "Direction", "LatestDate")
+        "CountryCode", "Direction", "LatestDate")
         VALUES ($1, $2, $3);`,
-    updateDataHistory: `UPDATE public.datauploadhistorybydate SET "LatestDate"=$1 WHERE "CountryName"=$2 AND "Direction"=$3;`,
+    updateDataHistory: `UPDATE public.datauploadhistorybydate SET "LatestDate"=$1 WHERE "CountryCode"=$2 AND "Direction"=$3;`,
     addDownloadCost: 'INSERT INTO public."Dowload_cost" ("CountryCode", "CostPerRecord") VALUES ($1, $2);',
     get_plan_by_name: `SELECT * FROM public.plan WHERE "PlanName"=$1`,
     add_plan: `INSERT INTO public.plan(
