@@ -36,7 +36,7 @@ module.exports = {
     get_hscode_import: 'SELECT * FROM public.HSCodes',
     get_hscode_export: 'SELECT "Hscode","HscodeDesc" FROM public."HSCodes"',
     get_hscode_export_digit: 'SELECT "Hscode" ,"HscodeDesc" FROM public."HSCodes" where length("Hscode") =$1',
-    getCountry: `SELECT "Countrycode", "CountryName", "Import", "Export","LatestDate", "StartDate"  FROM public."Country" inner join public.datauploadhistorybydate on
+    getCountry: `SELECT "Countrycode", "CountryName", "Import", "Export","LatestDate", "StartDate","Direction"  FROM public."Country" inner join public.datauploadhistorybydate on
     public.datauploadhistorybydate."CountryCode" = public."Country"."Countrycode"
     ORDER BY "CountryName"`,
     getLatestDate: `SELECT "LatestDate" FROM public.datauploadhistorybydate where "CountryCode"=$1 AND "Direction"=$2;`,
