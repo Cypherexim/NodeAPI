@@ -58,8 +58,8 @@ exports.postLogin = async (req, res) => {
         });
         return res.status(422).json(validation(err));
     }
-
-    const user = await db.query(query.get_user_by_email, [Email]);
+    const Parentuser = await db.query(query.get_user_email, [Email]);
+    const user = await db.query(Parentuser.rows[0].ParentUserId != null ? query.get_user_by_parentuser : query.get_user_by_email, [Email]);
     if (user?.rows.length > 0) {
         bycrypt.compare(Password, user.rows[0].Password)
             .then(doMatch => {
@@ -225,7 +225,7 @@ exports.updateUserByAdmin = async (req, res) => {
                     Validity, DataAccess, CountryAccess, CommodityAccess, TarrifCodeAccess, Workspace, WSSLimit, Downloadfacility,
                     Favoriteshipment, Whatstrending, Companyprofile, Addonfacility, Analysis, User, UserId], (err, result) => {
                         if (!err) {
-                            db.query(query.update_user_Access, [UserId, AddUser, EditUser, DeleteUser, AddPlan, EditPlan, DeletePlan, DownloadsAccess, Search, EnableId, DisableId, BlockUser, UnblockUser, ClientList, PlanList, Share ], (error, result) => {
+                            db.query(query.update_user_Access, [UserId, AddUser, EditUser, DeleteUser, AddPlan, EditPlan, DeletePlan, DownloadsAccess, Search, EnableId, DisableId, BlockUser, UnblockUser, ClientList, PlanList, Share], (error, result) => {
 
                             })
                             mail.SendEmail(Email, config.userUpdatemailSubject, config.accountcreationmailBody);

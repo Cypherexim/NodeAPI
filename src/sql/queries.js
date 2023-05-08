@@ -29,6 +29,17 @@ module.exports = {
     inner join public.plan on "userplantransaction"."PlanId" = "plan"."PlanId" 
     inner join "Role" on "Cypher"."RoleId" = "Role"."RoleId"
     where "Email"=$1`,
+    get_user_by_parentuser: `SELECT "FullName", "CompanyName", "MobileNumber", "Email", "Password","RoleName", "Cypher"."UserId", "CountryCode", "ParentUserId", "Designation", "Location", "GST", "IEC", "Cypher"."RoleId", "Enable", public.userplantransaction."PlanId", public.userplantransaction."Downloads", public.userplantransaction."Searches", 
+    public.userplantransaction."StartDate", public.userplantransaction."EndDate", public.userplantransaction."Validity",
+    public.userplantransaction."DataAccess", public.userplantransaction."CountryAccess", 
+    public.userplantransaction."CommodityAccess", public.userplantransaction."TarrifCodeAccess", 
+    public.userplantransaction."Workspace", public.userplantransaction."WSSLimit", public.userplantransaction."Downloadfacility",
+    public.userplantransaction."Favoriteshipment", public.userplantransaction."Whatstrending", public.userplantransaction."Companyprofile", 
+    public.userplantransaction."Addonfacility", public.userplantransaction."Analysis", public.userplantransaction."User",("EndDate"- now()::date) AS Remainingdays FROM public."Cypher" 
+    inner join public.userplantransaction on "Cypher"."ParentUserId" = "userplantransaction"."UserId" 
+    inner join public.plan on "userplantransaction"."PlanId" = "plan"."PlanId" 
+    inner join "Role" on "Cypher"."RoleId" = "Role"."RoleId"
+    where "Email"=$1`,
     get_user_email: `SELECT * FROM public."Cypher" where "Email"=$1`,
     get_user_by_email_forchangepassword: `SELECT * FROM public."Cypher" where "Email"=$1`,
     update_password: `UPDATE public."Cypher" SET "Password"=$1 WHERE "UserId"=$2`,
