@@ -458,7 +458,7 @@ exports.addupdateAccessSideFilter = async (req, res) => {
     };
 }
 
-exports.getWorksapce = async (req, res) => {
+exports.getWorkspace = async (req, res) => {
     try {
         const { UserId } = req.query;
         db.query(query.get_workspace, [UserId], (error, results) => {
@@ -476,8 +476,8 @@ exports.getWorksapce = async (req, res) => {
 
 exports.addWorkspace = async (req, res) => {
     try {
-        const { UserId, Searchbar, Sidefilter } = req.body;
-        db.query(query.add_workspace, [UserId, Searchbar, Sidefilter], (err, result) => {
+        const { UserId, Searchbar, Sidefilter, foldername } = req.body;
+        db.query(query.add_workspace, [UserId, Searchbar, Sidefilter, foldername], (err, result) => {
             if (!err) {
                 return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
             }

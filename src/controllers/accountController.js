@@ -59,7 +59,7 @@ exports.postLogin = async (req, res) => {
         return res.status(422).json(validation(err));
     }
     const Parentuser = await db.query(query.get_user_email, [Email]);
-    const user = await db.query(Parentuser.rows[0].ParentUserId != null ? query.get_user_by_parentuser : query.get_user_by_email, [Email]);
+    const user = await db.query(Parentuser?.rows[0]?.ParentUserId != null ? query.get_user_by_parentuser : query.get_user_by_email, [Email]);
     if (user?.rows.length > 0) {
         bycrypt.compare(Password, user.rows[0].Password)
             .then(doMatch => {

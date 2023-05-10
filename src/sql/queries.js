@@ -134,8 +134,8 @@ module.exports = {
     get_workspace: `SELECT * FROM public.workspace WHERE "UserId"=$1 AND visible = true`,
 
     add_workspace: `INSERT INTO public.workspace(
-        "UserId", "Searchbar", "Sidefilter")
-        VALUES ($1, $2, $3);`,
+        "UserId", "Searchbar", "Sidefilter","foldername")
+        VALUES ($1, $2, $3,$4);`,
 
     delete_Workspace: `UPDATE public.workspace SET visible=$1 WHERE "Id"=$2;`,
 

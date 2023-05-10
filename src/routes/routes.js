@@ -53,7 +53,7 @@ router.get('/getImportExportList', importController.getImportExportList);
 router.get('/getImportList', importController.getImportList);
 router.get('/getExportList', importController.getExportList);
 router.post('/addUpdateAccess', importController.addupdateAccessSideFilter);
-router.get('/getWorkSpace', importController.getWorksapce);
+router.get('/getWorkSpace', importController.getWorkspace);
 router.post('/addWorkspace', importController.addWorkspace);
 router.post('/deleteWorkspace',importController.deleteWorkspace);
 router.get('/getDownloadCost', check('CountryCode').notEmpty(), importController.getDownloadCost);
