@@ -75,21 +75,21 @@ module.exports = {
     update_Plan_Trasaction_by_admin: `UPDATE public.userplantransaction
 	SET "PlanId"=$1, "Downloads"=$2, "Searches"=$3, "StartDate"=$4, "EndDate"=$5, "Validity"=$6, "DataAccess"=$7, "CountryAccess"=$8, "CommodityAccess"=$9, "TarrifCodeAccess"=$10, "Workspace"=$11, "WSSLimit"=$12, "Downloadfacility"=$13, "Favoriteshipment"=$14, "Whatstrending"=$15, "Companyprofile"=$16, "Addonfacility"=$17, "Analysis"=$18, "User"=$19
 	WHERE "UserId"=$20`,
-    update_user_Access:`UPDATE public."UserAccess"
+    update_user_Access: `UPDATE public."UserAccess"
 	SET "AddUser"=$2, "EditUser"=$3, "DeleteUser"=$4, "AddPlan"=$5, 
 	"EditPlan"=$6, "DeletePlan"=$7, "Downloads"=$8, "Search"=$9, "EnableId"=$10, "DisableId"=$11, 
 	"BlockUser"=$12, "UnblockUser"=$13, "ClientList"=$14, "PlanList"=$15, "Share"=$16
 	WHERE "UserId"=$1;`,
-    add_user_Access:`INSERT INTO public."UserAccess"(
+    add_user_Access: `INSERT INTO public."UserAccess"(
         "AddUser", "EditUser", "DeleteUser", "AddPlan", "EditPlan", "DeletePlan", "Downloads", "Search", "EnableId", "DisableId", "BlockUser", "UnblockUser", "ClientList", "PlanList", "UserId","Share")
         VALUES ( $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16);`,
     get_Plan_By_UserId: `SELECT * FROM public.userplantransaction WHERE "UserId"=$1`,
-    share_download_files:`INSERT INTO public.userdownloadtransaction(countrycode, "userId", direction, workspacename, datetime, "recordIds", "filePath", status, errorlog)
+    share_download_files: `INSERT INTO public.userdownloadtransaction(countrycode, "userId", direction, workspacename, datetime, "recordIds", "filePath", status, errorlog)
     select "countrycode", $1,direction, workspacename, $3, "recordIds", "filePath", status, errorlog
     from public.userdownloadtransaction where "Id"=$2`,
-    insert_share_history:`INSERT INTO sharehistory(shareby, shareto, date, "workspaceId") VALUES ($1, $2, $3, $4);`,
+    insert_share_history: `INSERT INTO sharehistory(shareby, shareto, date, "workspaceId") VALUES ($1, $2, $3, $4);`,
     update_Plan_transaction: `UPDATE public.userplantransaction SET "Searches" = $1 WHERE "UserId"= $2`,
-
+    get_cypher_userby_id: `SELECT * FROM public."Cypher" where "UserId"=$1`,
     get_Searches_By_UserId: `SELECT "userplantransaction"."UserId", "userplantransaction"."PlanId", "userplantransaction"."Downloads", 
     "userplantransaction"."Searches", "userplantransaction"."StartDate", "userplantransaction"."EndDate", 
     "userplantransaction"."Validity", "userplantransaction"."DataAccess", 
@@ -101,7 +101,7 @@ module.exports = {
 	inner join "plan" on "plan"."PlanId" = "userplantransaction"."PlanId" 
 	inner join "UserAccess" on "UserAccess"."UserId" = "userplantransaction"."UserId"
 	WHERE "userplantransaction"."UserId"=$1`,
-    get_user_by_ParentId:`SELECT * FROM public."Cypher" where "ParentUserId"=$1`,
+    get_user_by_ParentId: `SELECT * FROM public."Cypher" where "ParentUserId"=$1`,
     get_sidefilter_Access: `SELECT * FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
     get_first_sidefilter_Access: `SELECT "HsCode", "ProductDesc" FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
     get_Import_sidefilter_Access: `SELECT "Imp_Name" FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,

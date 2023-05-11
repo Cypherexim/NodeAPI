@@ -118,9 +118,17 @@ exports.changePassword = async (req, res) => {
 }
 exports.getAccountDetails = async (req, res) => {
     try {
-        const { UserId } = req.query;
-        db.query(query.get_Searches_By_UserId, [UserId], (error, results) => {
+        let { UserId } = req.query;
+        let id;
+        const user = await db.query(query.get_cypher_userby_id, [UserId]);
+        if (user.rows[0].ParentUserId != null) {
+            id = parseInt(user.rows[0].ParentUserId);
+        } else {
+            id = UserId;
+        }
+        db.query(query.get_Searches_By_UserId, [id], (error, results) => {
             if (!error) {
+                results.rows[0].UserId = UserId;
                 return res.status(200).json(success("Ok", results.rows, res.statusCode));
             } else {
                 return res.status(200).json(success("Ok", error.message, res.statusCode));
