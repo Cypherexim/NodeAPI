@@ -155,8 +155,8 @@ exports.getHscode = async (req, res) => {
 exports.getSideFilterAccess = async (req, res) => {
     try {
         const { Country, Direction } = req.query;
-        db.query(query.get_sidefilter_Access, [Country, Direction.toUpperCase()], (error, results) => {
-            if (!error) {
+        db.query(query.get_sidefilter_Access, [Country, Direction.toUpperCase()], (err, results) => {
+            if (!err) {
                 return res.status(200).json(success("Ok", results.rows, res.statusCode));
             } else {
                 return res.status(500).json(error(error, res.statusCode));
