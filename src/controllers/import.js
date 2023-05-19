@@ -159,7 +159,7 @@ exports.getSideFilterAccess = async (req, res) => {
             if (!err) {
                 return res.status(200).json(success("Ok", results.rows, res.statusCode));
             } else {
-                return res.status(500).json(error(error, res.statusCode));
+                return res.status(500).json(error(err, res.statusCode));
             }
         })
 
