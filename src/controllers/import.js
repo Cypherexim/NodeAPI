@@ -169,11 +169,11 @@ exports.getSideFilterAccess = async (req, res) => {
 }
 exports.getAllSideFilterAccess = async (req, res) => {
     try {
-        db.query(query.get_all_sidefilter_Access, (error, results) => {
-            if (!error) {
+        db.query(query.get_all_sidefilter_Access, (err, results) => {
+            if (!err) {
                 return res.status(200).json(success("Ok", results.rows, res.statusCode));
             } else {
-                return res.status(500).json(error(error, res.statusCode));
+                return res.status(500).json(error(err, res.statusCode));
             }
         })
 
@@ -335,19 +335,19 @@ exports.getimporterexportindia = async (req, res) => {
     try {
         const { text = null } = req.query;
         if (text == null) {
-            db.query(query.getimporter_export_india, (error, results) => {
-                if (!error) {
+            db.query(query.getimporter_export_india, (err, results) => {
+                if (!err) {
                     return res.status(200).json(success("Ok", results.rows, res.statusCode));
                 } else {
-                    return res.status(500).json(error(error, res.statusCode));
+                    return res.status(500).json(error(err, res.statusCode));
                 }
             })
         } else {
-            db.query(query.getimporter_export_india_search, [text + '%'], (error, results) => {
-                if (!error) {
+            db.query(query.getimporter_export_india_search, [text + '%'], (err, results) => {
+                if (!err) {
                     return res.status(200).json(success("Ok", results.rows, res.statusCode));
                 } else {
-                    return res.status(500).json(error(error, res.statusCode));
+                    return res.status(500).json(error(err, res.statusCode));
                 }
             })
         }
@@ -360,19 +360,19 @@ exports.getimporterimportindia = async (req, res) => {
     try {
         const { text = null } = req.query;
         if (text == null) {
-            db.query(query.getimporter_import_india, (error, results) => {
-                if (!error) {
+            db.query(query.getimporter_import_india, (err, results) => {
+                if (!err) {
                     return res.status(200).json(success("Ok", results.rows, res.statusCode));
                 } else {
-                    return res.status(500).json(error(error, res.statusCode));
+                    return res.status(500).json(error(err, res.statusCode));
                 }
             })
         } else {
-            db.query(query.getimporter_import_india_search, [text + '%'], (error, results) => {
-                if (!error) {
+            db.query(query.getimporter_import_india_search, [text + '%'], (err, results) => {
+                if (!err) {
                     return res.status(200).json(success("Ok", results.rows, res.statusCode));
                 } else {
-                    return res.status(500).json(error(error, res.statusCode));
+                    return res.status(500).json(error(err, res.statusCode));
                 }
             })
         }
@@ -386,19 +386,19 @@ exports.getexporterexportindia = async (req, res) => {
     try {
         const { text = null } = req.query;
         if (text == null) {
-            db.query(query.getexporter_export_india, (error, results) => {
-                if (!error) {
+            db.query(query.getexporter_export_india, (err, results) => {
+                if (!err) {
                     return res.status(200).json(success("Ok", results.rows, res.statusCode));
                 } else {
-                    return res.status(500).json(error(error, res.statusCode));
+                    return res.status(500).json(error(err, res.statusCode));
                 }
             })
         } else {
-            db.query(query.getexporter_export_india_search, [text + '%'], (error, results) => {
-                if (!error) {
+            db.query(query.getexporter_export_india_search, [text + '%'], (err, results) => {
+                if (!err) {
                     return res.status(200).json(success("Ok", results.rows, res.statusCode));
                 } else {
-                    return res.status(500).json(error(error, res.statusCode));
+                    return res.status(500).json(error(err, res.statusCode));
                 }
             })
         }
@@ -410,19 +410,19 @@ exports.getexporterimportindia = async (req, res) => {
     try {
         const { text = null } = req.query;
         if (text == null) {
-            db.query(query.getexporter_import_india, (error, results) => {
-                if (!error) {
+            db.query(query.getexporter_import_india, (err, results) => {
+                if (!err) {
                     return res.status(200).json(success("Ok", results.rows, res.statusCode));
                 } else {
-                    return res.status(500).json(error(error, res.statusCode));
+                    return res.status(500).json(error(err, res.statusCode));
                 }
             })
         } else {
-            db.query(query.getexporter_import_india_search, [text + '%'], (error, results) => {
-                if (!error) {
+            db.query(query.getexporter_import_india_search, [text + '%'], (err, results) => {
+                if (!err) {
                     return res.status(200).json(success("Ok", results.rows, res.statusCode));
                 } else {
-                    return res.status(500).json(error(error, res.statusCode));
+                    return res.status(500).json(error(err, res.statusCode));
                 }
             })
         }
