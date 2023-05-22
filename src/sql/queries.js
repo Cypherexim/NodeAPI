@@ -87,7 +87,7 @@ module.exports = {
     share_download_files: `INSERT INTO public.userdownloadtransaction(countrycode, "userId", direction, workspacename, datetime, "recordIds", "filePath", status, errorlog)
     select "countrycode", $1,direction, workspacename, $3, "recordIds", "filePath", status, errorlog
     from public.userdownloadtransaction where "Id"=$2`,
-    insert_share_history: `INSERT INTO sharehistory(shareby, shareto, date, "workspaceId") VALUES ($1, $2, $3, $4);`,
+    insert_share_history: `INSERT INTO public."ShareHistory"(shareby, shareto, date, "workspaceId") VALUES ($1, $2, $3, $4);`,
     update_Plan_transaction: `UPDATE public.userplantransaction SET "Searches" = $1 WHERE "UserId"= $2`,
     get_cypher_userby_id: `SELECT * FROM public."Cypher" where "UserId"=$1`,
     get_Searches_By_UserId: `SELECT "userplantransaction"."UserId", "userplantransaction"."PlanId", "userplantransaction"."Downloads", 

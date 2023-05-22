@@ -62,18 +62,25 @@ exports.sharedownloadfile = async (req, res) => {
     try {
         const { WorkspaceId, UserIdto, UserIdBy } = req.body;
         const datetime = new Date();
-        db.query(query.share_download_files, [UserIdto, WorkspaceId, datetime], (err, result) => {
-            if (!err) {
-                // db.query(query.insert_share_history,[UserIdBy, UserIdto, datetime,WorkspaceId], (err, result) => {
-                //     if (!err) {
-                return res.status(200).json(success("Ok", result.command + " Successful.", res.statusCode));
-                //     }
-                // })
+        if (UserIdto.length > 0) {
+            UserIdto.forEach(element => {
+                db.query(query.share_download_files, [element, WorkspaceId, datetime], (err, result) => {
+                    if (!err) {
+                        db.query(query.insert_share_history, [UserIdBy, element, datetime, WorkspaceId], (err, result) => {
+                            if (!err) {
+                                // return res.status(200).json(success("Ok", result.command + " Successful.", res.statusCode));
+                            }
+                        })
 
-            } else {
-                return res.status(200).json(success("Ok", err.message, res.statusCode));
-            }
-        });
+                    } else {
+                        return res.status(200).json(success("Ok", err.message, res.statusCode));
+                    }
+                });
+            });
+            return res.status(200).json(success("Ok", "Insert Successful.", 200));
+        } else {
+            return res.status(200).json(success("Ok", "Please pass to userid to share the workspace.", res.statusCode));
+        }
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
