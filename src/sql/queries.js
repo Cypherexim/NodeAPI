@@ -151,7 +151,8 @@ module.exports = {
 
     get_download_Workspace: `SELECT "Id", countrycode as CountryName, "userId", direction,cardinality("recordIds") as totalrecords
     , workspacename, datetime,"filePath","status","errorlog" 
-        FROM public.userdownloadtransaction WHERE "userId"=$1`,
+        FROM public.userdownloadtransaction WHERE "userId"=$1 or
+        "UserId" IN(SELECT "UserId" from public."Cypher" where "ParentUserId"=$1)`,
 
     update_download_count: `UPDATE public.userplantransaction SET "Downloads" = $1 WHERE "UserId"= $2`,
 

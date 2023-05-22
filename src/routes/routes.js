@@ -138,8 +138,8 @@ router.get('/getRolesAccessById', rolesController.getAccessByRoleId);
 router.post('/savedownloadworkspace', downloadController.saveDownload);
 router.get('/getdownloadworkspace', downloadController.getDownloadworkspace)
 router.post('/getdownloadData', downloadController.getdownloaddata);
-router.post('/generatedownloadfiles',downloadController.generateDownloadbigfiles);
-router.post('/generatedownloadbigfiles',downloadController.generateDownloadbigfiles);
+router.post('/generatedownloadfiles',downloadController.generateDownloadbigfilesforalluser);
+router.post('/generatedownloadbigfiles',downloadController.generateDownloadbigfilesforalluser);
 router.post('/sharedownloadtransaction',downloadController.sharedownloadfile);
 
 // Analysis Controller
