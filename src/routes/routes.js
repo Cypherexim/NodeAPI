@@ -38,6 +38,7 @@ const mexicoExportController = require('../controllers/Export/mexicoController')
 const nigeriaExportController = require('../controllers/Export/nigeriaController');
 const usaExportController = require('../controllers/Export/usaController');
 const vietnamExportController = require('../controllers/Export/vietnamController');
+const companyProfileController = require('../controllers/companyProfileController');
 
 
 // first Controller
@@ -146,4 +147,8 @@ router.post('/sharedownloadtransaction',downloadController.sharedownloadfile);
 
 router.post('/getAnalysisReport', analysisController.getAnalysisData);
 router.get('/getwhatstrending', analysisController.getWhatsTrending);
+
+// Company Profile Controller
+router.post('/getCompanyprofile', companyProfileController.getcompanyprofile);
+
 module.exports = router;
