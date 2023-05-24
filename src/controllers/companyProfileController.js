@@ -16,8 +16,10 @@ exports.getcompanyprofile = async (req, res) => {
         } else {
             query = 'SELECT COUNT(*) FROM ' + direction.toLowerCase() + '_' + countryname.toLowerCase() + ' where "Exp_Name" = $1';
         }
-        db.query(query,[companyname], (error, results) => {
+        db.query(query,[companyname], (err, results) => {
+            if(!err){
             return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            }
         })
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
