@@ -56,22 +56,24 @@ router.get('/getExportList', importController.getExportList);
 router.post('/addUpdateAccess', importController.addupdateAccessSideFilter);
 router.get('/getWorkSpace', importController.getWorkspace);
 router.post('/addWorkspace', importController.addWorkspace);
-router.post('/deleteWorkspace',importController.deleteWorkspace);
+router.post('/deleteWorkspace', importController.deleteWorkspace);
 router.get('/getDownloadCost', check('CountryCode').notEmpty(), importController.getDownloadCost);
 router.get('/gettotalrecords', importController.getTotalRecord);
 router.post('/getSideFilterData', importController.getListofSidefilterdata);
 router.get('/getProductDesc', importController.getProductDesc);
-router.get('/getimporterexportindia',importController.getimporterexportindia)
-router.get('/getimporterimportindia',importController.getimporterimportindia)
-router.get('/getexporterexportindia',importController.getexporterexportindia)
-router.get('/getexporterimportindia',importController.getexporterimportindia)
+router.get('/getimporterexportindia', importController.getimporterexportindia)
+router.get('/getimporterimportindia', importController.getimporterimportindia)
+router.get('/getexporterexportindia', importController.getexporterexportindia)
+router.get('/getexporterimportindia', importController.getexporterimportindia)
 router.post('/getfirstSideFilterData', importController.getfirstListofSidefilterdata);
 router.post('/getsecondSideFilterData', importController.getsecondListofSidefilterdata);
 router.post('/getthirdSideFilterData', importController.getthirdListofSidefilterdata);
 router.post('/getfourthSideFilterData', importController.getfourthListofSidefilterdata);
 router.post('/getimportSideFilterData', importController.getImportListofSidefilterdata);
 router.post('/getexportSideFilterData', importController.getExportListofSidefilterdata);
-router.post('/getdatabyalphabet',importController.getexportlistbyAlphabet);
+router.post('/getdatabyalphabet', importController.getexportlistbyAlphabet);
+router.get('/getcommonimport', importController.getcommonimportlist);
+router.get('/getcommonexport', importController.getcommonexportlist);
 
 //Import controller
 router.post('/getIndiaImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), indiaImportController.getindiaImport);
@@ -112,7 +114,7 @@ router.get('/getAccountDetails', accountController.getAccountDetails);
 router.post('/addUserAdmin', check('FullName').notEmpty(), check('CompanyName').notEmpty(), body('MobileNumber').isLength({ min: 10, max: 10 }).withMessage('Mobile Number should be of 10 digit.'), check('Password').notEmpty(), check('Email').isEmail(), accountController.addUserByAdmin);
 router.post('/updateUserAdmin', check('FullName').notEmpty(), check('CompanyName').notEmpty(), body('MobileNumber').isLength({ min: 10, max: 10 }).withMessage('Mobile Number should be of 10 digit.'), check('Email').isEmail(), accountController.updateUserByAdmin);
 router.get('/getAllUserList', accountController.getAllUserlist);
-router.post('/changePassword', check('NewPassword').notEmpty(),check('CurrentPassword').notEmpty(), check('Email').isEmail(), accountController.changePassword);
+router.post('/changePassword', check('NewPassword').notEmpty(), check('CurrentPassword').notEmpty(), check('Email').isEmail(), accountController.changePassword);
 router.post('/enabledisableuser', accountController.enabledisableuser);
 router.get('/getUserslistByParentId', accountController.getuserlistbyParentId);
 
@@ -139,9 +141,9 @@ router.get('/getRolesAccessById', rolesController.getAccessByRoleId);
 router.post('/savedownloadworkspace', downloadController.saveDownload);
 router.get('/getdownloadworkspace', downloadController.getDownloadworkspace)
 router.post('/getdownloadData', downloadController.getdownloaddata);
-router.post('/generatedownloadfiles',downloadController.generateDownloadbigfilesforalluser);
-router.post('/generatedownloadbigfiles',downloadController.generateDownloadbigfilesforalluser);
-router.post('/sharedownloadtransaction',downloadController.sharedownloadfile);
+router.post('/generatedownloadfiles', downloadController.generateDownloadbigfilesforalluser);
+router.post('/generatedownloadbigfiles', downloadController.generateDownloadbigfilesforalluser);
+router.post('/sharedownloadtransaction', downloadController.sharedownloadfile);
 
 // Analysis Controller
 
