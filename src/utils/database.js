@@ -11,34 +11,34 @@ const env = require('dotenv').config()
 // })
 
 // Production - Exim
-const pool = new Pool({
-    user:'apiuser',
-    host: '18.214.151.123',
-    database:'exim_portal_db',
-    password: 'api123',
-    port:5432,
-    // keepAlive: true,
-    // keepAliveInitialDelayMillis: 10000,
-    idleTimeoutMillis: 0,
-    connectionTimeoutMillis: 0
-})
-
-
 // const pool = new Pool({
 //     user:'apiuser',
 //     host: '18.214.151.123',
 //     database:'exim_portal_db',
 //     password: 'api123',
 //     port:5432,
-//   min: 0,
-//   max: 10,
-//   createTimeoutMillis: 8000,
-//   acquireTimeoutMillis: 8000,
-//   idleTimeoutMillis: 8000,
-//   reapIntervalMillis: 1000,
-//   createRetryIntervalMillis: 100,
-//   acquireConnectionTimeout: 5000
+//     // keepAlive: true,
+//     // keepAliveInitialDelayMillis: 10000,
+//     idleTimeoutMillis: 0,
+//     connectionTimeoutMillis: 0
 // })
+
+
+const pool = new Pool({
+    user:'apiuser',
+    host: '18.214.151.123',
+    database:'exim_portal_db',
+    password: 'api123',
+    port:5432,
+  min: 0,
+  max: 10,
+  createTimeoutMillis: 8000,
+  acquireTimeoutMillis: 8000,
+  idleTimeoutMillis: 8000,
+  reapIntervalMillis: 1000,
+  createRetryIntervalMillis: 100,
+  acquireConnectionTimeout: 5000
+})
 
 // const pool = new Pool({
 //     user:process.env.USER,
