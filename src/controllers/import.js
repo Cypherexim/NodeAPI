@@ -138,12 +138,20 @@ exports.getHscode = async (req, res) => {
     try {
         const { digit } = req.query;
         if (digit == null) {
-            db.query(query.get_hscode_export, (error, results) => {
-                return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            db.query(query.get_hscode_export, (err, results) => {
+                if (!err) {
+                    return res.status(200).json(success("Ok", results.rows, res.statusCode));
+                } else {
+                    return res.status(200).json(error(err.message, "No Record found", res.statusCode));
+                }
             })
         } else {
-            db.query(query.get_hscode_export_digit, [digit], (error, results) => {
-                return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            db.query(query.get_hscode_export_digit, [digit], (err, results) => {
+                if (!err) {
+                    return res.status(200).json(success("Ok", results.rows, res.statusCode));
+                } else {
+                    return res.status(200).json(error(err.message, "No Record found", res.statusCode));
+                }
             })
         }
     } catch (err) {
@@ -161,7 +169,7 @@ exports.getcommonimportlist = async (req, res) => {
                 if (!err) {
                     return res.status(200).json(success("Ok", results.rows, res.statusCode));
                 } else {
-                    return res.status(200).json(error("Ok", "Records not found !", res.statusCode));
+                    return res.status(200).json(error(err.message, "Records not found !", res.statusCode));
                 }
             })
         } else {
@@ -170,7 +178,7 @@ exports.getcommonimportlist = async (req, res) => {
                 if (!err) {
                     return res.status(200).json(success("Ok", results.rows, res.statusCode));
                 } else {
-                    return res.status(200).json(error("Ok", "Records not found !", res.statusCode));
+                    return res.status(200).json(error(err.message, "Records not found !", res.statusCode));
                 }
             })
         }
@@ -194,7 +202,7 @@ exports.getcommonexportlist = async (req, res) => {
             })
         } else {
             const qury = 'SELECT * FROM ' + countryname.toLowerCase() + '_participate_companies WHERE "Exp_Name" like $1 order by "Exp_Name" limit 500';
-            db.query(qury,[text + '%'], (err, results) => {
+            db.query(qury, [text + '%'], (err, results) => {
                 if (!err) {
                     return res.status(200).json(success("Ok", results.rows, res.statusCode));
                 } else {
