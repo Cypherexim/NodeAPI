@@ -29,7 +29,8 @@ exports.getExportData = async (fromDate, toDate, HsCode, ProductDesc, Imp_Name, 
     Mode, LoadingPort,
     NotifyPartyName, Currency, page, itemperpage, selectQuery, tablename, isOrderBy) => {
     let params = []
-
+       // params.push(utility.generateParams("ProductDesc", "SIMILAR TO","%(" + ProductDesc + ")%" ))
+    let desc = ProductDesc[0].split(" ");
     if (fromDate != '' && fromDate != undefined) {
         params.push(utility.generateParams("Date", ">=", fromDate))
     }
@@ -39,9 +40,12 @@ exports.getExportData = async (fromDate, toDate, HsCode, ProductDesc, Imp_Name, 
     if (HsCode != '' && HsCode != undefined) {
         params.push(utility.generateParams("HsCode", "SIMILAR TO", "(" + HsCode.join("|") + ")%")) //'(300|500)%'     '(300|500)%'
     }
-    if (ProductDesc != '' && ProductDesc != undefined) {
-        params.push(utility.generateParams("ProductDesc", "SIMILAR TO","%(" + ProductDesc + ")%" ))
-    }
+    desc.forEach(element => {
+        if (element != '' && element != undefined) {
+            params.push(utility.generateParams("ProductDesc", "SIMILAR TO","%(" + element + ")%" ))
+        }
+    });
+    
     if (Imp_Name != '' && Imp_Name != undefined) {
         params.push(utility.generateParams("Imp_Name", "ANY", Imp_Name))
     }
