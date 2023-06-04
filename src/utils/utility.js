@@ -39,7 +39,7 @@ queryCondition = (params) => {
                 values.push(item.value);
                 break;
             }
-            case 'SIMILAR TO':{
+            case 'SIMILAR TO': {
                 conditions.push('"' + item.name + '"' + " SIMILAR TO ($" + (index + 1) + ")");
                 values.push(item.value);
                 break;
@@ -59,10 +59,16 @@ exports.generateFilterQuery = (params, selectQuery, tablename) => {
     }
 
     [conditions, values] = queryCondition(params)
-
+    let withdesc = conditions.filter(x => x.includes('ProductDesc'));
+    let withoutdesc = conditions.filter(x => !x.includes('ProductDesc'));
+    // let build = {
+    //     where: conditions.length ?
+    //         conditions.join(' AND ') : '1',
+    //     values: values
+    // };
     let build = {
         where: conditions.length ?
-            conditions.join(' AND ') : '1',
+            withoutdesc.join(' AND ')+' AND ('+withdesc.join(' OR ')+')' : '1',
         values: values
     };
 
@@ -76,4 +82,14 @@ exports.generateParams = (name, eq, value) => {
         eq: eq, // %_%, %_, _%, =, >, <, !=,
         value: value
     }
+}
+exports.formatDate = (date) => {
+    return [
+        date.getFullYear(),
+        padTo2Digits(date.getMonth() + 1),
+        padTo2Digits(date.getDate()),
+    ].join('-');
+}
+function padTo2Digits(num) {
+    return num.toString().padStart(2, '0');
 }

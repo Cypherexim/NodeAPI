@@ -1,6 +1,7 @@
 module.exports = {
     DefaultPlan: 'Start-Up', // Default plan name
     DefaultRole: 1,
+    companyProfileStartDate:'2022-01-01',
     /* Table names */
     Plan: "plan",
     Cypher: "Cypher",
