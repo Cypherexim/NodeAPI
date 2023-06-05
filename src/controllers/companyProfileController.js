@@ -28,7 +28,7 @@ exports.getcompanyprofile = async (req, res) => {
             availablefield.rows.forEach(x => {
                 selectedfields += '"' + x.column_name + '",';
             })
-            query = 'SELECT ' + selectedfields.replace(/,\s*$/, "") + ' FROM ' + direction.toLowerCase() + '_' + countryname.toLowerCase() + ' where "Exp_Name" = $1 AND AND "Date" >= $2 AND "Date" <= $3';
+            query = 'SELECT ' + selectedfields.replace(/,\s*$/, "") + ' FROM ' + direction.toLowerCase() + '_' + countryname.toLowerCase() + ' where "Exp_Name" = $1 AND "Date" >= $2 AND "Date" <= $3';
         }
         db.query(query, [companyname, config.companyProfileStartDate, dateto], (err, results) => {
             if (!err) {
