@@ -68,7 +68,7 @@ exports.generateFilterQuery = (params, selectQuery, tablename) => {
     // };
     let build = {
         where: conditions.length ?
-            withoutdesc.join(' AND ')+' AND ('+withdesc.join(' OR ')+')' : '1',
+            withoutdesc.join(' AND ') + (withdesc.length > 0 ? ' AND (' + withdesc.join(' OR ') + ')' : '') : '1',
         values: values
     };
 

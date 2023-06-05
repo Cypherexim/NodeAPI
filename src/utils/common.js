@@ -5,7 +5,7 @@ const utility = require('../utils/utility');
 
 exports.deductSearches = async (UserId, IsWorkspaceSearch) => {
     const planDetails = await db.query(queries.get_Plan_By_UserId, [UserId]);
-    
+
     if (!JSON.parse(IsWorkspaceSearch)) {
         if (planDetails.rows[0] != null) {
             if (planDetails.rows[0].Searches > 0 || planDetails.rows[0].Searches == 'Unlimited') {
@@ -29,8 +29,11 @@ exports.getExportData = async (fromDate, toDate, HsCode, ProductDesc, Imp_Name, 
     Mode, LoadingPort,
     NotifyPartyName, Currency, page, itemperpage, selectQuery, tablename, isOrderBy) => {
     let params = []
-       // params.push(utility.generateParams("ProductDesc", "SIMILAR TO","%(" + ProductDesc + ")%" ))
-    let desc = ProductDesc[0].split(" ");
+    let desc = [];
+    // params.push(utility.generateParams("ProductDesc", "SIMILAR TO","%(" + ProductDesc + ")%" ))
+    if (ProductDesc != '' && ProductDesc != undefined) {
+        desc = ProductDesc[0].split(" ");
+    }
     if (fromDate != '' && fromDate != undefined) {
         params.push(utility.generateParams("Date", ">=", fromDate))
     }
@@ -40,12 +43,13 @@ exports.getExportData = async (fromDate, toDate, HsCode, ProductDesc, Imp_Name, 
     if (HsCode != '' && HsCode != undefined) {
         params.push(utility.generateParams("HsCode", "SIMILAR TO", "(" + HsCode.join("|") + ")%")) //'(300|500)%'     '(300|500)%'
     }
-    desc.forEach(element => {
-        if (element != '' && element != undefined) {
-            params.push(utility.generateParams("ProductDesc", "SIMILAR TO","%(" + element + ")%" ))
-        }
-    });
-    
+    if (desc.length > 0) {
+        desc.forEach(element => {
+            if (element != '' && element != undefined) {
+                params.push(utility.generateParams("ProductDesc", "SIMILAR TO", "%(" + element + ")%"))
+            }
+        });
+    }
     if (Imp_Name != '' && Imp_Name != undefined) {
         params.push(utility.generateParams("Imp_Name", "ANY", Imp_Name))
     }
@@ -105,9 +109,9 @@ exports.getavailableFieldlist = async (tablename) => {
             fields.push('"' + x.column_name.toString() + '"');
         })
         if (fields.length == 1) {
-            querystring = 'COUNT(distinct  ' + fields[0] + ') as '+fields[0].replace(/"|'/g, '')+'Count';
+            querystring = 'COUNT(distinct  ' + fields[0] + ') as ' + fields[0].replace(/"|'/g, '') + 'Count';
         } else {
-            querystring = 'COUNT(distinct  ' + fields[0] + ') as '+fields[0].replace(/"|'/g, '')+'Count , COUNT(distinct  ' + fields[1] + ') as '+fields[1].replace(/"|'/g, '')+'Count';
+            querystring = 'COUNT(distinct  ' + fields[0] + ') as ' + fields[0].replace(/"|'/g, '') + 'Count , COUNT(distinct  ' + fields[1] + ') as ' + fields[1].replace(/"|'/g, '') + 'Count';
         }
         const query = querystring + ' , COUNT(distinct  "HsCode") as TotalHsCode FROM';
         return [query];
