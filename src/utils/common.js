@@ -46,7 +46,7 @@ exports.getExportData = async (fromDate, toDate, HsCode, ProductDesc, Imp_Name, 
     if (desc.length > 0) {
         desc.forEach(element => {
             if (element != '' && element != undefined) {
-                params.push(utility.generateParams("ProductDesc", "SIMILAR TO", "%( " + element + " )%"))
+                params.push(utility.generateParams("ProductDesc", "SIMILAR TO", "%(" + element + ")%"))
             }
         });
     }

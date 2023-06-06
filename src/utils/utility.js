@@ -59,18 +59,18 @@ exports.generateFilterQuery = (params, selectQuery, tablename) => {
     }
 
     [conditions, values] = queryCondition(params)
-    let withdesc = conditions.filter(x => x.includes('ProductDesc'));
-    let withoutdesc = conditions.filter(x => !x.includes('ProductDesc'));
-    // let build = {
-    //     where: conditions.length ?
-    //         conditions.join(' AND ') : '1',
-    //     values: values
-    // };
+    // let withdesc = conditions.filter(x => x.includes('ProductDesc'));
+    // let withoutdesc = conditions.filter(x => !x.includes('ProductDesc'));
     let build = {
         where: conditions.length ?
-            withoutdesc.join(' AND ') + (withdesc.length > 0 ? ' AND (' + withdesc.join(' OR ') + ')' : '') : '1',
+            conditions.join(' AND ') : '1',
         values: values
     };
+    // let build = {
+    //     where: conditions.length ?
+    //         withoutdesc.join(' AND ') + (withdesc.length > 0 ? ' AND (' + withdesc.join(' OR ') + ')' : '') : '1',
+    //     values: values
+    // };
 
     let query = 'SELECT ' + selectQuery + ' ' + tablename + ' WHERE ' + build.where;
     return [query, build.values]
