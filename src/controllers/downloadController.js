@@ -79,11 +79,12 @@ exports.sharedownloadfile = async (req, res) => {
                             }
                         });
                     });
-                    return res.status(200).json(success("Ok", "Insert Successful.", 200));
+                    
                 } else {
                     return res.status(200).json(success("Ok", "Please pass to userid to share the workspace.", res.statusCode));
                 }
             });
+            return res.status(200).json(success("Ok", "Insert Successful.", 200));
         } else {
             return res.status(200).json(success("Ok", "Please pass at least one workspace id to share !", res.statusCode));
         }
