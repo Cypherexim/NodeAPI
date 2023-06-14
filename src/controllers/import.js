@@ -955,6 +955,21 @@ exports.getExportListofSidefilterdata = async (req, res) => {
         return res.status(500).json(error(err, res.statusCode));
     };
 }
+
+exports.getAlertMessage = async (req, res) => {
+    try {
+        const { Id } = req.query;
+        db.query(query.get_alert_message, [Id], (err, result) => {
+            if (!err) {
+                return res.status(200).json(success("Ok", result.rows, res.statusCode));
+            } else {
+                return res.status(200).json(error(err.message, res.statusCode));
+            }
+        });
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
 exports.getProductDesc = async (req, res) => {
     try {
         const { product } = req.query;

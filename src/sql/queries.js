@@ -182,5 +182,6 @@ module.exports = {
     inner join public.userplantransaction on "Cypher"."UserId" = "userplantransaction"."UserId"
     inner join public.plan  on "plan"."PlanId" = "userplantransaction"."PlanId"
     WHERE "UserId"=$1
-    ORDER BY "Cypher"."UserId" DESC`
+    ORDER BY "Cypher"."UserId" DESC`,
+    get_alert_message:`SELECT * FROM public.alert_msg where "id"=$1 AND "status"= true`
 };
