@@ -183,5 +183,7 @@ module.exports = {
     inner join public.plan  on "plan"."PlanId" = "userplantransaction"."PlanId"
     WHERE "UserId"=$1
     ORDER BY "Cypher"."UserId" DESC`,
-    get_alert_message:`SELECT * FROM public.alert_msg where "id"=$1 AND "status"= true`
+    get_alert_message:`SELECT * FROM public.alert_msg where "id"=$1 AND "status"= true`,
+    add_notification:`INSERT INTO public.push_notifications(message, created_date) VALUES ($1, $2);`,
+    get_notification:`SELECT * FROM public.push_notifications where "Id"=$1`
 };
