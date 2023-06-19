@@ -955,13 +955,13 @@ exports.getExportListofSidefilterdata = async (req, res) => {
         return res.status(500).json(error(err, res.statusCode));
     };
 }
-exports.addnotification = async(req, res) =>{
+exports.addnotification = async (req, res) => {
     try {
         const { message } = req.body;
         const date = utility.formatDate(new Date());
         db.query(query.add_notification, [message, date], (err, result) => {
             if (!err) {
-                return res.status(200).json(success("Ok","Insert Successfully !", res.statusCode));
+                return res.status(200).json(success("Ok", "Insert Successfully !", res.statusCode));
             } else {
                 return res.status(200).json(error(err.message, res.statusCode));
             }
@@ -973,13 +973,23 @@ exports.addnotification = async(req, res) =>{
 exports.getnotification = async (req, res) => {
     try {
         const { Id } = req.query;
-        db.query(query.get_notification, [Id], (err, result) => {
-            if (!err) {
-                return res.status(200).json(success("Ok", result.rows, res.statusCode));
-            } else {
-                return res.status(200).json(error(err.message, res.statusCode));
-            }
-        });
+        if (Id != null && Id != undefined) {
+            db.query(query.get_notification, [Id], (err, result) => {
+                if (!err) {
+                    return res.status(200).json(success("Ok", result.rows, res.statusCode));
+                } else {
+                    return res.status(200).json(error(err.message, res.statusCode));
+                }
+            });
+        } else {
+            db.query(query.get_notification_all, (err, result) => {
+                if (!err) {
+                    return res.status(200).json(success("Ok", result.rows, res.statusCode));
+                } else {
+                    return res.status(200).json(error(err.message, res.statusCode));
+                }
+            });
+        }
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };

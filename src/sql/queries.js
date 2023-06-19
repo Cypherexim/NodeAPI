@@ -185,5 +185,6 @@ module.exports = {
     ORDER BY "Cypher"."UserId" DESC`,
     get_alert_message:`SELECT * FROM public.alert_msg where "id"=$1 AND "status"= true`,
     add_notification:`INSERT INTO public.push_notifications(message, created_date) VALUES ($1, $2);`,
-    get_notification:`SELECT * FROM public.push_notifications where "Id"=$1`
+    get_notification:`SELECT * FROM public.push_notifications where "Id"=$1`,
+    get_notification_all:`SELECT * FROM public.push_notifications`
 };
