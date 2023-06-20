@@ -120,6 +120,7 @@ router.get('/getAllUserList', accountController.getAllUserlist);
 router.post('/changePassword', check('NewPassword').notEmpty(), check('CurrentPassword').notEmpty(), check('Email').isEmail(), accountController.changePassword);
 router.post('/enabledisableuser', accountController.enabledisableuser);
 router.get('/getUserslistByParentId', accountController.getuserlistbyParentId);
+router.post('/resetpassword', accountController.resetPassword);
 
 // Country Controller
 router.get('/getContries', countryController.getCountries);

@@ -42,6 +42,7 @@ module.exports = {
     where "Email"=$1`,
     get_user_email: `SELECT * FROM public."Cypher" where "Email"=$1`,
     get_user_by_email_forchangepassword: `SELECT * FROM public."Cypher" where "Email"=$1`,
+    reset_password:`UPDATE public."Cypher" SET "Password"=$1 WHERE "Email"=$2`,
     update_password: `UPDATE public."Cypher" SET "Password"=$1 WHERE "UserId"=$2`,
     get_user_email: `SELECT * FROM public."Cypher" WHERE "Email"=$1`,
     get_hscode_import: 'SELECT * FROM public.HSCodes',

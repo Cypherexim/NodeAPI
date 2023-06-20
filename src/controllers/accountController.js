@@ -116,6 +116,30 @@ exports.changePassword = async (req, res) => {
     }
     ////db.end;
 }
+
+exports.resetPassword = async (req, res) => {
+    try{
+    const { Email } = req.body;
+
+    const user = await db.query(query.get_user_by_email_forchangepassword, [Email]);
+    const Password ='Cypher@123';
+    if (user?.rows.length > 0) {
+        bycrypt.hash(Password, 12).then(hashPassword => {
+            db.query(query.reset_password,[hashPassword, Email], (error, results) => {
+                if (!error) {
+                    return res.status(200).json(success("Ok", results.rows, res.statusCode));
+                } else {
+                    return res.status(200).json(success("Ok", error.message, res.statusCode));
+                }
+            })
+        });
+    } else {
+        return res.status(200).json(error("Email not found !", res.statusCode));
+    }
+} catch(ex){
+    return res.status(500).json(error(ex, res.statusCode));
+}
+}
 exports.getAccountDetails = async (req, res) => {
     try {
         let { UserId } = req.query;

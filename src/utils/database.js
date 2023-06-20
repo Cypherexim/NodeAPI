@@ -37,7 +37,7 @@ const pool = new Pool({
   idleTimeoutMillis: 8000,
   reapIntervalMillis: 1000,
   createRetryIntervalMillis: 100,
-  acquireConnectionTimeout: 5000
+  acquireConnectionTimeout: 10000
 })
 
 // const pool = new Pool({
