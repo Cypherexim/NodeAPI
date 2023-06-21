@@ -113,7 +113,7 @@ exports.getavailableFieldlist = async (tablename) => {
         } else {
             querystring = 'COUNT(distinct  ' + fields[0] + ') as ' + fields[0].replace(/"|'/g, '') + 'Count , COUNT(distinct  ' + fields[1] + ') as ' + fields[1].replace(/"|'/g, '') + 'Count';
         }
-        const query = querystring + ' , COUNT(distinct  "HsCode") as TotalHsCode FROM';
+        const query = querystring + ' , COUNT(distinct  "HsCode") as TotalHsCode , COUNT(*) as total_records FROM';
         return [query];
     }
 }

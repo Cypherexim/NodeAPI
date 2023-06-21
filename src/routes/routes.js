@@ -77,6 +77,7 @@ router.get('/getcommonexport', importController.getcommonexportlist);
 router.get('/getalertmessage',importController.getAlertMessage);
 router.post('/addnotification', importController.addnotification);
 router.get('/getnotification', importController.getnotification);
+router.post('/getcount', importController.getcounts);
 
 //Import controller
 router.post('/getIndiaImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), indiaImportController.getindiaImport);

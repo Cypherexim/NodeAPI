@@ -994,6 +994,33 @@ exports.getnotification = async (req, res) => {
         return res.status(500).json(error(err, res.statusCode));
     };
 }
+exports.getcounts = async (req, res) => {
+    try {
+        const { fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
+            CountryofDestination, Month, Year, Currency, uqc, Quantity, PortofOrigin,
+            PortofDestination,
+            Mode, LoadingPort,
+            NotifyPartyName, UserId, IsWorkspaceSearch = false,
+            page, itemperpage, direction, countryname } = req.body;
+        var result = { counters: {}};
+        const counterquery = await common.getExportData(fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
+            CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
+            PortofDestination,
+            Mode, LoadingPort,
+            NotifyPartyName, Currency, page, itemperpage, await common.getavailableFieldlist(direction+'_'+countryname), direction+'_'+countryname, false);
+
+        db.query(counterquery[0], counterquery[1].slice(1), (err, results) => {
+            if (!err) {
+                result.counters = results.rows[0];
+                return res.status(200).json(success("Ok", result, res.statusCode));
+            } else {
+                return res.status(500).json(error(err, res.statusCode));
+            }
+        })
+    } catch (ex) {
+        return res.status(500).json(error("Internal server error", res.statusCode));
+    }
+}
 exports.getAlertMessage = async (req, res) => {
     try {
         const { Id } = req.query;
