@@ -1035,6 +1035,22 @@ exports.getAlertMessage = async (req, res) => {
         return res.status(500).json(error(err, res.statusCode));
     };
 }
+
+exports.updateUserPreference = async (req, res) => {
+    try {
+        const { Email, userPreference } = req.body;
+        db.query(query.update_userPreferences, [Email, userPreference], (err, result) => {
+            if (!err) {
+                return res.status(200).json(success("Ok", result.rows, res.statusCode));
+            } else {
+                return res.status(200).json(error(err.message, res.statusCode));
+            }
+        });
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
+
 exports.getProductDesc = async (req, res) => {
     try {
         const { product } = req.query;

@@ -18,7 +18,7 @@ module.exports = {
 	SET "FullName"=$1, "CompanyName"=$2, "MobileNumber"=$3, "Email"=$4, "CountryCode"=$5,
     "Designation"=$6, "Location"=$7, "GST"=$8, "IEC"=$9, "RoleId"=$10 WHERE "UserId"=$11`,
     enable_disable_user: `UPDATE public."Cypher" SET "Enable"=$1 WHERE "UserId"= $2;`,
-    get_user_by_email: `SELECT "FullName", "CompanyName", "MobileNumber", "Email", "Password","RoleName", "Cypher"."UserId", "CountryCode", "ParentUserId", "Designation", "Location", "GST", "IEC", "Cypher"."RoleId", "Enable", public.userplantransaction."PlanId", public.userplantransaction."Downloads", public.userplantransaction."Searches", 
+    get_user_by_email: `SELECT "FullName", "CompanyName", "MobileNumber", "Email", "Password","RoleName", "Cypher"."UserId", "CountryCode", "ParentUserId", "Designation", "Location", "GST", "IEC", "Cypher"."RoleId", "Enable","userPreference", public.userplantransaction."PlanId", public.userplantransaction."Downloads", public.userplantransaction."Searches", 
     public.userplantransaction."StartDate", public.userplantransaction."EndDate", public.userplantransaction."Validity",
     public.userplantransaction."DataAccess", public.userplantransaction."CountryAccess", 
     public.userplantransaction."CommodityAccess", public.userplantransaction."TarrifCodeAccess", 
@@ -29,7 +29,7 @@ module.exports = {
     inner join public.plan on "userplantransaction"."PlanId" = "plan"."PlanId" 
     inner join "Role" on "Cypher"."RoleId" = "Role"."RoleId"
     where "Email"=$1`,
-    get_user_by_parentuser: `SELECT "FullName", "CompanyName", "MobileNumber", "Email", "Password","RoleName", "Cypher"."UserId", "CountryCode", "ParentUserId", "Designation", "Location", "GST", "IEC", "Cypher"."RoleId", "Enable", public.userplantransaction."PlanId", public.userplantransaction."Downloads", public.userplantransaction."Searches", 
+    get_user_by_parentuser: `SELECT "FullName", "CompanyName", "MobileNumber", "Email", "Password","RoleName", "Cypher"."UserId", "CountryCode", "ParentUserId", "Designation", "Location", "GST", "IEC", "Cypher"."RoleId", "Enable","userPreference", public.userplantransaction."PlanId", public.userplantransaction."Downloads", public.userplantransaction."Searches", 
     public.userplantransaction."StartDate", public.userplantransaction."EndDate", public.userplantransaction."Validity",
     public.userplantransaction."DataAccess", public.userplantransaction."CountryAccess", 
     public.userplantransaction."CommodityAccess", public.userplantransaction."TarrifCodeAccess", 
@@ -187,5 +187,6 @@ module.exports = {
     get_alert_message:`SELECT * FROM public.alert_msg where "id"=$1 AND "status"= true`,
     add_notification:`INSERT INTO public.push_notifications(message, created_date) VALUES ($1, $2);`,
     get_notification:`SELECT * FROM public.push_notifications where "Id"=$1`,
-    get_notification_all:`SELECT * FROM public.push_notifications`
+    get_notification_all:`SELECT * FROM public.push_notifications`,
+    update_userPreferences:`UPDATE public."Cypher" SET "userPreference"=$2 WHERE "Email"=$1`
 };
