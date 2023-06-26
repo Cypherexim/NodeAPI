@@ -188,5 +188,6 @@ module.exports = {
     add_notification:`INSERT INTO public.push_notifications(message, created_date) VALUES ($1, $2);`,
     get_notification:`SELECT * FROM public.push_notifications where "Id"=$1`,
     get_notification_all:`SELECT * FROM public.push_notifications`,
-    update_userPreferences:`UPDATE public."Cypher" SET "userPreference"=$2 WHERE "Email"=$1`
+    update_userPreferences:`UPDATE public."Cypher" SET "userPreference"=$2 WHERE "Email"=$1`,
+    update_alert_message:`UPDATE public.alert_msg SET txt_msg=$1 WHERE id=$2`
 };

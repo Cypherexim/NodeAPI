@@ -1036,6 +1036,21 @@ exports.getAlertMessage = async (req, res) => {
     };
 }
 
+exports.updateAlertMessage = async (req, res) => {
+    try {
+        const { message, id } = req.body;
+        db.query(query.update_alert_message, [message, id], (err, result) => {
+            if (!err) {
+                return res.status(200).json(success("update successful", res.statusCode));
+            } else {
+                return res.status(200).json(error(err.message, res.statusCode));
+            }
+        });
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
+
 exports.updateUserPreference = async (req, res) => {
     try {
         const { Email, userPreference } = req.body;
