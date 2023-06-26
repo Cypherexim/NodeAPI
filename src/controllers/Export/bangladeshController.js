@@ -33,8 +33,8 @@ exports.getbangladeshExport = async (req, res) => {
             db.query(query[0], query[1].slice(1), (error, results) => {
                 if (!error) {
                     result.data = results.rows;
-                    db.query(counterquery[0], counterquery[1].slice(1), (error, results) => {
-                        if (!error) {
+                    db.query(counterquery[0], counterquery[1].slice(1), (err, results) => {
+                        if (!err) {
                             result.counters = results.rows[0];
                             return res.status(200).json(success("Ok", result, res.statusCode));
                         } else {
