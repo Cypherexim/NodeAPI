@@ -43,7 +43,8 @@ module.exports = {
     export_vietnam:"export_vietnam",
     /* Select Queries */
     //select_Query_for_totalrecords:'* FROM ',
-    select_Query_for_totalrecords:'*, count(*) OVER() AS total_records FROM',
+    // select_Query_for_totalrecords:'*, count(*) OVER() AS total_records FROM',
+    select_Query_for_totalrecords:'* FROM',
     select_Query_for_totalCounts:'COUNT(distinct  "Exp_Name") as TotalExpName, COUNT(distinct  "Imp_Name") as TotalImpName, COUNT(distinct  "HsCode") as TotalHsCode FROM',
     select_all_to_download:'* FROM',
     india_export_query:'"RecordID", "Type" as "DIRECTION","Date" as "DATE","Month" as "MONTH","Year" as "YEAR","HsCode" as	"TARIFF CODE","HSCode2dig" as "TWO_DIGIT","HSCode4Dig" as "FOUR_DIGIT","ProductDesc" as "ITEM DESCRIPTION","CommodityDesc" as "COMMODITY_DESCRIPTION","uqc"	as "UQC","Quantity" as "QTY","Currency"	as "CURRENCY","UnitPriceFC" as "UNT PRICE FC","InvValueFC" as "EST_VALUE FC","CountryofDestination" as "COUNTRY OF DESTINATION","ValueInUSD" as "EST_ VALUE US$","Exchange_Rate" as "EXCHANGE_RATE","Imp_Name"	as "BUYER","Imp_Address"	as "BUYER ADDRESS","PortofDestination"	as "PORT_OF_DISCHARGE","Mode"	as "MODE_OF_PORT","PortofOrigin"	as "PORT_OF_LODING","Exp_Name"	as "SHIPPER","Exp_Address"	as "SHIPPER ADDRESS","Exp_City"	as "SHIPPER CITY","Exp_PIN"	as "SHIPPER PIN","Exp_Phone"	as "SHIPPER PHONE","Exp_Email"	as "SHIPPER EMAIL","Exp_Contact_Person"	as "SHIPPER CONTACT PERSON" FROM',
