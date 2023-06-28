@@ -30,8 +30,8 @@ exports.getbangladeshExport = async (req, res) => {
                 PortofDestination,
                 Mode, LoadingPort,
                 NotifyPartyName, Currency, page, itemperpage, await common.getavailableFieldlist(config.export_bangladesh), config.export_bangladesh, false);
-            db.query(query[0], query[1].slice(1), (error, results) => {
-                if (!error) {
+            db.query(query[0], query[1].slice(1), (err, results) => {
+                if (!err) {
                     result.data = results.rows;
                     db.query(counterquery[0], counterquery[1].slice(1), (err, results) => {
                         if (!err) {
@@ -42,7 +42,7 @@ exports.getbangladeshExport = async (req, res) => {
                         }
                     })
                 } else {
-                    return res.status(500).json(error(error.message, res.statusCode));
+                    return res.status(500).json(error(err.message, res.statusCode));
                 }
             })
         } else {
