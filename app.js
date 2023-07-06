@@ -15,4 +15,4 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 //app.use(cors());
 app.use('/api', routes);
-app.listen(80);
+app.listen(8080);
