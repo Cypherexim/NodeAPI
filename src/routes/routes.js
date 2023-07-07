@@ -80,6 +80,7 @@ router.get('/getnotification', importController.getnotification);
 router.post('/getcount', importController.getcounts);
 router.post('/updateuserpreferences', importController.updateUserPreference);
 router.post('/updatealertmessage',importController.updateAlertMessage);
+router.get('/getcountries',importController.getallcountries);
 
 //Import controller
 router.post('/getIndiaImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), indiaImportController.getindiaImport);

@@ -189,5 +189,6 @@ module.exports = {
     get_notification:`SELECT * FROM public.push_notifications where "Id"=$1`,
     get_notification_all:`SELECT * FROM public.push_notifications`,
     update_userPreferences:`UPDATE public."Cypher" SET "userPreference"=$2 WHERE "Email"=$1`,
-    update_alert_message:`UPDATE public.alert_msg SET txt_msg=$1 WHERE id=$2`
+    update_alert_message:`UPDATE public.alert_msg SET txt_msg=$1 WHERE id=$2`,
+    get_all_countries:`SELECT * FROM public.all_countries Order by country`
 };

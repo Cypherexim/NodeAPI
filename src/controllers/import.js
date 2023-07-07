@@ -1036,6 +1036,20 @@ exports.getAlertMessage = async (req, res) => {
     };
 }
 
+exports.getallcountries = async (req, res) => {
+    try {
+        db.query(query.get_all_countries, (err, result) => {
+            if (!err) {
+                return res.status(200).json(success("Ok", result.rows, res.statusCode));
+            } else {
+                return res.status(200).json(error(err.message, res.statusCode));
+            }
+        });
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
+
 exports.updateAlertMessage = async (req, res) => {
     try {
         const { message, id } = req.body;
