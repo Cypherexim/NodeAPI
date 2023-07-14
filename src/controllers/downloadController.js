@@ -9,7 +9,7 @@ const config = require('../utils/config');
 const Stream = require('stream');
 const ExcelJs = require('exceljs');
 const AWS = require('aws-sdk');
-require('dotenv').config();
+// require('dotenv').config();
 const region = "us-east-1";
 
 // Creating a Secrets Manager client
@@ -368,7 +368,6 @@ exports.generateDownloadbigfilesforalluser = async (req, res) => {
     // Getting secret value from ASM
     const secret = await client.getSecretValue({ SecretId: `cypher-access-key` }).promise();
     // Prasing SecretString into javascript object
-    console.log('secret value', secret);
     const secretData = JSON.parse(secret.SecretString);
     AWS.config.update({
         accessKeyId: secretData.AccessKey,
