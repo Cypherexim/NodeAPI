@@ -9,7 +9,7 @@ const config = require('../utils/config');
 const Stream = require('stream');
 const ExcelJs = require('exceljs');
 const AWS = require('aws-sdk');
-// require('dotenv').config()
+require('dotenv').config();
 const region = "us-east-1";
 
 // Creating a Secrets Manager client
