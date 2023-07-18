@@ -8,11 +8,27 @@ const query = require('../../src/sql/queries');
 exports.getCountries = async (req, res) => {
     //db.connect();
     try {
-        db.query(query.getCountry, (error, results) => {
-            if (!error) {
+        db.query(query.getCountry, (err, results) => {
+            if (!err) {
                 return res.status(200).json(success("Ok", results.rows, res.statusCode));
             } else {
                 return res.status(200).json(success("Ok", error.message, res.statusCode));
+            }
+        })
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+    //db.end;
+}
+
+exports.getCountrieswithoutdate = async (req, res) => {
+    //db.connect();
+    try {
+        db.query(query.getCountryWithoutDate, (err, results) => {
+            if (!err) {
+                return res.status(200).json(success("Ok", results.rows, res.statusCode));
+            } else {
+                return res.status(200).json(error("Ok", error.message, res.statusCode));
             }
         })
     } catch (err) {

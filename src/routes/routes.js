@@ -128,6 +128,7 @@ router.post('/resetpassword', accountController.resetPassword);
 
 // Country Controller
 router.get('/getContries', countryController.getCountries);
+router.get('/getAllContries', countryController.getCountrieswithoutdate);
 router.post('/addCountry', countryController.addCountry);
 router.post('/updateCountry', countryController.updateCountry);
 router.get('/getlatestdate', countryController.getlatestDate);

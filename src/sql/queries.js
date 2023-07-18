@@ -51,6 +51,7 @@ module.exports = {
     getCountry: `SELECT "Countrycode", "CountryName", "Import", "Export","LatestDate", "StartDate","Direction"  FROM public."Country" inner join public.datauploadhistorybydate on
     public.datauploadhistorybydate."CountryCode" = public."Country"."Countrycode"
     ORDER BY "CountryName"`,
+    getCountryWithoutDate:`SELECT "Countrycode", "CountryName" FROM public."Country" ORDER BY "CountryName";`,
     getCountryByCountrycode:`SELECT * FROM public."Country" where "Countrycode"=$1`,
     getLatestDate: `SELECT "LatestDate" FROM public.datauploadhistorybydate where "CountryCode"=$1 AND "Direction"=$2;`,
     addCountry: 'INSERT INTO public."Country"("Countrycode", "CountryName", "Import", "Export") VALUES ($1, $2, $3, $4)',

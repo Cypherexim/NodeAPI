@@ -95,8 +95,8 @@ exports.changePassword = async (req, res) => {
             .then(doMatch => {
                 if (doMatch) {
                     bycrypt.hash(NewPassword, 12).then(hashPassword => {
-                        db.query(query.update_password, [hashPassword, user.rows[0].UserId], (error, results) => {
-                            if (!error) {
+                        db.query(query.update_password, [hashPassword, user.rows[0].UserId], (err, results) => {
+                            if (!err) {
                                 return res.status(200).json(success("Password changed Successfully !", res.statusCode));
                             } else {
                                 return res.status(500).json(error("Internal server Error", res.statusCode));
@@ -125,8 +125,8 @@ exports.resetPassword = async (req, res) => {
     const Password ='Cypher@123';
     if (user?.rows.length > 0) {
         bycrypt.hash(Password, 12).then(hashPassword => {
-            db.query(query.reset_password,[hashPassword, Email], (error, results) => {
-                if (!error) {
+            db.query(query.reset_password,[hashPassword, Email], (err, results) => {
+                if (!err) {
                     return res.status(200).json(success("Ok", results.rows, res.statusCode));
                 } else {
                     return res.status(200).json(success("Ok", error.message, res.statusCode));
@@ -150,8 +150,8 @@ exports.getAccountDetails = async (req, res) => {
         } else {
             id = UserId;
         }
-        db.query(query.get_Searches_By_UserId, [id], (error, results) => {
-            if (!error) {
+        db.query(query.get_Searches_By_UserId, [id], (err, results) => {
+            if (!err) {
                 results.rows[0].UserId = UserId;
                 return res.status(200).json(success("Ok", results.rows, res.statusCode));
             } else {
@@ -165,8 +165,8 @@ exports.getAccountDetails = async (req, res) => {
 exports.getuserlistbyParentId = async (req, res) => {
     try {
         const { ParentUserId } = req.query;
-        db.query(query.get_user_by_ParentId, [ParentUserId], (error, results) => {
-            if (!error) {
+        db.query(query.get_user_by_ParentId, [ParentUserId], (err, results) => {
+            if (!err) {
                 return res.status(200).json(success("Ok", results.rows, res.statusCode));
             } else {
                 return res.status(200).json(success("Ok", error.message, res.statusCode));
@@ -179,8 +179,8 @@ exports.getuserlistbyParentId = async (req, res) => {
 exports.enabledisableuser = async (req, res) => {
     const { enable, UserId } = req.body;
     try {
-        db.query(query.enable_disable_user, [enable, UserId], (error, results) => {
-            if (!error) {
+        db.query(query.enable_disable_user, [enable, UserId], (err, results) => {
+            if (!err) {
                 return res.status(200).json(success("Ok", results.command + " Successful.", res.statusCode));
             }
         })
@@ -275,8 +275,8 @@ exports.updateUserByAdmin = async (req, res) => {
 
 exports.getAllUserlist = async (req, res) => {
     try {
-        db.query(query.get_userlist, (error, results) => {
-            if (!error) {
+        db.query(query.get_userlist, (err, results) => {
+            if (!err) {
                 return res.status(200).json(success("Ok", results.rows, res.statusCode));
             } else {
                 return res.status(200).json(success("Ok", error.message, res.statusCode));
