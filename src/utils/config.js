@@ -18,6 +18,8 @@ module.exports = {
     export_ethiopia: "export_ethiopia",
     import_ethiopia: "import_ethiopia",
     export_chile: "export_chile",
+    import_brazil:"import_brazil",
+    export_brazil:"export_brazil",
     workspace: "workspace",
     import_india: "import_india",
     export_india: "export_india",

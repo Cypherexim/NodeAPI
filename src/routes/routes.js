@@ -39,6 +39,8 @@ const nigeriaExportController = require('../controllers/Export/nigeriaController
 const usaExportController = require('../controllers/Export/usaController');
 const vietnamExportController = require('../controllers/Export/vietnamController');
 const companyProfileController = require('../controllers/companyProfileController');
+const brazilImportController = require('../controllers/Import/brazilController');
+const brazilExportController = require('../controllers/Export/brazilController');
 
 
 // first Controller
@@ -97,6 +99,7 @@ router.post('/getMexicoImports', check('fromDate').notEmpty().isDate(), check('t
 router.post('/getNigeriaImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), nigeriaImportController.getnigeriaImport);
 router.post('/getUsaImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), usaImportController.getusaImport);
 router.post('/getVietnamImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), vietnamImportController.getvietnamImport);
+router.post('/getBrazilImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), brazilImportController.getbrazilImport);
 
 //Export controller
 router.post('/getIndiaExports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), indiaExportController.getindiaExport);
@@ -113,6 +116,7 @@ router.post('/getMexicoExports', check('fromDate').notEmpty().isDate(), check('t
 router.post('/getNigeriaExports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), nigeriaExportController.getnigeriaExport);
 router.post('/getUsaExports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), usaExportController.getusaExport);
 router.post('/getVietnamExports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), vietnamExportController.getvietnamExport);
+router.post('/getBrazilExports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), brazilExportController.getbrazilExport);
 
 // Account Controller
 router.post('/signup', check('FullName').notEmpty(), check('CompanyName').notEmpty(), body('MobileNumber').isLength({ min: 10, max: 10 }).withMessage('Mobile Number should be of 10 digit.'), check('Password').notEmpty(), check('Email').isEmail(), accountController.createUser);
