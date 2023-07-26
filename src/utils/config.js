@@ -43,6 +43,11 @@ module.exports = {
     export_nigeria:"export_nigeria",
     export_usa:"export_usa",
     export_vietnam:"export_vietnam",
+    import_columbia:"import_columbia",
+    export_columbia:"export_columbia",
+    export_uganda:"export_uganda",
+    export_paraguay:"export_paraguay",
+    export_peru:"export_peru",
     /* Select Queries */
     //select_Query_for_totalrecords:'* FROM ',
     // select_Query_for_totalrecords:'*, count(*) OVER() AS total_records FROM',
