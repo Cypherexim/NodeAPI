@@ -28,12 +28,12 @@ exports.getphilipExport = async (req, res) => {
                 PortofDestination,
                 Mode, LoadingPort,
                 NotifyPartyName, Currency, page, itemperpage, await common.getavailableFieldlist(config.export_philip), config.export_philip, false);
-                db.query(query[0], query[1].slice(1), (error, results) => {
-                    if(!error){
+                db.query(query[0], query[1].slice(1), (err, results) => {
+                    if(!err){
                     result.data = results.rows;
-                    db.query(counterquery[0], counterquery[1].slice(1), (error, results) => {
+                    db.query(counterquery[0], counterquery[1].slice(1), (err, results) => {
                         
-                        if (!error) {
+                        if (!err) {
                             result.counters = results.rows[0];
                             return res.status(200).json(success("Ok", result, res.statusCode));
                         } else {
@@ -41,7 +41,7 @@ exports.getphilipExport = async (req, res) => {
                         }
                     })
                 } else {
-                    return res.status(500).json(error(error.message, res.statusCode));
+                    return res.status(500).json(error(err.message, res.statusCode));
                 }                    
                 })
         } else {

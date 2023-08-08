@@ -29,11 +29,11 @@ exports.getbangladeshImport = async (req, res) => {
                 PortofDestination,
                 Mode, LoadingPort,
                 NotifyPartyName, Currency, page, itemperpage, await common.getavailableFieldlist(config.import_bangladesh), config.import_bangladesh, false);
-            db.query(query[0], query[1].slice(1), (error, results) => {
-                if (!error) {
+            db.query(query[0], query[1].slice(1), (err, results) => {
+                if (!err) {
                     result.data = results.rows;
-                    db.query(counterquery[0], counterquery[1].slice(1), (error, results) => {
-                        if (!error) {
+                    db.query(counterquery[0], counterquery[1].slice(1), (err, results) => {
+                        if (!err) {
                             result.counters = results.rows[0];
                             return res.status(200).json(success("Ok", result, res.statusCode));
                         } else {
@@ -41,7 +41,7 @@ exports.getbangladeshImport = async (req, res) => {
                         }
                     })
                 } else {
-                    return res.status(500).json(error(error.message, res.statusCode));
+                    return res.status(500).json(error(err.message, res.statusCode));
                 }
             })
         } else {
