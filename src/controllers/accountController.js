@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { response } = require('express');
 const db = require('../../src/utils/database');
 const { validationResult } = require('express-validator');
@@ -6,6 +7,8 @@ const query = require('../../src/sql/queries');
 const bycrypt = require('bcryptjs');
 const config = require('../utils/config');
 const mail = require('../utils/mailing');
+const jwt = require("jsonwebtoken");
+
 
 
 exports.createUser = async (req, res) => {
@@ -64,6 +67,16 @@ exports.postLogin = async (req, res) => {
         bycrypt.compare(Password, user.rows[0].Password)
             .then(doMatch => {
                 if (doMatch) {
+                    // Create token
+                    const token = jwt.sign(
+                        { user_id: user.rows[0].UserId, Email },
+                        config.TOKEN_KEY,
+                        {
+                            expiresIn: "2h",
+                        }
+                    );
+
+                    user.rows[0].token = token;
                     return res.status(200).json(success("Login Successfully !", user.rows[0], res.statusCode));
                 } else {
                     return res.status(200).json(error("Wrong password !", res.statusCode));
@@ -118,27 +131,27 @@ exports.changePassword = async (req, res) => {
 }
 
 exports.resetPassword = async (req, res) => {
-    try{
-    const { Email } = req.body;
+    try {
+        const { Email } = req.body;
 
-    const user = await db.query(query.get_user_by_email_forchangepassword, [Email]);
-    const Password ='Cypher@123';
-    if (user?.rows.length > 0) {
-        bycrypt.hash(Password, 12).then(hashPassword => {
-            db.query(query.reset_password,[hashPassword, Email], (err, results) => {
-                if (!err) {
-                    return res.status(200).json(success("Ok", results.rows, res.statusCode));
-                } else {
-                    return res.status(200).json(success("Ok", error.message, res.statusCode));
-                }
-            })
-        });
-    } else {
-        return res.status(200).json(error("Email not found !", res.statusCode));
+        const user = await db.query(query.get_user_by_email_forchangepassword, [Email]);
+        const Password = 'Cypher@123';
+        if (user?.rows.length > 0) {
+            bycrypt.hash(Password, 12).then(hashPassword => {
+                db.query(query.reset_password, [hashPassword, Email], (err, results) => {
+                    if (!err) {
+                        return res.status(200).json(success("Ok", results.rows, res.statusCode));
+                    } else {
+                        return res.status(200).json(success("Ok", error.message, res.statusCode));
+                    }
+                })
+            });
+        } else {
+            return res.status(200).json(error("Email not found !", res.statusCode));
+        }
+    } catch (ex) {
+        return res.status(500).json(error(ex, res.statusCode));
     }
-} catch(ex){
-    return res.status(500).json(error(ex, res.statusCode));
-}
 }
 exports.getAccountDetails = async (req, res) => {
     try {

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { check, body } = require('express-validator');
+const config = require('../utils/config');
 const firstController = require('../../src/controllers/firstController');
 const importController = require('../controllers/import');
 const accountController = require('../controllers/accountController');
@@ -47,6 +48,42 @@ const paraguayExportController = require('../controllers/Export/paraguayControll
 const peruExportController = require('../controllers/Export/peruController');
 const ugandaExportController = require('../controllers/Export/ugandaController');
 
+
+
+router.post('/signup', check('FullName').notEmpty(), check('CompanyName').notEmpty(), body('MobileNumber').isLength({ min: 10, max: 10 }).withMessage('Mobile Number should be of 10 digit.'), check('Password').notEmpty(), check('Email').isEmail(), accountController.createUser);
+router.post('/signin', check('Password').notEmpty(), check('Email').isEmail(), accountController.postLogin);
+router.post('/resetpassword', accountController.resetPassword);
+var jwt = require('jsonwebtoken');
+
+router.use(function (req, res, next) {
+    var token = req.headers['x-access-token'];
+    console.log(token);
+    if (token) {
+        jwt.verify(token, config.TOKEN_KEY,
+            {
+                algorithm: 'HS256'
+
+            }, function (err, decoded) {
+                if (err) {
+                    let errordata = {
+                        message: err.message,
+                        expiredAt: err.expiredAt
+                    };
+                    console.log(errordata);
+                    return res.status(401).json({
+                        message: 'Unauthorized Access'
+                    });
+                }
+                req.decoded = decoded;
+                console.log(decoded);
+                next();
+            });
+    } else {
+        return res.status(403).json({
+            message: 'Token required to access this API.'
+        });
+    }
+});
 // first Controller
 router.get('/getUsers', firstController.getUsers);
 router.post('/addUser', check('email').isEmail(), firstController.createtUser);
@@ -128,8 +165,6 @@ router.post('/getPeruExports', check('fromDate').notEmpty().isDate(), check('toD
 router.post('/getUgandaExports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), ugandaExportController.getugandaExport);
 
 // Account Controller
-router.post('/signup', check('FullName').notEmpty(), check('CompanyName').notEmpty(), body('MobileNumber').isLength({ min: 10, max: 10 }).withMessage('Mobile Number should be of 10 digit.'), check('Password').notEmpty(), check('Email').isEmail(), accountController.createUser);
-router.post('/signin', check('Password').notEmpty(), check('Email').isEmail(), accountController.postLogin);
 router.get('/getAccountDetails', accountController.getAccountDetails);
 router.post('/addUserAdmin', check('FullName').notEmpty(), check('CompanyName').notEmpty(), body('MobileNumber').isLength({ min: 10, max: 10 }).withMessage('Mobile Number should be of 10 digit.'), check('Password').notEmpty(), check('Email').isEmail(), accountController.addUserByAdmin);
 router.post('/updateUserAdmin', check('FullName').notEmpty(), check('CompanyName').notEmpty(), body('MobileNumber').isLength({ min: 10, max: 10 }).withMessage('Mobile Number should be of 10 digit.'), check('Email').isEmail(), accountController.updateUserByAdmin);
@@ -137,7 +172,7 @@ router.get('/getAllUserList', accountController.getAllUserlist);
 router.post('/changePassword', check('NewPassword').notEmpty(), check('CurrentPassword').notEmpty(), check('Email').isEmail(), accountController.changePassword);
 router.post('/enabledisableuser', accountController.enabledisableuser);
 router.get('/getUserslistByParentId', accountController.getuserlistbyParentId);
-router.post('/resetpassword', accountController.resetPassword);
+
 
 // Country Controller
 router.get('/getContries', countryController.getCountries);
