@@ -13,6 +13,6 @@ app.use((req, res, next) => {
 });
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
-//app.use(cors());
+app.use(cors());
 app.use('/api', routes);
 app.listen(8080);
