@@ -24,23 +24,23 @@ exports.getturkeyImport = async (req, res) => {
                 PortofDestination,
                 Mode, LoadingPort,
                 NotifyPartyName, Currency, page, itemperpage, config.select_Query_for_totalrecords, config.import_turkey, true);
-            const counterquery = await common.getExportData(fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
-                CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
-                PortofDestination,
-                Mode, LoadingPort,
-                NotifyPartyName, Currency, page, itemperpage, await common.getavailableFieldlist(config.import_turkey), config.import_turkey, false);
+            // const counterquery = await common.getExportData(fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
+            //     CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
+            //     PortofDestination,
+            //     Mode, LoadingPort,
+            //     NotifyPartyName, Currency, page, itemperpage, await common.getavailableFieldlist(config.import_turkey), config.import_turkey, false);
                 db.query(query[0], query[1].slice(1), (err, results) => {
                     if(!err){
                     result.data = results.rows;
-                    db.query(counterquery[0], counterquery[1].slice(1), (err, results) => {
+                    // db.query(counterquery[0], counterquery[1].slice(1), (err, results) => {
                         
-                        if (!err) {
-                            result.counters = results.rows[0];
+                    //     if (!err) {
+                    //         result.counters = results.rows[0];
                             return res.status(200).json(success("Ok", result, res.statusCode));
-                        } else {
-                            return res.status(500).json(error("Internal server error", res.statusCode));
-                        }
-                    })
+                    //     } else {
+                    //         return res.status(500).json(error("Internal server error", res.statusCode));
+                    //     }
+                    // })
                 } else {
                     return res.status(500).json(error(error.message, res.statusCode));
                 }
