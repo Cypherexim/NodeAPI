@@ -781,8 +781,8 @@ exports.getthirdListofSidefilterdata = async (req, res) => {
                                 output[keys[i]] = [...new Set(extractValue(results.rows, keys[i]))];
                             }
                         }
-                        output.HSCODE = extractValue(results.rows,'HsCode');
-                        console.log(output);
+                        // output.HSCODE = extractValue(results.rows,'HsCode');
+                        // console.log(output);
                         return res.status(200).json(success("Ok", output, res.statusCode));
                     } else {
                         return res.status(500).json(error(err.message, res.statusCode));
@@ -834,8 +834,8 @@ exports.getfourthListofSidefilterdata = async (req, res) => {
                                 output[keys[i]] = [...new Set(extractValue(results.rows, keys[i]))];
                             }
                         }
-                        output.HSCODE = extractValue(results.rows,'HsCode');
-                        console.log(output);
+                        // output.HSCODE = extractValue(results.rows,'HsCode');
+                        // console.log(output);
                         return res.status(200).json(success("Ok", output, res.statusCode));
                     } else {
                         return res.status(500).json(error(err.message, res.statusCode));
