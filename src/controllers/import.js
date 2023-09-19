@@ -674,7 +674,7 @@ exports.getfirstListofSidefilterdata = async (req, res) => {
                         //         output[keys[i]] = [...new Set(extractValue(results.rows, keys[i]))];
                         //     }
                         // }
-                        // output.HSCODE = extractValue(results.rows,'HsCode');
+                        // output.HsCode = extractValue(results.rows,'HsCode');
                         // console.log(output);
                         return res.status(200).json(success("Ok", results.rows, res.statusCode));
                     } else {
@@ -768,23 +768,22 @@ exports.getthirdListofSidefilterdata = async (req, res) => {
                         selectQuery += '"' + keys[i] + '", '
                     }
                 }
-                var finalQuery = selectQuery.replace(/,\s*$/, "") + ', ROUND(SUM("Quantity")::numeric,0) as Quantity, ROUND(SUM("ValueInUSD")::numeric,2) as ValueInUSD ';
                 const query = await common.getExportData(fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
                     CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
                     PortofDestination,
                     Mode, LoadingPort,
-                    NotifyPartyName, Currency, 0, 0, finalQuery + ' FROM ', Direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
+                    NotifyPartyName, Currency, 0, 0, selectQuery.replace(/,\s*$/, "") + ' FROM ', Direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
 
-                db.query(query[0] + ' Group By ' + selectQuery.replace('Distinct ', "").replace(/,\s*$/, ""), query[1].slice(1), (err, results) => {
+                db.query(query[0], query[1].slice(1), (err, results) => {
                     if (!err) {
-                        // for (let i = 0; i < keys.length; i++) {
-                        //     if (obj[keys[i]] == true) {
-                        //         output[keys[i]] = [...new Set(extractValue(results.rows, keys[i]))];
-                        //     }
-                        // }
-                        // output.HSCODE = extractValue(results.rows,'HsCode');
-                        // console.log(output);
-                        return res.status(200).json(success("Ok", results.rows, res.statusCode));
+                        for (let i = 0; i < keys.length; i++) {
+                            if (obj[keys[i]] == true) {
+                                output[keys[i]] = [...new Set(extractValue(results.rows, keys[i]))];
+                            }
+                        }
+                        output.HSCODE = extractValue(results.rows,'HsCode');
+                        console.log(output);
+                        return res.status(200).json(success("Ok", output, res.statusCode));
                     } else {
                         return res.status(500).json(error(err.message, res.statusCode));
                     }
@@ -822,23 +821,22 @@ exports.getfourthListofSidefilterdata = async (req, res) => {
                         selectQuery += '"' + keys[i] + '", '
                     }
                 }
-                var finalQuery = selectQuery.replace(/,\s*$/, "") + ', ROUND(SUM("Quantity")::numeric,0) as Quantity, ROUND(SUM("ValueInUSD")::numeric,2) as ValueInUSD ';
                 const query = await common.getExportData(fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
                     CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
                     PortofDestination,
                     Mode, LoadingPort,
-                    NotifyPartyName, Currency, 0, 0, finalQuery + ' FROM ', Direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
+                    NotifyPartyName, Currency, 0, 0, selectQuery.replace(/,\s*$/, "") + ' FROM ', Direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
 
-                db.query(query[0] + ' Group By ' + selectQuery.replace('Distinct ', "").replace(/,\s*$/, ""), query[1].slice(1), (err, results) => {
+                db.query(query[0], query[1].slice(1), (err, results) => {
                     if (!err) {
-                        // for (let i = 0; i < keys.length; i++) {
-                        //     if (obj[keys[i]] == true) {
-                        //         output[keys[i]] = [...new Set(extractValue(results.rows, keys[i]))];
-                        //     }
-                        // }
-                        // output.HSCODE = extractValue(results.rows,'HsCode');
-                        // console.log(output);
-                        return res.status(200).json(success("Ok", results.rows, res.statusCode));
+                        for (let i = 0; i < keys.length; i++) {
+                            if (obj[keys[i]] == true) {
+                                output[keys[i]] = [...new Set(extractValue(results.rows, keys[i]))];
+                            }
+                        }
+                        output.HSCODE = extractValue(results.rows,'HsCode');
+                        console.log(output);
+                        return res.status(200).json(success("Ok", output, res.statusCode));
                     } else {
                         return res.status(500).json(error(err.message, res.statusCode));
                     }
