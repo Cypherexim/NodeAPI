@@ -53,9 +53,7 @@ const ugandaExportController = require('../controllers/Export/ugandaController')
 router.post('/signup', check('FullName').notEmpty(), check('CompanyName').notEmpty(), body('MobileNumber').isLength({ min: 10, max: 10 }).withMessage('Mobile Number should be of 10 digit.'), check('Password').notEmpty(), check('Email').isEmail(), accountController.createUser);
 router.post('/signin', check('Password').notEmpty(), check('Email').isEmail(), accountController.postLogin);
 router.post('/resetpassword', accountController.resetPassword);
-router.post('/getcount', importController.getcounts);
-router.post('/getAnalysisReport', analysisController.getAnalysisData);
-router.post('/getfirstSideFilterData', importController.getfirstListofSidefilterdata);
+
 var jwt = require('jsonwebtoken');
 
 router.use(function (req, res, next) {
@@ -111,10 +109,11 @@ router.get('/getimporterexportindia', importController.getimporterexportindia)
 router.get('/getimporterimportindia', importController.getimporterimportindia)
 router.get('/getexporterexportindia', importController.getexporterexportindia)
 router.get('/getexporterimportindia', importController.getexporterimportindia)
-
+router.post('/getfirstSideFilterData', importController.getfirstListofSidefilterdata);
 router.post('/getsecondSideFilterData', importController.getsecondListofSidefilterdata);
 router.post('/getthirdSideFilterData', importController.getthirdListofSidefilterdata);
 router.post('/getfourthSideFilterData', importController.getfourthListofSidefilterdata);
+router.post('/getfifthSideFilterData', importController.getfifthListofSidefilterdata);
 router.post('/getimportSideFilterData', importController.getImportListofSidefilterdata);
 router.post('/getexportSideFilterData', importController.getExportListofSidefilterdata);
 router.post('/getdatabyalphabet', importController.getexportlistbyAlphabet);
@@ -123,7 +122,7 @@ router.get('/getcommonexport', importController.getcommonexportlist);
 router.get('/getalertmessage',importController.getAlertMessage);
 router.post('/addnotification', importController.addnotification);
 router.get('/getnotification', importController.getnotification);
-
+router.post('/getcount', importController.getcounts);
 router.post('/updateuserpreferences', importController.updateUserPreference);
 router.post('/updatealertmessage',importController.updateAlertMessage);
 router.get('/getcountries',importController.getallcountries);
@@ -207,7 +206,7 @@ router.post('/sharedownloadtransaction', downloadController.sharedownloadfile);
 
 // Analysis Controller
 
-
+router.post('/getAnalysisReport', analysisController.getAnalysisData);
 router.get('/getwhatstrending', analysisController.getWhatsTrending);
 
 // Company Profile Controller
