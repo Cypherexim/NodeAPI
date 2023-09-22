@@ -230,7 +230,7 @@ exports.addUserByAdmin = async (req, res) => {
                         Favoriteshipment, Whatstrending, Companyprofile, Addonfacility, Analysis, User], (err, reslt) => {
                             if (!err) {
                                 db.query(query.add_user_Access, [AddUser, EditUser, DeleteUser, AddPlan, EditPlan, DeletePlan, DownloadsAccess, Search, EnableId, DisableId, BlockUser, UnblockUser, ClientList, PlanList, result.rows[0].UserId, Share], (error, result) => {
-                                    console.log(error)
+                                    
                                 })
                                 mail.SendEmail(Email, config.userRegisterationmailSubject, config.accountcreationmailBody);
                                 return res.status(201).json(success("Ok", reslt.command + " Successful.", res.statusCode));
