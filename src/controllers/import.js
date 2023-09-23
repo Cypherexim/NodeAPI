@@ -644,15 +644,9 @@ exports.getfirstListofSidefilterdata = async (req, res) => {
         var output = {};
         var group = '';
         var count = ''
-        const fieldList = ["Imp_Name", "Exp_Name"];
-        const availablefield = await db.query('SELECT column_name FROM information_schema.columns WHERE table_name = $1 and column_name = ANY($2)', [Direction.toLowerCase() + '_' + CountryName.toLowerCase(), fieldList]);
-        if (availablefield.rows.length == 1) {
-            group = '"'+availablefield.rows[0].column_name.toString()+'"';
-            count = 'COUNT("' + availablefield.rows[0].column_name.toString() + '") as '+availablefield.rows[0].column_name.toString()+'count';
-        } else if (availablefield.rows.length == 2) {
-            group = '"'+availablefield.rows[0].column_name.toString()+'","'+availablefield.rows[1].column_name.toString()+'"';
-            count = 'COUNT("' + availablefield.rows[0].column_name.toString() + '") as '+availablefield.rows[0].column_name.toString()+'count, COUNT("' + availablefield.rows[1].column_name.toString() + '") as '+availablefield.rows[1].column_name.toString()+'count';
-        }
+            group = '"HsCode"';
+            count = 'COUNT("HsCode") as count';
+        
         if (access.rows.length > 0) {
             const keys = Object.keys(access.rows[0]);
             const obj = access.rows[0];
@@ -670,14 +664,14 @@ exports.getfirstListofSidefilterdata = async (req, res) => {
                         selectQuery += '"' + keys[i] + '", '
                     }
                 }
-                var finalQuery = selectQuery.replace(/,\s*$/, "") + ', ROUND(SUM("ValueInUSD")::numeric,2) as ValueInUSD ,'+ count;
+                var finalQuery = selectQuery.replace(/,\s*$/, "") + ', ROUND(SUM("ValueInUSD")::numeric,2) as ValueInUSD ,' + count;
                 const query = await common.getExportData(fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
                     CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
                     PortofDestination,
                     Mode, LoadingPort,
                     NotifyPartyName, Currency, 0, 0, finalQuery + ' FROM ', Direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
 
-                db.query(query[0] + ' Group By ' + selectQuery.replace('Distinct ', "").replace(/,\s*$/, "")+','+ group, query[1].slice(1), (err, results) => {
+                db.query(query[0] + ' Group By ' + selectQuery.replace('Distinct ', "").replace(/,\s*$/, "") + ',' + group, query[1].slice(1), (err, results) => {
                     if (!err) {
                         // for (let i = 0; i < keys.length; i++) {
                         //     if (obj[keys[i]] == true) {
@@ -709,14 +703,12 @@ exports.getsecondListofSidefilterdata = async (req, res) => {
         var output = {};
         var group = '';
         var count = ''
-        const fieldList = ["Imp_Name", "Exp_Name"];
-        const availablefield = await db.query('SELECT column_name FROM information_schema.columns WHERE table_name = $1 and column_name = ANY($2)', [Direction.toLowerCase() + '_' + CountryName.toLowerCase(), fieldList]);
-        if (availablefield.rows.length == 1) {
-            group = '"'+availablefield.rows[0].column_name.toString()+'"';
-            count = 'COUNT("' + availablefield.rows[0].column_name.toString() + '") as '+availablefield.rows[0].column_name.toString()+'count';
-        } else if (availablefield.rows.length == 2) {
-            group = '"'+availablefield.rows[0].column_name.toString()+'","'+availablefield.rows[1].column_name.toString()+'"';
-            count = 'COUNT("' + availablefield.rows[0].column_name.toString() + '") as '+availablefield.rows[0].column_name.toString()+'count, COUNT("' + availablefield.rows[1].column_name.toString() + '") as '+availablefield.rows[1].column_name.toString()+'count';
+        if (Direction.toLowerCase() == 'import') {
+            group = '"CountryofOrigin"';
+            count = 'COUNT("CountryofOrigin") as count';
+        } else if (Direction.toLowerCase() == 'export') {
+            group = '"CountryofDestination"';
+            count = 'COUNT("CountryofDestination") as count';
         }
         if (access.rows.length > 0) {
             const keys = Object.keys(access.rows[0]);
@@ -735,14 +727,14 @@ exports.getsecondListofSidefilterdata = async (req, res) => {
                         selectQuery += '"' + keys[i] + '", '
                     }
                 }
-                var finalQuery = selectQuery.replace(/,\s*$/, "") + ', ROUND(SUM("Quantity")::numeric,0) as Quantity, ROUND(SUM("ValueInUSD")::numeric,2) as ValueInUSD ';
+                var finalQuery = selectQuery.replace(/,\s*$/, "") + ', ROUND(SUM("ValueInUSD")::numeric,2) as ValueInUSD, '+count;
                 const query = await common.getExportData(fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
                     CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
                     PortofDestination,
                     Mode, LoadingPort,
                     NotifyPartyName, Currency, 0, 0, finalQuery + ' FROM ', Direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
 
-                db.query(query[0] + ' Group By ' + selectQuery.replace('Distinct ', "").replace(/,\s*$/, "")+','+ group, query[1].slice(1), (err, results) => {
+                db.query(query[0] + ' Group By ' + selectQuery.replace('Distinct ', "").replace(/,\s*$/, "") + ',' + group, query[1].slice(1), (err, results) => {
                     if (!err) {
                         // for (let i = 0; i < keys.length; i++) {
                         //     if (obj[keys[i]] == true) {
@@ -934,15 +926,8 @@ exports.getImportListofSidefilterdata = async (req, res) => {
         var output = {};
         var group = '';
         var count = ''
-        const fieldList = ["Imp_Name", "Exp_Name"];
-        const availablefield = await db.query('SELECT column_name FROM information_schema.columns WHERE table_name = $1 and column_name = ANY($2)', [Direction.toLowerCase() + '_' + CountryName.toLowerCase(), fieldList]);
-        if (availablefield.rows.length == 1) {
-            group = '"'+availablefield.rows[0].column_name.toString()+'"';
-            count = 'COUNT("' + availablefield.rows[0].column_name.toString() + '") as '+availablefield.rows[0].column_name.toString()+'count';
-        } else if (availablefield.rows.length == 2) {
-            group = '"'+availablefield.rows[0].column_name.toString()+'","'+availablefield.rows[1].column_name.toString()+'"';
-            count = 'COUNT("' + availablefield.rows[0].column_name.toString() + '") as '+availablefield.rows[0].column_name.toString()+'count, COUNT("' + availablefield.rows[1].column_name.toString() + '") as '+availablefield.rows[1].column_name.toString()+'count';
-        }
+        group = '"Imp_Name"';
+        count = 'COUNT("Imp_Name") as count';
         if (access.rows.length > 0) {
             const keys = Object.keys(access.rows[0]);
             const obj = access.rows[0];
@@ -967,7 +952,7 @@ exports.getImportListofSidefilterdata = async (req, res) => {
                     Mode, LoadingPort,
                     NotifyPartyName, Currency, 0, 0, finalQuery + ' FROM ', Direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
 
-                db.query(query[0] + ' Group By ' + selectQuery.replace('Distinct ', "").replace(/,\s*$/, "")+','+ group, query[1].slice(1), (err, results) => {
+                db.query(query[0] + ' Group By ' + selectQuery.replace('Distinct ', "").replace(/,\s*$/, "") + ',' + group, query[1].slice(1), (err, results) => {
                     if (!err) {
                         // for (let i = 0; i < keys.length; i++) {
                         //     if (obj[keys[i]] == true) {
@@ -999,15 +984,8 @@ exports.getExportListofSidefilterdata = async (req, res) => {
         var output = {};
         var group = '';
         var count = ''
-        const fieldList = ["Imp_Name", "Exp_Name"];
-        const availablefield = await db.query('SELECT column_name FROM information_schema.columns WHERE table_name = $1 and column_name = ANY($2)', [Direction.toLowerCase() + '_' + CountryName.toLowerCase(), fieldList]);
-        if (availablefield.rows.length == 1) {
-            group = '"'+availablefield.rows[0].column_name.toString()+'"';
-            count = 'COUNT("' + availablefield.rows[0].column_name.toString() + '") as '+availablefield.rows[0].column_name.toString()+'count';
-        } else if (availablefield.rows.length == 2) {
-            group = '"'+availablefield.rows[0].column_name.toString()+'","'+availablefield.rows[1].column_name.toString()+'"';
-            count = 'COUNT("' + availablefield.rows[0].column_name.toString() + '") as '+availablefield.rows[0].column_name.toString()+'count, COUNT("' + availablefield.rows[1].column_name.toString() + '") as '+availablefield.rows[1].column_name.toString()+'count';
-        }
+        group = '"Exp_Name"';
+        count = 'COUNT("Exp_Name") as count';
         if (access.rows.length > 0) {
             const keys = Object.keys(access.rows[0]);
             const obj = access.rows[0];
@@ -1032,7 +1010,7 @@ exports.getExportListofSidefilterdata = async (req, res) => {
                     Mode, LoadingPort,
                     NotifyPartyName, Currency, 0, 0, finalQuery + ' FROM ', Direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
 
-                db.query(query[0] + ' Group By ' + selectQuery.replace('Distinct ', "").replace(/,\s*$/, "")+','+ group, query[1].slice(1), (err, results) => {
+                db.query(query[0] + ' Group By ' + selectQuery.replace('Distinct ', "").replace(/,\s*$/, "") + ',' + group, query[1].slice(1), (err, results) => {
                     if (!err) {
                         // for (let i = 0; i < keys.length; i++) {
                         //     if (obj[keys[i]] == true) {
