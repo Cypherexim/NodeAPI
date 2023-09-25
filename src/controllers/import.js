@@ -945,7 +945,7 @@ exports.getImportListofSidefilterdata = async (req, res) => {
                         selectQuery += '"' + keys[i] + '", '
                     }
                 }
-                var finalQuery = selectQuery.replace(/,\s*$/, "") + ', ROUND(SUM("Quantity")::numeric,0) as Quantity, ROUND(SUM("ValueInUSD")::numeric,2) as ValueInUSD ';
+                var finalQuery = selectQuery.replace(/,\s*$/, "") + ', ROUND(SUM("ValueInUSD")::numeric,2) as ValueInUSD ,' + count;
                 const query = await common.getExportData(fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
                     CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
                     PortofDestination,
@@ -1003,7 +1003,7 @@ exports.getExportListofSidefilterdata = async (req, res) => {
                         selectQuery += '"' + keys[i] + '", '
                     }
                 }
-                var finalQuery = selectQuery.replace(/,\s*$/, "") + ', ROUND(SUM("Quantity")::numeric,0) as Quantity, ROUND(SUM("ValueInUSD")::numeric,2) as ValueInUSD ';
+                var finalQuery = selectQuery.replace(/,\s*$/, "") + ', ROUND(SUM("ValueInUSD")::numeric,2) as ValueInUSD ,' + count;
                 const query = await common.getExportData(fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
                     CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
                     PortofDestination,
