@@ -99,7 +99,7 @@ exports.getExportData = async (fromDate, toDate, HsCode, ProductDesc, Imp_Name, 
     return [finalQuery, querytoexecute[1]];
 }
 
-exports.getavailableFieldlist = async (tablename, uniquerecords) => {
+exports.getavailableFieldlist = async (tablename) => {
     const fieldList = ["Imp_Name", "Exp_Name"];
     let countryCount;
     if (tablename.toLowerCase().includes('import')) {
@@ -111,7 +111,6 @@ exports.getavailableFieldlist = async (tablename, uniquerecords) => {
     if (availablefield.rows.length > 0) {
         var fields = [];
         var querystring;
-        var totalrec = uniquerecords ? 'COUNT(distinct *)' : 'COUNT(*)';
         availablefield.rows.forEach(x => {
             fields.push('"' + x.column_name.toString() + '"');
         })
@@ -120,7 +119,7 @@ exports.getavailableFieldlist = async (tablename, uniquerecords) => {
         } else {
             querystring = 'COUNT(distinct  ' + fields[0] + ') as ' + fields[0].replace(/"|'/g, '') + 'Count , COUNT(distinct  ' + fields[1] + ') as ' + fields[1].replace(/"|'/g, '') + 'Count';
         }
-        const query = querystring + ' , COUNT(distinct  "HsCode") as TotalHsCode , ' + totalrec + ' as total_records , ' + countryCount + ' FROM';
+        const query = 'DISTINCT COUNT(*) OVER() as unique_count ,'+ querystring + ' , COUNT(distinct  "HsCode") as TotalHsCode , COUNT(*) as total_records , ' + countryCount + ' FROM';
         return [query];
     }
 }
