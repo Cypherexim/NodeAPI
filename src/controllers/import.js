@@ -644,9 +644,9 @@ exports.getfirstListofSidefilterdata = async (req, res) => {
         var output = {};
         var group = '';
         var count = ''
-            group = '"HsCode"';
-            count = 'COUNT("HsCode") as count';
-        
+        group = '"HsCode"';
+        count = 'COUNT("HsCode") as count';
+
         if (access.rows.length > 0) {
             const keys = Object.keys(access.rows[0]);
             const obj = access.rows[0];
@@ -670,7 +670,7 @@ exports.getfirstListofSidefilterdata = async (req, res) => {
                     PortofDestination,
                     Mode, LoadingPort,
                     NotifyPartyName, Currency, 0, 0, finalQuery + ' FROM ', Direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
-                    console.log(query[0] + ' Group By ' + selectQuery.replace('Distinct ', "").replace(/,\s*$/, "") + ',' + group);
+                console.log(query[0] + ' Group By ' + selectQuery.replace('Distinct ', "").replace(/,\s*$/, "") + ',' + group);
                 db.query(query[0] + ' Group By ' + selectQuery.replace('Distinct ', "").replace(/,\s*$/, "") + ',' + group, query[1].slice(1), (err, results) => {
                     if (!err) {
                         // for (let i = 0; i < keys.length; i++) {
@@ -727,7 +727,7 @@ exports.getsecondListofSidefilterdata = async (req, res) => {
                         selectQuery += '"' + keys[i] + '", '
                     }
                 }
-                var finalQuery = selectQuery.replace(/,\s*$/, "") + ', ROUND(SUM(CAST("ValueInUSD" as DOUBLE PRECISION))::numeric,2) as ValueInUSD, '+count;
+                var finalQuery = selectQuery.replace(/,\s*$/, "") + ', ROUND(SUM(CAST("ValueInUSD" as DOUBLE PRECISION))::numeric,2) as ValueInUSD, ' + count;
                 const query = await common.getExportData(fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
                     CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
                     PortofDestination,
@@ -1207,15 +1207,25 @@ exports.getexportlistbyAlphabet = async (req, res) => {
 exports.adduserlog = async (req, res) => {
     try {
         const { UserId, IP, Location, Searchcount, Searchhistory } = req.body;
-        const datetime = new Date();
-        const log = db.query(query.get_userlog, [UserId, datetime])
-        db.query(query.insert_userlog, [UserId, IP, Location, Searchcount, Searchhistory, datetime], (err, result) => {
-            if (!err) {
-                return res.status(200).json(success("Ok", result.rows, res.statusCode));
-            } else {
-                return res.status(200).json(error(err.message, res.statusCode));
-            }
-        });
+        const datetime = utility.formatDate(new Date());
+        const log = await db.query(query.get_userlog, [UserId, datetime]);
+        if (log.rows.length > 0) {
+            db.query(query.update_userlog, [Searchcount, UserId, datetime], (err, result) => {
+                if (!err) {
+                    return res.status(200).json(success("Ok", result.rows, res.statusCode));
+                } else {
+                    return res.status(200).json(error(err.message, res.statusCode));
+                }
+            });
+        } else {
+            db.query(query.insert_userlog, [UserId, IP, Location, Searchcount, Searchhistory, datetime], (err, result) => {
+                if (!err) {
+                    return res.status(200).json(success("Ok", result.rows, res.statusCode));
+                } else {
+                    return res.status(200).json(error(err.message, res.statusCode));
+                }
+            });
+        }
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };

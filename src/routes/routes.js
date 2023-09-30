@@ -126,6 +126,7 @@ router.post('/getcount', importController.getcounts);
 router.post('/updateuserpreferences', importController.updateUserPreference);
 router.post('/updatealertmessage',importController.updateAlertMessage);
 router.get('/getcountries',importController.getallcountries);
+router.post('/addlog',importController.adduserlog);
 
 //Import controller
 router.post('/getIndiaImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), indiaImportController.getindiaImport);
