@@ -1204,6 +1204,22 @@ exports.getexportlistbyAlphabet = async (req, res) => {
     };
 }
 
+exports.adduserlog = async (req, res) => {
+    try {
+        const { UserId, IP, Location, Searchcount, Searchhistory } = req.body;
+        const datetime = new Date();
+        const log = db.query(query.get_userlog, [UserId, datetime])
+        db.query(query.insert_userlog, [UserId, IP, Location, Searchcount, Searchhistory, datetime], (err, result) => {
+            if (!err) {
+                return res.status(200).json(success("Ok", result.rows, res.statusCode));
+            } else {
+                return res.status(200).json(error(err.message, res.statusCode));
+            }
+        });
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
 function extractValue(arr, prop) {
     // extract value from property
     let extractedValue = arr.map(item => item[prop]);
