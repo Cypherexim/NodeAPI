@@ -56,35 +56,35 @@ router.post('/resetpassword', accountController.resetPassword);
 
 var jwt = require('jsonwebtoken');
 
-router.use(function (req, res, next) {
-    var token = req.headers['x-access-token'];
-    console.log(token);
-    if (token) {
-        jwt.verify(token, config.TOKEN_KEY,
-            {
-                algorithm: 'HS256'
+// router.use(function (req, res, next) {
+//     var token = req.headers['x-access-token'];
+//     console.log(token);
+//     if (token) {
+//         jwt.verify(token, config.TOKEN_KEY,
+//             {
+//                 algorithm: 'HS256'
 
-            }, function (err, decoded) {
-                if (err) {
-                    let errordata = {
-                        message: err.message,
-                        expiredAt: err.expiredAt
-                    };
-                    console.log(errordata);
-                    return res.status(401).json({
-                        message: 'Unauthorized Access'
-                    });
-                }
-                req.decoded = decoded;
-                console.log(decoded);
-                next();
-            });
-    } else {
-        return res.status(403).json({
-            message: 'Token required to access this API.'
-        });
-    }
-});
+//             }, function (err, decoded) {
+//                 if (err) {
+//                     let errordata = {
+//                         message: err.message,
+//                         expiredAt: err.expiredAt
+//                     };
+//                     console.log(errordata);
+//                     return res.status(401).json({
+//                         message: 'Unauthorized Access'
+//                     });
+//                 }
+//                 req.decoded = decoded;
+//                 console.log(decoded);
+//                 next();
+//             });
+//     } else {
+//         return res.status(403).json({
+//             message: 'Token required to access this API.'
+//         });
+//     }
+// });
 // first Controller
 router.get('/getUsers', firstController.getUsers);
 router.post('/addUser', check('email').isEmail(), firstController.createtUser);
