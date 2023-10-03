@@ -119,7 +119,7 @@ exports.getavailableFieldlist = async (tablename) => {
         } else {
             querystring = 'COUNT(distinct  ' + fields[0] + ') as ' + fields[0].replace(/"|'/g, '') + 'Count , COUNT(distinct  ' + fields[1] + ') as ' + fields[1].replace(/"|'/g, '') + 'Count';
         }
-        const query = 'DISTINCT COUNT(*) OVER() as unique_count ,'+ querystring + ' , COUNT(distinct  "HsCode") as TotalHsCode , COUNT(*) as total_records , ' + countryCount + ' FROM';
+        const query = 'DISTINCT COUNT(*) OVER() as unique_count ,'+ querystring + ' , COUNT(distinct  "HsCode") as TotalHsCode , COUNT(*) as total_records , ROUND(SUM(CAST("ValueInUSD" as DOUBLE PRECISION))::numeric,2) as ValueInUSD, ' + countryCount + ' FROM';
         return [query];
     }
 }
