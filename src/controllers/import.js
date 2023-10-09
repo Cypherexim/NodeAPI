@@ -640,10 +640,10 @@ exports.getfirstListofSidefilterdata = async (req, res) => {
             Mode, LoadingPort,
             NotifyPartyName, CountryCode, CountryName, Direction } = req.body;
             const fieldList = ["ValueInUSD"];
-            const valuefield = '';
+            var valuefield = '';
             const availablefield = await db.query('SELECT column_name FROM information_schema.columns WHERE table_name = $1 and column_name = ANY($2)', [Direction.toLowerCase() + '_' + CountryName.toLowerCase(), fieldList]);
             if(availablefield.rows.length > 0){
-                valuefield = ', ROUND(SUM(CAST("ValueInUSD" as DOUBLE PRECISION))::numeric,2) as ValueInUSD ,';
+                valuefield = 'ROUND(SUM(CAST("ValueInUSD" as DOUBLE PRECISION))::numeric,2) as ValueInUSD,';
             }
         const access = await db.query(query.get_first_sidefilter_Access, [CountryCode, Direction.toUpperCase()]);
         var selectQuery = 'Distinct ';
@@ -705,10 +705,10 @@ exports.getsecondListofSidefilterdata = async (req, res) => {
             Mode, LoadingPort,
             NotifyPartyName, CountryCode, CountryName, Direction } = req.body;
             const fieldList = ["ValueInUSD"];
-            const valuefield = '';
+            var valuefield = '';
             const availablefield = await db.query('SELECT column_name FROM information_schema.columns WHERE table_name = $1 and column_name = ANY($2)', [Direction.toLowerCase() + '_' + CountryName.toLowerCase(), fieldList]);
             if(availablefield.rows.length > 0){
-                valuefield = ', ROUND(SUM(CAST("ValueInUSD" as DOUBLE PRECISION))::numeric,2) as ValueInUSD ,';
+                valuefield = ' ROUND(SUM(CAST("ValueInUSD" as DOUBLE PRECISION))::numeric,2) as ValueInUSD ,';
             }
         const access = await db.query(query.get_second_sidefilter_Access, [CountryCode, Direction.toUpperCase()]);
         var selectQuery = 'Distinct ';
@@ -934,10 +934,10 @@ exports.getImportListofSidefilterdata = async (req, res) => {
             Mode, LoadingPort,
             NotifyPartyName, CountryCode, CountryName, Direction } = req.body;
             const fieldList = ["ValueInUSD"];
-            const valuefield = '';
+            var valuefield = '';
             const availablefield = await db.query('SELECT column_name FROM information_schema.columns WHERE table_name = $1 and column_name = ANY($2)', [Direction.toLowerCase() + '_' + CountryName.toLowerCase(), fieldList]);
             if(availablefield.rows.length > 0){
-                valuefield = ', ROUND(SUM(CAST("ValueInUSD" as DOUBLE PRECISION))::numeric,2) as ValueInUSD ,';
+                valuefield = ' ROUND(SUM(CAST("ValueInUSD" as DOUBLE PRECISION))::numeric,2) as ValueInUSD ,';
             }
         const access = await db.query(query.get_Import_sidefilter_Access, [CountryCode, Direction.toUpperCase()]);
         var selectQuery = 'Distinct ';
@@ -963,7 +963,7 @@ exports.getImportListofSidefilterdata = async (req, res) => {
                         selectQuery += '"' + keys[i] + '", '
                     }
                 }
-                var finalQuery = selectQuery.replace(/,\s*$/, "") + valuefield  + count;
+                var finalQuery = selectQuery.replace(/,\s*$/, "") + ', '+valuefield  + count;
                 const query = await common.getExportData(fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
                     CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
                     PortofDestination,
@@ -998,10 +998,10 @@ exports.getExportListofSidefilterdata = async (req, res) => {
             Mode, LoadingPort,
             NotifyPartyName, CountryCode, CountryName, Direction } = req.body;
             const fieldList = ["ValueInUSD"];
-            const valuefield = '';
+            var valuefield = '';
             const availablefield = await db.query('SELECT column_name FROM information_schema.columns WHERE table_name = $1 and column_name = ANY($2)', [Direction.toLowerCase() + '_' + CountryName.toLowerCase(), fieldList]);
             if(availablefield.rows.length > 0){
-                valuefield = 'ROUND(SUM(CAST("ValueInUSD" as DOUBLE PRECISION))::numeric,2) as ValueInUSD ,';
+                valuefield = ' ROUND(SUM(CAST("ValueInUSD" as DOUBLE PRECISION))::numeric,2) as ValueInUSD ,';
             }
         const access = await db.query(query.get_Export_sidefilter_Access, [CountryCode, Direction.toUpperCase()]);
         var selectQuery = 'Distinct ';
