@@ -100,7 +100,7 @@ exports.getExportData = async (fromDate, toDate, HsCode, ProductDesc, Imp_Name, 
 }
 
 exports.getavailableFieldlist = async (tablename) => {
-    const fieldList = ["Imp_Name", "Exp_Name"];
+    const fieldList = ["Imp_Name", "Exp_Name","ValueInUSD"];
     let countryCount;
     if (tablename.toLowerCase().includes('import')) {
         countryCount = 'COUNT(distinct  "CountryofOrigin") as TotalCountry';
@@ -110,16 +110,25 @@ exports.getavailableFieldlist = async (tablename) => {
     const availablefield = await db.query('SELECT column_name FROM information_schema.columns WHERE table_name = $1 and column_name = ANY($2)', [tablename, fieldList]);
     if (availablefield.rows.length > 0) {
         var fields = [];
-        var querystring;
+        var querystring ='';
+        // availablefield.rows.forEach(x => {
+        //     fields.push('"' + x.column_name.toString() + '"');
+        // })
+        // if (fields.length == 1) {
+        //     querystring = 'COUNT(distinct  ' + fields[0] + ') as ' + fields[0].replace(/"|'/g, '') + 'Count';
+        // } else {
+        //     querystring = 'COUNT(distinct  ' + fields[0] + ') as ' + fields[0].replace(/"|'/g, '') + 'Count , COUNT(distinct  ' + fields[1] + ') as ' + fields[1].replace(/"|'/g, '') + 'Count';
+        // }
+
         availablefield.rows.forEach(x => {
-            fields.push('"' + x.column_name.toString() + '"');
+            
+            if(x.column_name.toString() =='ValueInUSD' && !querystring.includes('ValueInUSD')){
+                querystring += ', ROUND(SUM(CAST("ValueInUSD" as DOUBLE PRECISION))::numeric,2) as ValueInUSD' 
+            } else {
+                querystring += ', COUNT(distinct  "' + x.column_name.toString() + '") as ' +x.column_name.toString().replace(/"|'/g, '') + 'Count'
+            }
         })
-        if (fields.length == 1) {
-            querystring = 'COUNT(distinct  ' + fields[0] + ') as ' + fields[0].replace(/"|'/g, '') + 'Count';
-        } else {
-            querystring = 'COUNT(distinct  ' + fields[0] + ') as ' + fields[0].replace(/"|'/g, '') + 'Count , COUNT(distinct  ' + fields[1] + ') as ' + fields[1].replace(/"|'/g, '') + 'Count';
-        }
-        const query = 'DISTINCT COUNT(*) OVER() as unique_count ,'+ querystring + ' , COUNT(distinct  "HsCode") as TotalHsCode , COUNT(*) as total_records , ROUND(SUM(CAST("ValueInUSD" as DOUBLE PRECISION))::numeric,2) as ValueInUSD, ' + countryCount + ' FROM';
+        const query = 'DISTINCT COUNT(*) OVER() as unique_count '+ querystring + ' , COUNT(distinct  "HsCode") as TotalHsCode , COUNT(*) as total_records , ' + countryCount + ' FROM';
         return [query];
     }
 }
