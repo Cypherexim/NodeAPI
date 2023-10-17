@@ -106,12 +106,13 @@ module.exports = {
 	WHERE "userplantransaction"."UserId"=$1`,
     get_user_by_ParentId: `SELECT * FROM public."Cypher" where "ParentUserId"=$1`,
     get_sidefilter_Access: `SELECT * FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
-    get_first_sidefilter_Access: `SELECT "HsCode", "ProductDesc" FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
+    get_first_sidefilter_Access: `SELECT "HsCode" FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
     get_Import_sidefilter_Access: `SELECT "Imp_Name" FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
     get_Export_sidefilter_Access: `SELECT "Exp_Name" FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
-    get_second_sidefilter_Access: `SELECT "CountryofDestination", "CountryofOrigin", "PortofOrigin", "Mode" FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
+    get_second_sidefilter_Access: `SELECT "CountryofDestination", "CountryofOrigin" FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
     get_third_sidefilter_Access: `SELECT uqc, "Quantity", "Month", "Year" FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
     get_fourth_sidefilter_Access: `SELECT  "PortofDestination", "LoadingPort", "Currency", "NotifyPartyName" FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
+    get_fifth_sidefilter_Access: `SELECT "PortofOrigin", "Mode" FROM public."SideFilterAccess" where "Country"=$1 AND "Direction"=$2`,
     get_all_sidefilter_Access: `SELECT * FROM public."SideFilterAccess"`,
     getimporter_export_india: `SELECT * FROM public.importer_export_india ORDER BY "Imp_Name" limit 500`,
     getimporter_import_india: `SELECT * FROM public.importer_import_india ORDER BY "Imp_Name" limit 500`,
@@ -191,5 +192,9 @@ module.exports = {
     get_notification_all:`SELECT * FROM public.push_notifications`,
     update_userPreferences:`UPDATE public."Cypher" SET "userPreference"=$2 WHERE "Email"=$1`,
     update_alert_message:`UPDATE public.alert_msg SET txt_msg=$1 WHERE id=$2`,
-    get_all_countries:`SELECT * FROM public.all_countries Order by country`
+    get_all_countries:`SELECT * FROM public.all_countries Order by country`,
+    insert_userlog:`INSERT INTO public."Userlog"("UserId", "IP", "Location", "Searchcount", "Searchhistory", "Datetime")
+	VALUES ($1, $2, $3, $4, $5, $6);`,
+    get_userlog:`SELECT * FROM "Userlog" where "UserId"=$1 AND "Datetime"=$2`,
+    update_userlog:`update "Userlog" set "Searchcount" = "Searchcount" + $1 where "UserId"=$2 AND "Datetime"=$3`
 };

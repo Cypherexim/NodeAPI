@@ -53,6 +53,7 @@ const ugandaExportController = require('../controllers/Export/ugandaController')
 router.post('/signup', check('FullName').notEmpty(), check('CompanyName').notEmpty(), body('MobileNumber').isLength({ min: 10, max: 10 }).withMessage('Mobile Number should be of 10 digit.'), check('Password').notEmpty(), check('Email').isEmail(), accountController.createUser);
 router.post('/signin', check('Password').notEmpty(), check('Email').isEmail(), accountController.postLogin);
 router.post('/resetpassword', accountController.resetPassword);
+
 var jwt = require('jsonwebtoken');
 
 router.use(function (req, res, next) {
@@ -110,6 +111,7 @@ router.post('/getfirstSideFilterData', importController.getfirstListofSidefilter
 router.post('/getsecondSideFilterData', importController.getsecondListofSidefilterdata);
 router.post('/getthirdSideFilterData', importController.getthirdListofSidefilterdata);
 router.post('/getfourthSideFilterData', importController.getfourthListofSidefilterdata);
+router.post('/getfifthSideFilterData', importController.getfifthListofSidefilterdata);
 router.post('/getimportSideFilterData', importController.getImportListofSidefilterdata);
 router.post('/getexportSideFilterData', importController.getExportListofSidefilterdata);
 router.post('/getdatabyalphabet', importController.getexportlistbyAlphabet);
@@ -122,6 +124,7 @@ router.post('/getcount', importController.getcounts);
 router.post('/updateuserpreferences', importController.updateUserPreference);
 router.post('/updatealertmessage',importController.updateAlertMessage);
 router.get('/getcountries',importController.getallcountries);
+router.post('/addlog',importController.adduserlog);
 
 //Import controller
 router.post('/getIndiaImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), indiaImportController.getindiaImport);
