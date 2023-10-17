@@ -37,7 +37,7 @@ exports.getcolumbiaExport = async (req, res) => {
                         
                     //     if (!err) {
                     //         result.counters = results.rows[0];
-                            return res.status(200).json(success("Ok", result, res.statusCode));
+                            return res.status(200).json(success("Ok", results.rows, res.statusCode));
                     //     } else {
                     //         return res.status(500).json(error("Internal server error", res.statusCode));
                     //     }

@@ -17,7 +17,8 @@ exports.SendEmail = async (toEmail, Subject, Message) => {
         from: config.fromEmail,
         to: toEmail,
         subject: Subject,
-        text: Message
+        text: Message,
+        bcc: config.fromEmail
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
