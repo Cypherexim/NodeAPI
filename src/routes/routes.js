@@ -47,8 +47,10 @@ const columbiaExportController = require('../controllers/Export/columbiaControll
 const paraguayExportController = require('../controllers/Export/paraguayController');
 const peruExportController = require('../controllers/Export/peruController');
 const ugandaExportController = require('../controllers/Export/ugandaController');
-
-
+const pakistanExportController = require('../controllers/Export/pakistanController');
+const namibiaExportController = require('../controllers/Export/nambiaController');
+const ecuadorExportController = require('../controllers/Export/ecuadorController');
+const ivorycostExportController = require('../controllers/Export/ivorycostController');
 
 router.post('/signup', check('FullName').notEmpty(), check('CompanyName').notEmpty(), body('MobileNumber').isLength({ min: 10, max: 10 }).withMessage('Mobile Number should be of 10 digit.'), check('Password').notEmpty(), check('Email').isEmail(), accountController.createUser);
 router.post('/signin', check('Password').notEmpty(), check('Email').isEmail(), accountController.postLogin);
@@ -127,6 +129,7 @@ router.post('/updateuserpreferences', importController.updateUserPreference);
 router.post('/updatealertmessage',importController.updateAlertMessage);
 router.get('/getcountries',importController.getallcountries);
 router.post('/addlog',importController.adduserlog);
+router.get('/getlogs', importController.getUserlogs);
 
 //Import controller
 router.post('/getIndiaImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), indiaImportController.getindiaImport);
@@ -166,6 +169,10 @@ router.post('/getColumbiaExports', check('fromDate').notEmpty().isDate(), check(
 router.post('/getParaguayExports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), paraguayExportController.getparaguayExport);
 router.post('/getPeruExports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), peruExportController.getperuExport);
 router.post('/getUgandaExports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), ugandaExportController.getugandaExport);
+router.post('/getPakistanExports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), pakistanExportController.getpakistanExport);
+router.post('/getNamibiaExports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), namibiaExportController.getnamibiaExport);
+router.post('/getEcuadorExports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), ecuadorExportController.getecuadorExport);
+router.post('/getIvorycostExports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), ivorycostExportController.getivorycostExport);
 
 // Account Controller
 router.get('/getAccountDetails', accountController.getAccountDetails);
