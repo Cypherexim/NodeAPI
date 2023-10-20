@@ -51,6 +51,9 @@ const pakistanExportController = require('../controllers/Export/pakistanControll
 const namibiaExportController = require('../controllers/Export/nambiaController');
 const ecuadorExportController = require('../controllers/Export/ecuadorController');
 const ivorycostExportController = require('../controllers/Export/ivorycostController');
+const ivorycostImportController = require('../controllers/Import/ivorycostController');
+const ecuadorImportController = require('../controllers/Import/ecuadorController');
+const namibiaImportController = require('../controllers/Import/namibiaController');
 
 router.post('/signup', check('FullName').notEmpty(), check('CompanyName').notEmpty(), body('MobileNumber').isLength({ min: 10, max: 10 }).withMessage('Mobile Number should be of 10 digit.'), check('Password').notEmpty(), check('Email').isEmail(), accountController.createUser);
 router.post('/signin', check('Password').notEmpty(), check('Email').isEmail(), accountController.postLogin);
@@ -148,6 +151,10 @@ router.post('/getUsaImports', check('fromDate').notEmpty().isDate(), check('toDa
 router.post('/getVietnamImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), vietnamImportController.getvietnamImport);
 router.post('/getBrazilImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), brazilImportController.getbrazilImport);
 router.post('/getColumbiaImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), columbiaImportController.getcolumbiaImport);
+router.post('/getIvorycostImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), ivorycostImportController.getivorycostImport);
+router.post('/getEcuadorImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), columbiaImportController.getecuadorImport);
+router.post('/getNamibiaImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), columbiaImportController.getnamibiaImport);
+
 
 //Export controller
 router.post('/getIndiaExports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), indiaExportController.getindiaExport);
