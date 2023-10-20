@@ -22,7 +22,7 @@ exports.getnamibiaExport = async (req, res) => {
                 CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
                 PortofDestination,
                 Mode, LoadingPort,
-                NotifyPartyName, Currency, page, itemperpage, config.select_Query_for_totalrecords, config.export_nambia, true);
+                NotifyPartyName, Currency, page, itemperpage, config.select_Query_for_totalrecords, config.export_namibia, true);
                 db.query(query[0], query[1].slice(1), (err, results) => {
                     if(!err){
                     result.data = results.rows;

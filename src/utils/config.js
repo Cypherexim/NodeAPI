@@ -17,7 +17,7 @@ module.exports = {
     export_pakistan: "export_pakistan",
     export_ivorycost:"export_ivorycost",
     export_ecuador:"export_ecuador",
-    export_nambia:"export_nambia",
+    export_namibia:"export_namibia",
     import_srilanka: "import_srilanka",
     import_chile: "import_chile",
     export_ethiopia: "export_ethiopia",
