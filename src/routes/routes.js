@@ -152,8 +152,8 @@ router.post('/getVietnamImports', check('fromDate').notEmpty().isDate(), check('
 router.post('/getBrazilImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), brazilImportController.getbrazilImport);
 router.post('/getColumbiaImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), columbiaImportController.getcolumbiaImport);
 router.post('/getIvorycostImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), ivorycostImportController.getivorycostImport);
-router.post('/getEcuadorImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), columbiaImportController.getecuadorImport);
-router.post('/getNamibiaImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), columbiaImportController.getnamibiaImport);
+router.post('/getEcuadorImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), ecuadorImportController.getecuadorImport);
+router.post('/getNamibiaImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), namibiaImportController.getnamibiaImport);
 
 
 //Export controller
