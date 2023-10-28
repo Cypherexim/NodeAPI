@@ -9,6 +9,7 @@ const config = require('../utils/config');
 const Stream = require('stream');
 const ExcelJs = require('exceljs');
 const AWS = require('aws-sdk');
+const fs = require('fs');
 // require('dotenv').config();
 const region = "us-east-1";
 
@@ -79,7 +80,7 @@ exports.sharedownloadfile = async (req, res) => {
                             }
                         });
                     });
-                    
+
                 } else {
                     return res.status(200).json(success("Ok", "Please pass to userid to share the workspace.", res.statusCode));
                 }
@@ -470,29 +471,61 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
 
                             if (totalpointtodeduct > 0) {
 
-                                const stream = new Stream.PassThrough();
-                                const workbook = new ExcelJs.stream.xlsx.WorkbookWriter({
-                                    stream: stream,
-                                });
+                                // const stream = new Stream.PassThrough();
+                                // const workbook = new ExcelJs.stream.xlsx.WorkbookWriter({
+                                //     stream: stream,
+                                // });
+                                const workbook = new ExcelJs.Workbook();
                                 // Define worksheet
                                 const worksheet = workbook.addWorksheet('Data');
+
                                 // remove recordID from array 
                                 result.rows.forEach(function (tmp) { delete tmp.RecordID });
                                 // Set column headers
                                 worksheet.columns = getDataHeaders(result.rows[0]);
+                                worksheet.columns.forEach(column => {
+                                    column.width = column.header.length < 12 ? 14 : column.header.length + 3
+                                })
+                                // Add autofilter on each column
+                                worksheet.autoFilter = 'A1:AH1';
                                 result.rows.forEach((row) => {
                                     // recordIds.push(row.RecordID);
                                     worksheet.addRow(row).commit();
                                 });
-                                // Commit all changes
-                                worksheet.commit();
-                                workbook.commit();
-                                // Upload to s3
 
+                                // Process each row for beautification 
+                                worksheet.eachRow(function (row, rowNumber) {
+
+                                    row.eachCell((cell, colNumber) => {
+                                        if (rowNumber == 1) {
+                                            // First set the background of header row
+                                            cell.fill = {
+                                                type: 'pattern',
+                                                pattern: 'solid',
+                                                fgColor: { argb: 'f5b914' }
+                                            }
+                                        }
+                                        // Set border of each cell 
+                                        cell.border = {
+                                            top: { style: 'thin' },
+                                            left: { style: 'thin' },
+                                            bottom: { style: 'thin' },
+                                            right: { style: 'thin' }
+                                        };
+                                    })
+                                    //Commit the changed row to the stream
+                                    row.commit();
+                                });
+                                await workbook.xlsx.writeFile(`${filename}.xlsx`);
+                                // Commit all changes
+                                //worksheet.commit();
+                                //workbook.commit();
+                                // Upload to s3
+                                const fileContent = fs.readFileSync(`${filename}.xlsx`)
                                 const params = {
                                     Bucket: 'cypher-download-files',
                                     Key: `${filename}.xlsx`,
-                                    Body: stream
+                                    Body: fileContent
                                 }
                                 s3.upload(params, async (err, data) => {
                                     if (err) {
