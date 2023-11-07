@@ -484,12 +484,26 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                                 // Set column headers
                                 worksheet.columns = getDataHeaders(result.rows[0]);
                                 worksheet.columns.forEach(column => {
-                                    column.width = column.header.length < 12 ? 14 : column.header.length + 3
+                                    //column.font.bold = true;
+                                    if (column.header == 'ITEM DESCRIPTION') {
+                                        column.width = 125;
+                                    } else if (column.header == 'VENDOR') {
+                                        column.width = 40;
+                                    } else if (column.header == 'BUYER') {
+                                        column.width = 50;
+                                    } else if (column.header == 'BUYER ADDRESS') {
+                                        column.width = 100;
+                                    } else {
+                                        column.width = column.header.length < 12 ? 14 : column.header.length + 15
+                                    }
                                 })
                                 // Add autofilter on each column
                                 worksheet.autoFilter = 'A1:AH1';
-                                result.rows.forEach((row) => {
-                                    // recordIds.push(row.RecordID);
+                                result.rows.forEach((row, index) => {
+                                    // if(index < worksheet.columns.length){
+                                    // const a = row[worksheet.columns[index].key].length;
+                                    // worksheet.columns[index].width = worksheet.columns[index].header.length < 12 ? 14 : row[worksheet.columns[index].key].length + 15;
+                                    // }
                                     worksheet.addRow(row).commit();
                                 });
 
@@ -502,7 +516,7 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                                             cell.fill = {
                                                 type: 'pattern',
                                                 pattern: 'solid',
-                                                fgColor: { argb: 'f5b914' }
+                                                fgColor: { argb: 'f6be00' }
                                             }
                                         }
                                         // Set border of each cell 
