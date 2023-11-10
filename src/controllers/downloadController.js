@@ -496,10 +496,7 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                                 // Add autofilter on each column
                                 worksheet.autoFilter = 'A1:AH1';
                                 result.rows.forEach((row, index) => {
-                                    // if(index < worksheet.columns.length){
-                                    // const a = row[worksheet.columns[index].key].length;
-                                    // worksheet.columns[index].width = worksheet.columns[index].header.length < 12 ? 14 : row[worksheet.columns[index].key].length + 15;
-                                    // }
+                                    
                                     worksheet.addRow(row).commit();
                                 });
 
@@ -537,6 +534,7 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                                     Key: `${filename}.xlsx`,
                                     Body: fileContent
                                 }
+                                fs.unlinkSync(`${filename}.xlsx`);
                                 s3.upload(params, async (err, data) => {
                                     if (err) {
                                         reject(err)
