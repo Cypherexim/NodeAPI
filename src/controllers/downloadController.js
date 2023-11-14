@@ -467,11 +467,11 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
 
                             if (totalpointtodeduct > 0) {
 
-                                // const stream = new Stream.PassThrough();
-                                // const workbook = new ExcelJs.stream.xlsx.WorkbookWriter({
-                                //     stream: stream,
-                                // });
-                                const workbook = new ExcelJs.Workbook();
+                                const stream = new Stream.PassThrough();
+                                const workbook = new ExcelJs.stream.xlsx.WorkbookWriter({
+                                    stream: stream,
+                                });
+                               // const workbook = new ExcelJs.Workbook();
                                 // Define worksheet
                                 const worksheet = workbook.addWorksheet('Data');
 
@@ -501,40 +501,40 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                                 });
 
                                 // Process each row for beautification 
-                                worksheet.eachRow(function (row, rowNumber) {
+                                // worksheet.eachRow(function (row, rowNumber) {
 
-                                    row.eachCell((cell, colNumber) => {
-                                        if (rowNumber == 1) {
-                                            // First set the background of header row
-                                            cell.fill = {
-                                                type: 'pattern',
-                                                pattern: 'solid',
-                                                fgColor: { argb: 'f6be00' }
-                                            }
-                                        }
-                                        // Set border of each cell 
-                                        cell.border = {
-                                            top: { style: 'thin' },
-                                            left: { style: 'thin' },
-                                            bottom: { style: 'thin' },
-                                            right: { style: 'thin' }
-                                        };
-                                    })
-                                    //Commit the changed row to the stream
-                                    row.commit();
-                                });
-                                await workbook.xlsx.writeFile(`${filename}.xlsx`);
+                                //     row.eachCell((cell, colNumber) => {
+                                //         if (rowNumber == 1) {
+                                //             // First set the background of header row
+                                //             cell.fill = {
+                                //                 type: 'pattern',
+                                //                 pattern: 'solid',
+                                //                 fgColor: { argb: 'f6be00' }
+                                //             }
+                                //         }
+                                //         // Set border of each cell 
+                                //         cell.border = {
+                                //             top: { style: 'thin' },
+                                //             left: { style: 'thin' },
+                                //             bottom: { style: 'thin' },
+                                //             right: { style: 'thin' }
+                                //         };
+                                //     })
+                                //     //Commit the changed row to the stream
+                                //     row.commit();
+                                // });
+                               // await workbook.xlsx.writeFile(`${filename}.xlsx`);
                                 // Commit all changes
-                                //worksheet.commit();
-                                //workbook.commit();
+                                worksheet.commit();
+                                workbook.commit();
                                 // Upload to s3
-                                const fileContent = fs.readFileSync(`${filename}.xlsx`)
+                                //const fileContent = fs.readFileSync(`${filename}.xlsx`)
                                 const params = {
                                     Bucket: 'cypher-download-files',
                                     Key: `${filename}.xlsx`,
-                                    Body: fileContent
+                                    Body: stream
                                 }
-                                fs.unlinkSync(`${filename}.xlsx`);
+                               // fs.unlinkSync(`${filename}.xlsx`);
                                 s3.upload(params, async (err, data) => {
                                     if (err) {
                                         reject(err)
