@@ -470,81 +470,90 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                             const totalpointtodeduct = (parseInt(planDetails.rows[0].Downloads) - (parseInt(results.rows[0].CostPerRecord) * parseInt(recordtobill.rows[0].totalrecordtobill)));
 
                             if (totalpointtodeduct > 0) {
-                                const workbook = new ExcelJs.Workbook();
-                                // const stream = new Stream.PassThrough();
-                                // const workbook = new ExcelJs.stream.xlsx.WorkbookWriter({
-                                //     stream: stream,
-                                // });
+                                //const workbook = new ExcelJs.Workbook();
+                                const stream = new Stream.PassThrough();
+                                const workbook = new ExcelJs.stream.xlsx.WorkbookWriter({
+                                    stream: stream,
+                                    useStyles: true,
+                                    useSharedStrings: true,
+                                });
+                                // workbook.media.push({
+                                //     filename: './cypher_logo.png',
+                                //     extension: 'png',
+                                //   })
                                 // Define worksheet
                                 const worksheet = workbook.addWorksheet('Data'
                                     , {
-                                        views: [{ state: "frozen", ySplit: 12 }],
+                                        views: [{ state: "frozen", ySplit: 7 }],
                                     }
                                 );
                                 // add image to workbook by buffer
                                 const filepath = 'cypher_logo';
-                                var imageId2 = workbook.addImage({
-                                    buffer: fs.readFileSync(`${filepath}.png`),
-                                    extension: 'png',
-                                });
+                                // var imageId2 = workbook.addImage({
+                                //     buffer: fs.readFileSync(`${filepath}.png`),
+                                //     extension: 'png',
+                                // });
+                                
+                               // worksheet.addImage(0, 'A1:D6');
                                 worksheet.getRow(1).hidden = true;
-                                worksheet.mergeCells('A2:J6');
-                                worksheet.mergeCells('C7:J11');
-                                worksheet.addImage(imageId2, 'A1:D6');
-                                worksheet.getCell('A7').value = 'DIRECTION :';
-                                worksheet.getCell('B7').value = direction.toUpperCase();
-                                worksheet.getRow(8).getCell(1).value = 'HSCODE :';
-                                worksheet.getRow(8).getCell(2).value = HsCode.toString();
-                                worksheet.getRow(9).getCell(1).value = 'FROM :';
-                                worksheet.getRow(9).getCell(2).value = fromDate;
-                                worksheet.getRow(10).getCell(1).value = 'TO :';
-                                worksheet.getRow(10).getCell(2).value = toDate;
-                                worksheet.getRow(11).getCell(1).value = 'TOTAL RECORDS :';
-                                worksheet.getRow(11).getCell(2).value = result.rows.length;
-                                worksheet.getRow(6).style.border = 'None';
-                                worksheet.getRow(7).style.border = 'None';
-                                worksheet.getCell('A7').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
-                                worksheet.getCell('B7').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
-                                worksheet.getCell('A8').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
-                                worksheet.getCell('B8').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
-                                worksheet.getCell('A9').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
-                                worksheet.getCell('B9').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
-                                worksheet.getCell('A10').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
-                                worksheet.getCell('B10').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
-                                worksheet.getCell('A11').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
-                                worksheet.getCell('B11').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+                                 worksheet.mergeCells('C2:AG6');
+                                // worksheet.mergeCells('C7:J11');
+                                //worksheet.addImage(imageId2, 'A1:D6');
+                                worksheet.getCell('A2').value = 'DIRECTION :';
+                                worksheet.getCell('B2').value = direction.toUpperCase();
+                                worksheet.getRow(3).getCell(1).value = 'HSCODE :';
+                                worksheet.getRow(3).getCell(2).value = HsCode.toString();
+                                worksheet.getRow(4).getCell(1).value = 'FROM :';
+                                worksheet.getRow(4).getCell(2).value = fromDate;
+                                worksheet.getRow(5).getCell(1).value = 'TO :';
+                                worksheet.getRow(5).getCell(2).value = toDate;
+                                worksheet.getRow(6).getCell(1).value = 'TOTAL RECORDS :';
+                                worksheet.getRow(6).getCell(2).value = result.rows.length;
+                                // worksheet.getRow(6).style.border = 'None';
+                                // worksheet.getRow(7).style.border = 'None';
+                                worksheet.getCell('A2').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+                                worksheet.getCell('B2').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+                                worksheet.getCell('A3').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+                                worksheet.getCell('B3').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+                                worksheet.getCell('A4').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+                                worksheet.getCell('B4').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+                                worksheet.getCell('A5').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+                                worksheet.getCell('B5').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+                                worksheet.getCell('A6').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+                                worksheet.getCell('B6').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
                                 // Set column headers
                                 delete result.rows[0].RecordID;
                                 const a = getheaderarray(result.rows[0]);
-                                worksheet.getRow(12).values = a;
+                                worksheet.getRow(7).values = a;
                                 worksheet.columns = getDataHeaders(result.rows[0]);
-                                worksheet.getRow(12).fill = {
+                                worksheet.getRow(7).fill = {
                                     type: 'pattern',
                                     pattern: 'solid',
                                     fgColor: { argb: 'f6be00' }
                                 }
+                                
                                 worksheet.columns.forEach((col) => {
                                     col.alignment = { horizontal: 'left' }
                                     col.style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
                                 })
 
                                 // Add autofilter on each column
-                                worksheet.autoFilter = 'A12:AH12';
-                                 worksheet.addRows(result.rows);
-                                // result.rows.forEach((row) => {
-                                //     worksheet.addRow(row).commit();
-                                // });
+                                worksheet.autoFilter = 'A7:AH7';
+                                // worksheet.addRows(result.rows);
+                                result.rows.forEach((row) => {
+                                    worksheet.addRow(row).commit();
+                                });
 
-                                await workbook.xlsx.writeFile(`${filename}.xlsx`);
+                                //await workbook.xlsx.writeFile(`${filename}.xlsx`);
                                 // Upload to s3
-                                const fileContent = await fs.readFileSync(`${filename}.xlsx`)
-                                fs.unlinkSync(`${filename}.xlsx`);
-                                // worksheet.commit();
-                                // workbook.commit();
+                                // const fileContent = await fs.readFileSync(`${filename}.xlsx`)
+                                // fs.unlinkSync(`${filename}.xlsx`);
+                                worksheet.commit();
+                                workbook.commit();
                                 const params = {
                                     Bucket: 'cypher-download-files',
                                     Key: `${filename}.xlsx`,
-                                    Body: fileContent
+                                    Body: stream
                                 }
                                 s3.upload(params, async (err, data) => {
                                     if (err) {

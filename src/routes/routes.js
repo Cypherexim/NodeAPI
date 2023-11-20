@@ -58,7 +58,7 @@ const namibiaImportController = require('../controllers/Import/namibiaController
 router.post('/signup', check('FullName').notEmpty(), check('CompanyName').notEmpty(), body('MobileNumber').isLength({ min: 10, max: 10 }).withMessage('Mobile Number should be of 10 digit.'), check('Password').notEmpty(), check('Email').isEmail(), accountController.createUser);
 router.post('/signin', check('Password').notEmpty(), check('Email').isEmail(), accountController.postLogin);
 router.post('/resetpassword', accountController.resetPassword);
-
+router.post('/generatedownloadfiles', downloadController.generateDownloadbigfilesforalluser);
 var jwt = require('jsonwebtoken');
 
 router.use(function (req, res, next) {
@@ -215,7 +215,7 @@ router.get('/getRolesAccessById', rolesController.getAccessByRoleId);
 router.post('/savedownloadworkspace', downloadController.saveDownload);
 router.get('/getdownloadworkspace', downloadController.getDownloadworkspace)
 router.post('/getdownloadData', downloadController.getdownloaddata);
-router.post('/generatedownloadfiles', downloadController.generateDownloadbigfilesforalluser);
+
 router.post('/generatedownloadbigfiles', downloadController.generateDownloadbigfilesforalluser);
 router.post('/sharedownloadtransaction', downloadController.sharedownloadfile);
 
