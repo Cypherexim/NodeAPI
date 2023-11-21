@@ -560,11 +560,13 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                                     if (err) {
                                         reject(err)
                                     }
+                                    const dat = data.Expiration.match('"([^"]+)GMT"');
+                                    const expirydate = utility.formatDate(new Date(dat[1]));
                                     // resolve(data.Location)
                                     db.query(query.update_download_count, [totalpointtodeduct, UserId], (err, result) => {
 
                                     });
-                                    db.query(query.update_download_workspace, [recordIds, data.Location, 'Completed', '', id], async (err, result) => {
+                                    db.query(query.update_download_workspace, [recordIds, data.Location, 'Completed', '',expirydate, id], async (err, result) => {
                                         
                                     });
                                 })
