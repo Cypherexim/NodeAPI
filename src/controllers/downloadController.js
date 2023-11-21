@@ -555,39 +555,37 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                                     Key: `${filename}.xlsx`,
                                     Body: stream
                                 }
+                               // fs.unlinkSync(`${filename}.xlsx`);
                                 s3.upload(params, async (err, data) => {
                                     if (err) {
                                         reject(err)
                                     }
-                                    console.log('line 364 executed');
+                                    const dat = data.Expiration.match('"([^"]+)GMT"');
+                                    const expirydate = utility.formatDate(new Date(dat[1]));
                                     // resolve(data.Location)
                                     db.query(query.update_download_count, [totalpointtodeduct, UserId], (err, result) => {
 
                                     });
-                                    db.query(query.update_download_workspace, [recordIds, data.Location, 'Completed', '', id], async (err, result) => {
-                                        console.log(err);
+                                    db.query(query.update_download_workspace, [recordIds, data.Location, 'Completed', '',expirydate, id], async (err, result) => {
+                                        
                                     });
                                 })
                             } else {
                                 db.query(query.update_download_workspace, [{}, '', 'Error', 'Dont have enough balance to download these records !', id], async (err, result) => {
-                                    console.log('line no 372 ' + err);
                                 });
                             }
                         } else {
                             db.query(query.update_download_workspace, [{}, '', 'Error', err, id], async (err, result) => {
-                                console.log('line no 377 ' + err);
                             });
                         }
                     });
                 }
             } else {
                 db.query(query.update_download_workspace, [{}, '', 'Error', 'Can not download more than 5 Lacs records', id], async (err, result) => {
-                    console.log('line no 384 ' + err);
                 });
             }
         } else {
             db.query(query.update_download_workspace, [{}, '', 'Error', error, id], async (err, result) => {
-                console.log('line no 389 ' + error);
             });
         }
     })

@@ -151,10 +151,10 @@ module.exports = {
     add_download_workspace: `INSERT INTO public.userdownloadtransaction(
         "countrycode", "userId", direction, "recordIds", workspacename,datetime,"filePath","status","errorlog")
         VALUES ($1, $2, $3, $4, $5, $6,$7,$8,$9) RETURNING public."userdownloadtransaction"."Id";`,
-    update_download_workspace: `UPDATE public.userdownloadtransaction SET "recordIds"= $1, "filePath"= $2, "status"= $3, "errorlog"= $4 WHERE "Id"= $5;`,
+    update_download_workspace: `UPDATE public.userdownloadtransaction SET "recordIds"= $1, "filePath"= $2, "status"= $3, "errorlog"= $4, "expirydate" = $5 WHERE "Id"= $6;`,
 
     get_download_Workspace: `SELECT "Id", countrycode as CountryName, "userId", direction,cardinality("recordIds") as totalrecords
-    , workspacename, datetime,"filePath","status","errorlog" 
+    , workspacename, datetime,"filePath","status","errorlog","expirydate"
         FROM public.userdownloadtransaction WHERE "userId"=$1 or
         "userId" IN(SELECT "UserId" from public."Cypher" where "ParentUserId"=$1)`,
 
