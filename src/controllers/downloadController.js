@@ -493,16 +493,20 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                                 //     buffer: fs.readFileSync(`${filepath}.png`),
                                 //     extension: 'png',
                                 // });
-                                
-                               // worksheet.addImage(0, 'A1:D6');
+
+                                // worksheet.addImage(0, 'A1:D6');
                                 worksheet.getRow(1).hidden = true;
-                                 worksheet.mergeCells('C2:AG6');
+                                worksheet.mergeCells('C2:AG6');
                                 // worksheet.mergeCells('C7:J11');
                                 //worksheet.addImage(imageId2, 'A1:D6');
                                 worksheet.getCell('A2').value = 'DIRECTION :';
                                 worksheet.getCell('B2').value = direction.toUpperCase();
-                                worksheet.getRow(3).getCell(1).value = 'HSCODE :';
-                                worksheet.getRow(3).getCell(2).value = HsCode.toString();
+                                if (HsCode) {
+                                    worksheet.getRow(3).getCell(1).value = 'HSCODE :';
+                                    worksheet.getRow(3).getCell(2).value = HsCode.toString();
+                                } else {
+                                    worksheet.getRow(3).hidden = true;
+                                }
                                 worksheet.getRow(4).getCell(1).value = 'FROM :';
                                 worksheet.getRow(4).getCell(2).value = fromDate;
                                 worksheet.getRow(5).getCell(1).value = 'TO :';
@@ -531,7 +535,7 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                                     pattern: 'solid',
                                     fgColor: { argb: 'f6be00' }
                                 }
-                                
+
                                 worksheet.columns.forEach((col) => {
                                     col.alignment = { horizontal: 'left' }
                                     col.style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
@@ -555,7 +559,7 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                                     Key: `${filename}.xlsx`,
                                     Body: stream
                                 }
-                               // fs.unlinkSync(`${filename}.xlsx`);
+                                // fs.unlinkSync(`${filename}.xlsx`);
                                 s3.upload(params, async (err, data) => {
                                     if (err) {
                                         reject(err)
@@ -566,8 +570,8 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                                     db.query(query.update_download_count, [totalpointtodeduct, UserId], (err, result) => {
 
                                     });
-                                    db.query(query.update_download_workspace, [recordIds, data.Location, 'Completed', '',expirydate, id], async (err, result) => {
-                                        
+                                    db.query(query.update_download_workspace, [recordIds, data.Location, 'Completed', '', expirydate, id], async (err, result) => {
+
                                     });
                                 })
                             } else {
