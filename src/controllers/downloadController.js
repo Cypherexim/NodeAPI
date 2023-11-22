@@ -501,8 +501,12 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                                 //worksheet.addImage(imageId2, 'A1:D6');
                                 worksheet.getCell('A2').value = 'DIRECTION :';
                                 worksheet.getCell('B2').value = direction.toUpperCase();
+                                if(HsCode){
                                 worksheet.getRow(3).getCell(1).value = 'HSCODE :';
                                 worksheet.getRow(3).getCell(2).value = HsCode.toString();
+                                } else {
+                                    worksheet.getRow(3).hidden = true;
+                                }
                                 worksheet.getRow(4).getCell(1).value = 'FROM :';
                                 worksheet.getRow(4).getCell(2).value = fromDate;
                                 worksheet.getRow(5).getCell(1).value = 'TO :';
