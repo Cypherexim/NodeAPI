@@ -493,10 +493,10 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                                 //     buffer: fs.readFileSync(`${filepath}.png`),
                                 //     extension: 'png',
                                 // });
-                                
-                               // worksheet.addImage(0, 'A1:D6');
+
+                                // worksheet.addImage(0, 'A1:D6');
                                 worksheet.getRow(1).hidden = true;
-                                 worksheet.mergeCells('C2:AG6');
+                                worksheet.mergeCells('C2:AH6');
                                 // worksheet.mergeCells('C7:J11');
                                 //worksheet.addImage(imageId2, 'A1:D6');
                                 worksheet.getCell('A2').value = 'DIRECTION :';
@@ -535,7 +535,7 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                                     pattern: 'solid',
                                     fgColor: { argb: 'f6be00' }
                                 }
-                                
+
                                 worksheet.columns.forEach((col) => {
                                     col.alignment = { horizontal: 'left' }
                                     col.style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
@@ -686,7 +686,7 @@ function getDataHeaders(row) {
         } else if (prop == 'BUYER ADDRESS') {
             calculatedwidth = 100;
         } else {
-            calculatedwidth = prop.length < 12 ? 14 : prop + 15
+            calculatedwidth = prop.length < 12 ? 14 : prop.length + 15
         }
         columns.push({
             header: prop,
