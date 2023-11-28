@@ -133,6 +133,7 @@ router.post('/updatealertmessage',importController.updateAlertMessage);
 router.get('/getcountries',importController.getallcountries);
 router.post('/addlog',importController.adduserlog);
 router.get('/getlogs', importController.getUserlogs);
+router.post('/adduseractionlog', importController.adduseractionlog);
 
 //Import controller
 router.post('/getIndiaImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), indiaImportController.getindiaImport);

@@ -1268,6 +1268,22 @@ exports.getUserlogs = async (req, res) => {
         return res.status(500).json(error(err, res.statusCode));
     };
 }
+
+exports.adduseractionlog = async (req, res) => {
+    try {
+        const { UserId, LogType, Log } = req.body;
+        const date = utility.formatDate(new Date());
+        db.query(query.add_user_action_log, [UserId, LogType, Log, date], (err, result) => {
+            if (!err) {
+                return res.status(200).json(success("Ok", "Insert Successfully !", res.statusCode));
+            } else {
+                return res.status(200).json(error(err.message, res.statusCode));
+            }
+        });
+    } catch (err) {
+        return res.status(500).json(error(err, res.statusCode));
+    };
+}
 function extractValue(arr, prop) {
     // extract value from property
     let extractedValue = arr.map(item => item[prop]);
