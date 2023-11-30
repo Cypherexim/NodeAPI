@@ -176,8 +176,8 @@ module.exports = {
 	"AddUser", "EditUser", "DeleteUser", "AddPlan", "EditPlan", "DeletePlan", "UserAccess"."Downloads" as Dwnlds, "Search", "EnableId", "DisableId", "BlockUser", "UnblockUser", "ClientList", "PlanList", "Share"
     FROM public."Cypher" 
         inner join "Role" on "Cypher"."RoleId" = "Role"."RoleId"
-        inner join public.userplantransaction on "Cypher"."UserId" = "userplantransaction"."UserId"
-        inner join public."UserAccess" on "Cypher"."UserId" = "UserAccess"."UserId"
+        inner join public.userplantransaction on "Cypher"."UserId" = "userplantransaction"."UserId" OR "Cypher"."ParentUserId" = "userplantransaction"."UserId"
+        inner join public."UserAccess" on "Cypher"."UserId" = "UserAccess"."UserId" OR "Cypher"."ParentUserId" = "UserAccess"."UserId"
         inner join public.plan  on "plan"."PlanId" = "userplantransaction"."PlanId"
     ORDER BY "Cypher"."UserId" DESC`,
     get_user_By_Userid: `SELECT * FROM public."Cypher" 
