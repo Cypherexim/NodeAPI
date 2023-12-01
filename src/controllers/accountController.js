@@ -13,7 +13,7 @@ const jwt = require("jsonwebtoken");
 
 exports.createUser = async (req, res) => {
     ////db.connect();
-    const { FullName, CompanyName, MobileNumber, Email, Password, country, ParentUserId } = req.body;
+    const { FullName, CompanyName, MobileNumber, Email, Password, country, ParentUserId, RoleId } = req.body;
     const errors = validationResult(req);
     const date = new Date();
     if (!errors.isEmpty()) {
@@ -29,7 +29,7 @@ exports.createUser = async (req, res) => {
         return res.status(422).json(error("Email already registered !", res.statusCode));
     } else {
         bycrypt.hash(Password, 12).then(hashPassword => {
-            db.query(query.add_user, [FullName, CompanyName, MobileNumber, Email, hashPassword, country, ParentUserId, '', '', '', '', config.DefaultRole], async (err, result) => {
+            db.query(query.add_user, [FullName, CompanyName, MobileNumber, Email, hashPassword, country, ParentUserId, '', '', '', '', RoleId], async (err, result) => {
                 if (!err) {
                     if (ParentUserId == null || ParentUserId == '' || ParentUserId == undefined) {
                         const planDetails = await db.query(query.get_plan_by_name, [config.DefaultPlan]);
