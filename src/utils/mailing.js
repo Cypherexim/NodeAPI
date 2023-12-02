@@ -1,5 +1,6 @@
 var nodemailer = require('nodemailer');
 const AWS = require("aws-sdk");
+AWS.config.update({region:'us-east-1'});
 const SES = new AWS.SES({ apiVersion: '2010-12-01' });
 const config = require('../utils/config');
 
@@ -32,26 +33,26 @@ exports.SendEmail = async (toEmail, Subject, Message) => {
     });
 }
 
-// exports.sendSESEmail() = async (email, data) => {
-//     // SES params to be sent
-//     const sesParams = {
-//         Destination: {
-//             ToAddresses: [email],
-//         },
-//         Message: {
-//             Body: {
-//                 Html: {
-//                     Data: data,
-//                     Charset: 'UTF-8'
-//                 }
-//             },
-//             Subject: {
-//                 Data: 'ProTeen Credentials Changed',
-//             }
-//         },
-//         Source: 'ProTeen<info@proteen.com>'
-//     };
+exports.sendSESEmail = async (email, data) => {
+    // SES params to be sent
+    const sesParams = {
+        Destination: {
+            ToAddresses: [email],
+        },
+        Message: {
+            Body: {
+                Html: {
+                    Data: data.template,
+                    Charset: 'UTF-8'
+                }
+            },
+            Subject: {
+                Data: 'Test Email',
+            }
+        },
+        Source: 'Cypher<dispatch@cypherexim.com>'
+    };
 
-//     // Send mail
-//     return await SES.sendEmail(sesParams).promise();
-// };
+    // Send mail
+    return await SES.sendEmail(sesParams).promise();
+};
