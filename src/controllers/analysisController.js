@@ -36,6 +36,7 @@ exports.getAnalysisData = async (req, res) => {
                     NotifyPartyName, Currency, 0, 0, query, direction.toLowerCase() + '_' + countryname.toLowerCase(), false);
                 db.query(finalquery[0] + ' GROUP BY "' + fieldName + '"', finalquery[1].slice(1), (err, result) => {
                     if (!err) {
+                        fields = null;
                         return res.status(200).json(success("Ok", result.rows, res.statusCode));
                     } else {
                         return res.status(200).json(success("Ok", err.message, res.statusCode));
