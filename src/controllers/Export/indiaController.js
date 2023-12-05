@@ -1,8 +1,5 @@
-const { response } = require('express');
 const db = require('../../utils/database');
-const { validationResult } = require('express-validator');
-const { success, error, validation } = require('../../utils/response');
-const query = require('../../sql/Export/exportQuery');
+const { success, error } = require('../../utils/response');
 const common = require('../../utils/common');
 const config = require('../../utils/config');
 

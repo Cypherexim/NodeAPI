@@ -1,4 +1,3 @@
-const { response } = require('express');
 const db = require('../../src/utils/database');
 const { validationResult } = require('express-validator');
 const { success, error, validation } = require('../../src/utils/response');

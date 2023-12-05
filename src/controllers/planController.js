@@ -1,9 +1,7 @@
-const { response } = require('express');
 const db = require('../../src/utils/database');
 const { validationResult } = require('express-validator');
 const { success, error, validation } = require('../../src/utils/response');
 const query = require('../../src/sql/queries');
-const bycrypt = require('bcryptjs');
 
 
 exports.createPlan = async (req, res) => {

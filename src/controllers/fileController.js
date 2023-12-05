@@ -1,6 +1,4 @@
-const { response } = require('express');
-const { validationResult } = require('express-validator');
-const { success, error, validation } = require('../utils/response');
+const { success, error } = require('../utils/response');
 const fs = require('fs');
 const AWS = require('aws-sdk');
 // require('dotenv').config()

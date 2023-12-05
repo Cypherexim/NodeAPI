@@ -1,10 +1,6 @@
-const { response } = require('express');
 const db = require('../../src/utils/database');
-const { validationResult } = require('express-validator');
-const { success, error, validation } = require('../../src/utils/response');
-const query = require('../../src/sql/queries');
+const { success, error } = require('../../src/utils/response');
 const utility = require('../utils/utility');
-const common = require('../utils/common');
 const config = require('../utils/config');
 
 exports.getcompanyprofile = async (req, res) => {
