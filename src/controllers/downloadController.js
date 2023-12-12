@@ -559,6 +559,7 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                                 }
                                // fs.unlinkSync(`${filename}.xlsx`);
                                 s3.upload(params, async (err, data) => {
+                                    console.log('line 562', err);
                                     if (err) {
                                         reject(err)
                                     }
