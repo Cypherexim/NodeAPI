@@ -1,4 +1,3 @@
-const { response } = require('express');
 const db = require('../../src/utils/database');
 const { validationResult } = require('express-validator');
 const { success, error, validation } = require('../../src/utils/response');
@@ -676,7 +675,7 @@ exports.getfirstListofSidefilterdata = async (req, res) => {
                     PortofDestination,
                     Mode, LoadingPort,
                     NotifyPartyName, Currency, 0, 0, finalQuery + ' FROM ', Direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
-                console.log(query[0] + ' Group By ' + selectQuery.replace('Distinct ', "").replace(/,\s*$/, "") + ',' + group);
+                // console.log(query[0] + ' Group By ' + selectQuery.replace('Distinct ', "").replace(/,\s*$/, "") + ',' + group);
                 db.query(query[0] + ' Group By ' + selectQuery.replace('Distinct ', "").replace(/,\s*$/, "") + ',' + group, query[1].slice(1), (err, results) => {
                     if (!err) {
                         // for (let i = 0; i < keys.length; i++) {

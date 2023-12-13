@@ -1,4 +1,3 @@
-const { response } = require('express');
 const db = require('../utils/database');
 const queries = require('../sql/queries');
 const utility = require('../utils/utility');

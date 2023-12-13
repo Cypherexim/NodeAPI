@@ -1,9 +1,5 @@
-const { response } = require('express');
 const db = require('../../src/utils/database');
-const { validationResult } = require('express-validator');
-const { success, error, validation } = require('../../src/utils/response');
-const query = require('../../src/sql/queries');
-const utility = require('../utils/utility');
+const { success, error } = require('../../src/utils/response');
 const common = require('../utils/common');
 
 
@@ -36,6 +32,7 @@ exports.getAnalysisData = async (req, res) => {
                     NotifyPartyName, Currency, 0, 0, query, direction.toLowerCase() + '_' + countryname.toLowerCase(), false);
                 db.query(finalquery[0] + ' GROUP BY "' + fieldName + '"', finalquery[1].slice(1), (err, result) => {
                     if (!err) {
+                        fields = null;
                         return res.status(200).json(success("Ok", result.rows, res.statusCode));
                     } else {
                         return res.status(200).json(success("Ok", err.message, res.statusCode));

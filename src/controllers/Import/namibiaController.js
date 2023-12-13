@@ -1,14 +1,11 @@
-const { response } = require('express');
 const db = require('../../utils/database');
-const { validationResult } = require('express-validator');
-const { success, error, validation } = require('../../utils/response');
-const query = require('../../sql/Export/exportQuery');
+const { success, error } = require('../../utils/response');
 const common = require('../../utils/common');
 const config = require('../../utils/config');
 
 
 // to get import with search data
-exports.getecuadorImport = async (req, res) => {
+exports.getnamibiaImport = async (req, res) => {
     try {
         const { fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
             CountryofDestination, Month, Year, Currency, uqc, Quantity, PortofOrigin,
@@ -23,7 +20,7 @@ exports.getecuadorImport = async (req, res) => {
                 CountryofDestination, Month, Year, uqc, Quantity, PortofOrigin,
                 PortofDestination,
                 Mode, LoadingPort,
-                NotifyPartyName, Currency, page, itemperpage, config.select_Query_for_totalrecords, config.import_ecuador, true);
+                NotifyPartyName, Currency, page, itemperpage, config.select_Query_for_totalrecords, config.import_namibia, true);
             db.query(query[0], query[1].slice(1), (err, results) => {
                 if (!err) {
                     result.data = results.rows;

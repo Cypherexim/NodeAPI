@@ -1,7 +1,5 @@
-const { response } = require('express');
 const db = require('../../src/utils/database');
-const { validationResult } = require('express-validator');
-const { success, error, validation } = require('../../src/utils/response');
+const { success, error } = require('../../src/utils/response');
 const query = require('../../src/sql/queries');
 const utility = require('../utils/utility');
 const common = require('../utils/common');
@@ -501,9 +499,9 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                                 //worksheet.addImage(imageId2, 'A1:D6');
                                 worksheet.getCell('A2').value = 'DIRECTION :';
                                 worksheet.getCell('B2').value = direction.toUpperCase();
-                                if (HsCode) {
-                                    worksheet.getRow(3).getCell(1).value = 'HSCODE :';
-                                    worksheet.getRow(3).getCell(2).value = HsCode.toString();
+                                if(HsCode){
+                                worksheet.getRow(3).getCell(1).value = 'HSCODE :';
+                                worksheet.getRow(3).getCell(2).value = HsCode.toString();
                                 } else {
                                     worksheet.getRow(3).hidden = true;
                                 }
@@ -544,10 +542,12 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                                 // Add autofilter on each column
                                 worksheet.autoFilter = 'A7:AH7';
                                 // worksheet.addRows(result.rows);
-                                result.rows.forEach((row) => {
-                                    worksheet.addRow(row).commit();
-                                });
-
+                                // result.rows.forEach((row) => {
+                                //     worksheet.addRow(row).commit();
+                                // });
+                                for(var i =0; i< result.rows.length;i++){
+                                    worksheet.addRow(result.rows[i]).commit();
+                                }
                                 //await workbook.xlsx.writeFile(`${filename}.xlsx`);
                                 // Upload to s3
                                 // const fileContent = await fs.readFileSync(`${filename}.xlsx`)
@@ -559,8 +559,10 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                                     Key: `${filename}.xlsx`,
                                     Body: stream
                                 }
-                                // fs.unlinkSync(`${filename}.xlsx`);
-                                s3.upload(params, async (err, data) => {
+                               // fs.unlinkSync(`${filename}.xlsx`);
+                                var options = {partSize: 5 * 1024 * 1024, queueSize: 4};
+                                await s3.upload(params,options, async (err, data) => {
+                                    console.log('line 562', err);
                                     if (err) {
                                         reject(err)
                                     }
@@ -570,8 +572,8 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                                     db.query(query.update_download_count, [totalpointtodeduct, UserId], (err, result) => {
 
                                     });
-                                    db.query(query.update_download_workspace, [recordIds, data.Location, 'Completed', '', expirydate, id], async (err, result) => {
-
+                                    db.query(query.update_download_workspace, [recordIds, data.Location, 'Completed', '',expirydate, id], async (err, result) => {
+                                        
                                     });
                                 })
                             } else {
