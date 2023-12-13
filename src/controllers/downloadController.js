@@ -542,10 +542,12 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                                 // Add autofilter on each column
                                 worksheet.autoFilter = 'A7:AH7';
                                 // worksheet.addRows(result.rows);
-                                result.rows.forEach((row) => {
-                                    worksheet.addRow(row).commit();
-                                });
-
+                                // result.rows.forEach((row) => {
+                                //     worksheet.addRow(row).commit();
+                                // });
+                                for(var i =0; i< result.rows.length;i++){
+                                    worksheet.addRow(result.rows[i]).commit();
+                                }
                                 //await workbook.xlsx.writeFile(`${filename}.xlsx`);
                                 // Upload to s3
                                 // const fileContent = await fs.readFileSync(`${filename}.xlsx`)
@@ -558,7 +560,8 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                                     Body: stream
                                 }
                                // fs.unlinkSync(`${filename}.xlsx`);
-                                s3.upload(params, async (err, data) => {
+                                var options = {partSize: 5 * 1024 * 1024, queueSize: 4};
+                                await s3.upload(params,options, async (err, data) => {
                                     console.log('line 562', err);
                                     if (err) {
                                         reject(err)
