@@ -198,5 +198,6 @@ module.exports = {
     get_userlog:`SELECT * FROM "Userlog" where "UserId"=$1 AND "Datetime"=$2`,
     get_all_userlog:`SELECT "Id", "Userlog"."UserId", "IP", "Userlog"."Location", "Searchcount", "Searchhistory", "Datetime", "Email" FROM public."Userlog" inner join "Cypher" on "Userlog"."UserId" = "Cypher"."UserId"`,
     update_userlog:`update "Userlog" set "Searchcount" = "Searchcount" + $1 where "UserId"=$2 AND "Datetime"=$3`,
-    add_user_action_log:`INSERT INTO public."UserActionLog"("UserId", "LogType", "Log", "CreatedDate") VALUES ($1, $2, $3, $4);`
+    add_user_action_log:`INSERT INTO public."UserActionLog"("UserId", "LogType", "Log", "CreatedDate") VALUES ($1, $2, $3, $4);`,
+    get_user_action_log:`SELECT * FROM public."UserActionLog" Where "LogType"=$1`
 };
