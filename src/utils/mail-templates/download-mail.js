@@ -32,36 +32,28 @@ font-family: 'sf_ui_displaylight', sans-serif" border="0" align="center">
                     </p>
                     <p
                         style="color:#000; font-size:14px !important; line-height:22px !important;-webkit-text-size-adjust:100%; font-family: 'Roboto', sans-serif; font-weight:300;">
-                        Your password has been successfully reset. </p>
+                        Thank you for choosing our services. Your requested report is ready for download, click on the given link below: </p>
                         
-                        <p
-                        style="color:#000; font-size:14px !important; line-height:22px !important;-webkit-text-size-adjust:100%; font-family: 'Roboto', sans-serif; font-weight:300;">
-                        Please use the following username/password combination to access the Cypher portal. </p>                   
-<table style=" color:#000; font-size:14px;font-size:14px !important; ;line-height:16px !important; border: 2px dashed #000; border-radius: 8px; width: 70%;min-width: 350px;">
-
-    <tr>
-      <td style="padding: 20px; font-weight: bold;">Username</td>
-	  <td><b>:</b></td>
-      <td >{{username}}</td>
-    </tr>
-	<tr>
-      <td style="padding: 20px; font-weight: bold;">Password</td>
-	  <td><b>:</b></td>
-      <td >{{password}}</td>
-    </tr>
-</table>
+                        <a style="text-decoration: underline;font-style: italic" href="{{url}}" target="_blank"><span
+                                style="color: blue;">click here</span></a>                   
                     
 <br>
-                    <a href="{{domainurl}}" type="submit"
-                        style="background-color:#4CBFA6;color:#fff;border:1px solid #4CBFA6!important;height: 35px;width: 70px;line-height:36px;padding:0 16px;border-radius:4px;cursor: pointer;text-decoration: none;display: block;text-align: center;font-family: 'Roboto', sans-serif;">Login</a>
-
-
-
+                    
                     <p
                         style="color:#000; font-size:14px !important; line-height:22px !important;-webkit-text-size-adjust:100%; font-family: 'Roboto', sans-serif; font-weight:300;">
-                        In
-                        case of any queries, you may also write to us at <span
-                            style="color:blue; font-family: 'Roboto', sans-serif; font-weight:300;">info@Cypher.com</span>
+                        Please note that the download link provided is set to expire in 7 days after your download is complete. Ensure that you download the data promptly to avoid any inconvenience.
+                    </p>
+                     <p
+                        style="color:#000; font-size:14px !important; line-height:22px !important;-webkit-text-size-adjust:100%; font-family: 'Roboto', sans-serif; font-weight:300;">
+                        In the event that you need to download the data after the link has expired, kindly click on the link and submit a request. You can expect a response within 24 hours, and we will provide you with a new link promptly.
+                    </p>
+                     <p
+                        style="color:#000; font-size:14px !important; line-height:22px !important;-webkit-text-size-adjust:100%; font-family: 'Roboto', sans-serif; font-weight:300;">
+                        If you have any further questions or require assistance, feel free to reach out to our team. 
+                    </p>
+                     <p
+                        style="color:#000; font-size:14px !important; line-height:22px !important;-webkit-text-size-adjust:100%; font-family: 'Roboto', sans-serif; font-weight:300;">
+                        We appreciate your prompt attention to this matter.
                     </p>
                     <p
                         style="color:#000; font-size:14px !important; line-height:22px !important;-webkit-text-size-adjust:100%; font-family: 'Roboto', sans-serif; font-weight:600;">
@@ -83,7 +75,7 @@ font-family: 'sf_ui_displaylight', sans-serif" border="0" align="center">
                         scope="col">
                         <h3
                             style="color:#4CBFA6;margin-bottom: 0;margin-top: 0;font-size: 12px;text-align:center;font-weight:normal">
-                            <a style="text-decoration: none;" href="https://www.Cypher.com" target="_blank"><span
+                            <a style="text-decoration: none;" href="https://www.Cypherexim.com" target="_blank"><span
                                 style="color: #4CBFA6;font-weight: 600;">www.Cypherexim.com</span></a> |
                             <span
                                     style="color: #4CBFA6;font-weight: 600;">Cypher™️</span> 

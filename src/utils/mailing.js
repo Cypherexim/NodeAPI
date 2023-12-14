@@ -33,7 +33,7 @@ exports.SendEmail = async (toEmail, Subject, Message) => {
     });
 }
 
-exports.sendSESEmail = async (email, data) => {
+exports.sendSESEmail = async (email, data, subject, sourceemail) => {
     // SES params to be sent
     const sesParams = {
         Destination: {
@@ -42,15 +42,15 @@ exports.sendSESEmail = async (email, data) => {
         Message: {
             Body: {
                 Html: {
-                    Data: data.template,
+                    Data: data,
                     Charset: 'UTF-8'
                 }
             },
             Subject: {
-                Data: 'Test Email',
+                Data: subject,
             }
         },
-        Source: 'Cypher<dispatch@cypherexim.com>'
+        Source: sourceemail
     };
 
     // Send mail

@@ -7,7 +7,9 @@ const config = require('../utils/config');
 const Stream = require('stream');
 const ExcelJs = require('exceljs');
 const AWS = require('aws-sdk');
-const fs = require('fs');
+const {template} = require('../utils/mail-templates/download-mail');
+const mail = require('../utils/mailing');
+//const fs = require('fs');
 // require('dotenv').config();
 const region = "us-east-1";
 
@@ -563,9 +565,13 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                                 var options = {partSize: 5 * 1024 * 1024, queueSize: 4};
                                 await s3.upload(params,options, async (err, data) => {
                                     console.log('line 562', err);
+                                    
                                     if (err) {
                                         reject(err)
                                     }
+                                    db.query(query.get_Name_by_userid,[UserId],(errs,result) =>{
+                                        mail.sendSESEmail(result.rows[0].Email,template.replace("{{name}}",result.rows[0].FullName).replace("{{url}}",data.Location),config.downloadSubject, config.downloadsourceemail);
+                                    })
                                     const dat = data.Expiration.match('"([^"]+)GMT"');
                                     const expirydate = utility.formatDate(new Date(dat[1]));
                                     // resolve(data.Location)
