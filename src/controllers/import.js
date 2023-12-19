@@ -1286,7 +1286,7 @@ exports.adduseractionlog = async (req, res) => {
 exports.getUserActionlogs = async (req, res) => {
     try {
         const { LogType } = req.query;
-        db.query(query.get_user_action_log,[LogType], (err, result) => {
+        db.query(query.get_user_action_log,[`${LogType}%`], (err, result) => {
             if (!err) {
                 return res.status(200).json(success("Ok", result.rows, res.statusCode));
             } else {
