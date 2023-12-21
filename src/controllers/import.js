@@ -1300,9 +1300,9 @@ exports.getUserActionlogs = async (req, res) => {
 
 exports.adduserActivitylog = async (req, res) => {
     try {
-        const { UserId, IP } = req.body;
+        const { UserId, IP, Email } = req.body;
         const date = new Date();
-        db.query(query.add_user_Activity_log, [UserId, date,IP], (err, result) => {
+        db.query(query.add_user_Activity_log, [UserId, date,IP, Email], (err, result) => {
             if (!err) {
                 return res.status(200).json(success("Ok", "Insert Successfully !", res.statusCode));
             } else {
