@@ -55,8 +55,27 @@ exports.getWhatsTrending = async (req, res) => {
 
     const fromDate = year + '-01-01';
     const toDate = year + '-02-02';
-    
+
     db.query('SELECT ROUND(SUM("ValueInUSD")::numeric,2) as LastYearTrend FROM ' + direction.toLowerCase() + '_' + country.toLowerCase() + ' where "Date" >= $1  AND "Date" <= $2', [fromDate, toDate], (err, result) => {
+        if (!err) {
+            return res.status(200).json(success("Ok", result.rows, res.statusCode));
+        } else {
+            return res.status(200).json(success("Ok", err.message, res.statusCode));
+        }
+    });
+}
+
+exports.topcountriesByValue = async (req, res) => {
+    const { country, direction, fromDate, toDate } = req.query;
+    var query = '';
+    if (direction.toLowerCase() == 'export') {
+        query = `Select ROUND(SUM("ValueInUSD")::numeric,2) as total,"CountryofDestination" from ` + direction.toLowerCase() + '_' + country.toLowerCase() +
+            ` WHERE "Date" >= $1 AND "Date" <= $2 group by "CountryofDestination" ORDER BY total DESC LIMIT 10`;
+    } else {
+        query = `Select ROUND(SUM("ValueInUSD")::numeric,2) as total,"CountryofOrigin" from ` + direction.toLowerCase() + '_' + country.toLowerCase() +
+            ` WHERE "Date" >= $1 AND "Date" <= $2 group by "CountryofOrigin" ORDER BY total DESC LIMIT 10`;
+    }
+    db.query(query, [fromDate, toDate], (err, result) => {
         if (!err) {
             return res.status(200).json(success("Ok", result.rows, res.statusCode));
         } else {
