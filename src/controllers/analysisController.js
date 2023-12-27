@@ -83,3 +83,38 @@ exports.topcountriesByValue = async (req, res) => {
         }
     });
 }
+
+exports.getmonthwisepercentagegrowth = async (req, res) => {
+    const { country, direction, fromDate, toDate } = req.query;
+    var query = `WITH monthly_totals AS (
+SELECT
+(CASE 
+ when "Month" = 'JAN' then 1 
+ when "Month" = 'FEB' then 2 
+ when "Month" = 'MAR' then 3
+ when "Month" = 'APR' then 4
+ when "Month" = 'MAY' then 5
+ when "Month" = 'JUN' then 6
+ when "Month" = 'JUL' then 7
+ when "Month" = 'AUG' then 8
+ when "Month" = 'SEP' then 9
+ when "Month" = 'OCT' then 10
+ when "Month" = 'NOV' then 11
+ when "Month" = 'DEC' then 12
+ ELSE 0 END ) as "Months",ROUND(sum("ValueInUSD")::numeric,2) as current_sale, "Month"
+        from `+ direction.toLowerCase() + '_' + country.toLowerCase() + ` WHERE "Date" BETWEEN $1 AND $2 
+        group by "Months","Month"
+        order by "Months"
+)
+SELECT "Months","Month","current_sale", lag(sum("current_sale"), 1) over (order by "Months") as previous_month_sale,
+        ROUND(100 * (sum("current_sale") - lag(sum("current_sale"), 1) over (order by "Months")) / lag(sum("current_sale"), 1) over 
+        (order by "Months")::numeric, 2) as growth FROM monthly_totals group by "Months","Month","current_sale"`;
+    
+    db.query(query, [fromDate, toDate], (err, result) => {
+        if (!err) {
+            return res.status(200).json(success("Ok", result.rows, res.statusCode));
+        } else {
+            return res.status(200).json(success("Ok", err.message, res.statusCode));
+        }
+    });
+}

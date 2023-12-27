@@ -227,7 +227,7 @@ router.post('/sharedownloadtransaction', downloadController.sharedownloadfile);
 router.post('/getAnalysisReport', analysisController.getAnalysisData);
 router.get('/getwhatstrending', analysisController.getWhatsTrending);
 router.get('/getlatestcountrybyvalue', analysisController.topcountriesByValue);
-
+router.get('/getmonthwisepercentagegrowth', analysisController.getmonthwisepercentagegrowth);
 // Company Profile Controller
 router.post('/getCompanyprofile', companyProfileController.getcompanyprofile);
 
