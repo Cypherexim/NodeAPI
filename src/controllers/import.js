@@ -1317,6 +1317,7 @@ exports.adduserActivitylog = async (req, res) => {
 exports.getUserActivitylogs = async (req, res) => {
     try {
         const { UserId } = req.query;
+        if(UserId){
         db.query(query.get_user_Activitylist,[UserId], (err, result) => {
             if (!err) {
                 return res.status(200).json(success("Ok", result.rows, res.statusCode));
@@ -1324,6 +1325,15 @@ exports.getUserActivitylogs = async (req, res) => {
                 return res.status(200).json(error(err.message, res.statusCode));
             }
         });
+    } else {
+        db.query(query.get_user_ActivityAlllist, (err, result) => {
+            if (!err) {
+                return res.status(200).json(success("Ok", result.rows, res.statusCode));
+            } else {
+                return res.status(200).json(error(err.message, res.statusCode));
+            }
+        });
+    }
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
