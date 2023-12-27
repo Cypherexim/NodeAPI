@@ -70,10 +70,10 @@ exports.topcountriesByValue = async (req, res) => {
     var query = '';
     if (direction.toLowerCase() == 'export') {
         query = `Select ROUND(SUM("ValueInUSD")::numeric,2) as total,"CountryofDestination" from ` + direction.toLowerCase() + '_' + country.toLowerCase() +
-            ` WHERE "Date" >= $1 AND "Date" <= $2 group by "CountryofDestination" ORDER BY total DESC LIMIT 10`;
+            ` WHERE "Date" BETWEEN $1 AND $2 group by "CountryofDestination" ORDER BY total DESC LIMIT 10`;
     } else {
         query = `Select ROUND(SUM("ValueInUSD")::numeric,2) as total,"CountryofOrigin" from ` + direction.toLowerCase() + '_' + country.toLowerCase() +
-            ` WHERE "Date" >= $1 AND "Date" <= $2 group by "CountryofOrigin" ORDER BY total DESC LIMIT 10`;
+            ` WHERE "Date" BETWEEN $1 AND $2 group by "CountryofOrigin" ORDER BY total DESC LIMIT 10`;
     }
     db.query(query, [fromDate, toDate], (err, result) => {
         if (!err) {

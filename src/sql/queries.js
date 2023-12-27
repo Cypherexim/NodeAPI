@@ -201,5 +201,6 @@ module.exports = {
     add_user_action_log:`INSERT INTO public."UserActionLog"("UserId", "LogType", "Log", "CreatedDate") VALUES ($1, $2, $3, $4);`,
     get_user_action_log:`SELECT * FROM public."UserActionLog" where "LogType" ILIKE $1`,
     get_Name_by_userid:`SELECT "FullName", "Email" FROM public."Cypher" where "UserId"=$1`,
-    add_user_Activity_log:`INSERT INTO public."UserActivityLog"("UserId", "Lastlogin", "IP","Email") VALUES ( $1, $2, $3, $4);`
+    add_user_Activity_log:`INSERT INTO public."UserActivityLog"("UserId", "Lastlogin", "IP","Email") VALUES ( $1, $2, $3, $4);`,
+    get_user_Activitylist:`SELECT * FROM "UserActivityLog" Where "UserId"=$1`
 };

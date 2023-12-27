@@ -58,7 +58,8 @@ const namibiaImportController = require('../controllers/Import/namibiaController
 router.post('/signup', check('FullName').notEmpty(), check('CompanyName').notEmpty(), body('MobileNumber').isLength({ min: 10, max: 10 }).withMessage('Mobile Number should be of 10 digit.'), check('Password').notEmpty(), check('Email').isEmail(), accountController.createUser);
 router.post('/signin', check('Password').notEmpty(), check('Email').isEmail(), accountController.postLogin);
 router.post('/resetpassword', accountController.resetPassword);
-router.get('/getlatestcountrybyvalue', analysisController.topcountriesByValue);
+
+
 var jwt = require('jsonwebtoken');
 
 router.use(function (req, res, next) {
@@ -134,6 +135,7 @@ router.get('/getlogs', importController.getUserlogs);
 router.post('/adduseractionlog', importController.adduseractionlog);
 router.get('/getuseractionlogs', importController.getUserActionlogs);
 router.post('/adduseractivitylog', importController.adduserActivitylog);
+router.get('/getuseractivitylist', importController.getUserActivitylogs);
 
 //Import controller
 router.post('/getIndiaImports', check('fromDate').notEmpty().isDate(), check('toDate').notEmpty().isDate(), indiaImportController.getindiaImport);
@@ -224,7 +226,7 @@ router.post('/sharedownloadtransaction', downloadController.sharedownloadfile);
 
 router.post('/getAnalysisReport', analysisController.getAnalysisData);
 router.get('/getwhatstrending', analysisController.getWhatsTrending);
-
+router.get('/getlatestcountrybyvalue', analysisController.topcountriesByValue);
 
 // Company Profile Controller
 router.post('/getCompanyprofile', companyProfileController.getcompanyprofile);
