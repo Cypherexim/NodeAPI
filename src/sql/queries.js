@@ -196,12 +196,12 @@ module.exports = {
     insert_userlog:`INSERT INTO public."Userlog"("UserId", "IP", "Location", "Searchcount", "Searchhistory", "Datetime")
 	VALUES ($1, $2, $3, $4, $5, $6);`,
     get_userlog:`SELECT * FROM "Userlog" where "UserId"=$1 AND "Datetime"=$2`,
-    get_all_userlog:`SELECT "Id", "Userlog"."UserId", "IP", "Userlog"."Location", "Searchcount", "Searchhistory", "Datetime", "Email" FROM public."Userlog" inner join "Cypher" on "Userlog"."UserId" = "Cypher"."UserId"`,
+    get_all_userlog:`SELECT "Id", "Userlog"."UserId", "IP", "Userlog"."Location", "Searchcount", "Searchhistory", "Datetime", "Email" FROM public."Userlog" inner join "Cypher" on "Userlog"."UserId" = "Cypher"."UserId" ORDER BY "Datetime" DESC`,
     update_userlog:`update "Userlog" set "Searchcount" = "Searchcount" + $1 where "UserId"=$2 AND "Datetime"=$3`,
     add_user_action_log:`INSERT INTO public."UserActionLog"("UserId", "LogType", "Log", "CreatedDate") VALUES ($1, $2, $3, $4);`,
-    get_user_action_log:`SELECT * FROM public."UserActionLog" where "LogType" ILIKE $1`,
+    get_user_action_log:`SELECT * FROM public."UserActionLog" where "LogType" ILIKE $1 ORDER BY "CreatedDate" DESC`,
     get_Name_by_userid:`SELECT "FullName", "Email" FROM public."Cypher" where "UserId"=$1`,
     add_user_Activity_log:`INSERT INTO public."UserActivityLog"("UserId", "Lastlogin", "IP","Email") VALUES ( $1, $2, $3, $4);`,
-    get_user_Activitylist:`SELECT * FROM "UserActivityLog" Where "UserId"=$1`,
-    get_user_ActivityAlllist:`SELECT * FROM "UserActivityLog"`
+    get_user_Activitylist:`SELECT * FROM "UserActivityLog" Where "UserId"=$1 ORDER BY "Lastlogin" DESC`,
+    get_user_ActivityAlllist:`SELECT * FROM "UserActivityLog" ORDER BY "Lastlogin" DESC`
 };
