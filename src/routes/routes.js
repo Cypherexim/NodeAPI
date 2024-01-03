@@ -228,6 +228,7 @@ router.post('/getAnalysisReport', analysisController.getAnalysisData);
 router.get('/getwhatstrending', analysisController.getWhatsTrending);
 router.get('/getlatestcountrybyvalue', analysisController.topcountriesByValue);
 router.get('/getmonthwisepercentagegrowth', analysisController.getmonthwisepercentagegrowth);
+router.get('/gettopthreeproductbycompany', analysisController.gettopthreeproductbycompany);
 // Company Profile Controller
 router.post('/getCompanyprofile', companyProfileController.getcompanyprofile);
 

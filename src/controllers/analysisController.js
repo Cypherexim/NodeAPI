@@ -118,3 +118,66 @@ exports.getmonthwisepercentagegrowth = async (req, res) => {
         }
     });
 }
+
+exports.gettopthreeproductbycompany = async (req, res) => {
+    const { country, direction, fromDate, toDate } = req.query;
+    var query = '';
+    // var finalresult = {companyname: '', hscodes: []};
+    if(direction.toLowerCase()=='import'){
+        query = `WITH TopImporters AS (
+            SELECT "Imp_Name"
+            FROM ` + direction.toLowerCase() + '_' + country.toLowerCase() + `  
+            WHERE "Date" BETWEEN $1 AND $2
+            GROUP BY "Imp_Name"
+            ORDER BY ROUND(SUM("ValueInUSD")::numeric, 2) DESC
+            LIMIT 5
+         ),
+         RankedImporters AS (
+            SELECT
+               "HsCode",
+               "Imp_Name",
+               ROUND(SUM("ValueInUSD")::numeric, 2) AS valuehs,
+               ROW_NUMBER() OVER (PARTITION BY "Imp_Name" ORDER BY SUM("ValueInUSD") DESC) AS rn
+            FROM ` + direction.toLowerCase() + '_' + country.toLowerCase() + ` 
+            WHERE "Date" BETWEEN $1 AND $2 AND "Imp_Name" IN (SELECT "Imp_Name" FROM TopImporters)
+            GROUP BY "Imp_Name", "HsCode"
+         )
+         SELECT "HsCode", "Imp_Name", valuehs
+         FROM RankedImporters
+         WHERE rn <= 3
+         ORDER BY "Imp_Name", valuehs DESC
+         LIMIT 15;`;
+    } else {
+        query = `WITH TopExporters AS (
+            SELECT "Exp_Name"
+            FROM ` + direction.toLowerCase() + '_' + country.toLowerCase() + `
+            WHERE "Date" BETWEEN $1 AND $2
+            GROUP BY "Exp_Name"
+            ORDER BY ROUND(SUM("ValueInUSD")::numeric, 2) DESC
+            LIMIT 5
+         ),
+         RankedExporters AS (
+            SELECT
+               "HsCode",
+               "Exp_Name",
+               ROUND(SUM("ValueInUSD")::numeric, 2) AS valuehs,
+               ROW_NUMBER() OVER (PARTITION BY "Exp_Name" ORDER BY SUM("ValueInUSD") DESC) AS rn
+            FROM ` + direction.toLowerCase() + '_' + country.toLowerCase() + ` 
+            WHERE "Date" BETWEEN $1 AND $2 AND "Exp_Name" IN (SELECT "Exp_Name" FROM TopExporters)
+            GROUP BY "Exp_Name", "HsCode"
+         )
+         SELECT "HsCode", "Exp_Name", valuehs
+         FROM RankedExporters
+         WHERE rn <= 3
+         ORDER BY "Exp_Name", valuehs DESC
+         LIMIT 15;`
+    }
+    
+    db.query(query, [fromDate, toDate], (err, result) => {
+        if (!err) {
+            return res.status(200).json(success("Ok", result.rows, res.statusCode));
+        } else {
+            return res.status(200).json(success("Ok", err.message, res.statusCode));
+        }
+    });
+}
