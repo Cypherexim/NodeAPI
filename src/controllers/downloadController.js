@@ -406,36 +406,106 @@ exports.generateDownloadbigfilesforalluser = async (req, res) => {
                                 const stream = new Stream.PassThrough();
                                 const workbook = new ExcelJs.stream.xlsx.WorkbookWriter({
                                     stream: stream,
+                                    useStyles: true,
+                                    useSharedStrings: true,
                                 });
+                                // workbook.media.push({
+                                //     filename: './cypher_logo.png',
+                                //     extension: 'png',
+                                //   })
                                 // Define worksheet
-                                const worksheet = workbook.addWorksheet('Data');
-                                // remove recordID from array 
-                                result.rows.forEach(function (tmp) { delete tmp.RecordID });
+                                const worksheet = workbook.addWorksheet('Data'
+                                    , {
+                                        views: [{ state: "frozen", ySplit: 7 }],
+                                    }
+                                );
+                                // add image to workbook by buffer
+                                const filepath = 'cypher_logo';
+                                // var imageId2 = workbook.addImage({
+                                //     buffer: fs.readFileSync(`${filepath}.png`),
+                                //     extension: 'png',
+                                // });
+
+                                // worksheet.addImage(0, 'A1:D6');
+                                worksheet.getRow(1).hidden = true;
+                                worksheet.mergeCells('C2:AH6');
+                                // worksheet.mergeCells('C7:J11');
+                                //worksheet.addImage(imageId2, 'A1:D6');
+                                worksheet.getCell('A2').value = 'DIRECTION :';
+                                worksheet.getCell('B2').value = direction.toUpperCase();
+                                if(HsCode){
+                                worksheet.getRow(3).getCell(1).value = 'HSCODE :';
+                                worksheet.getRow(3).getCell(2).value = HsCode.toString();
+                                } else {
+                                    worksheet.getRow(3).hidden = true;
+                                }
+                                worksheet.getRow(4).getCell(1).value = 'FROM :';
+                                worksheet.getRow(4).getCell(2).value = fromDate;
+                                worksheet.getRow(5).getCell(1).value = 'TO :';
+                                worksheet.getRow(5).getCell(2).value = toDate;
+                                worksheet.getRow(6).getCell(1).value = 'TOTAL RECORDS :';
+                                worksheet.getRow(6).getCell(2).value = result.rows.length;
+                                // worksheet.getRow(6).style.border = 'None';
+                                // worksheet.getRow(7).style.border = 'None';
+                                worksheet.getCell('A2').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+                                worksheet.getCell('B2').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+                                worksheet.getCell('A3').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+                                worksheet.getCell('B3').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+                                worksheet.getCell('A4').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+                                worksheet.getCell('B4').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+                                worksheet.getCell('A5').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+                                worksheet.getCell('B5').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+                                worksheet.getCell('A6').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+                                worksheet.getCell('B6').style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
                                 // Set column headers
+                                delete result.rows[0].RecordID;
+                                const a = getheaderarray(result.rows[0]);
+                                worksheet.getRow(7).values = a;
                                 worksheet.columns = getDataHeaders(result.rows[0]);
-                                result.rows.forEach((row) => {
-                                    // recordIds.push(row.RecordID);
-                                    worksheet.addRow(row).commit();
-                                });
-                                // Commit all changes
+                                worksheet.getRow(7).fill = {
+                                    type: 'pattern',
+                                    pattern: 'solid',
+                                    fgColor: { argb: 'f6be00' }
+                                }
+
+                                worksheet.columns.forEach((col) => {
+                                    col.alignment = { horizontal: 'left' }
+                                    col.style.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+                                })
+
+                                // Add autofilter on each column
+                                worksheet.autoFilter = 'A7:AH7';
+                                // worksheet.addRows(result.rows);
+                                // result.rows.forEach((row) => {
+                                //     worksheet.addRow(row).commit();
+                                // });
+                                for(var i =0; i< result.rows.length;i++){
+                                    worksheet.addRow(result.rows[i]).commit();
+                                }
+                                //await workbook.xlsx.writeFile(`${filename}.xlsx`);
+                                // Upload to s3
+                                // const fileContent = await fs.readFileSync(`${filename}.xlsx`)
+                                // fs.unlinkSync(`${filename}.xlsx`);
                                 worksheet.commit();
                                 workbook.commit();
-                                // Upload to s3
-
                                 const params = {
                                     Bucket: 'cypher-download-files',
                                     Key: `${filename}.xlsx`,
                                     Body: stream
                                 }
+                               // fs.unlinkSync(`${filename}.xlsx`);
+                                var options = {partSize: 5 * 1024 * 1024, queueSize: 4};
                                 await s3.upload(params, async (err, data) => {
                                     if (err) {
                                         reject(err)
                                     }
+                                    const dat = data.Expiration.match('"([^"]+)GMT"');
+                                    const expirydate = utility.formatDate(new Date(dat[1]));
                                     // resolve(data.Location)
                                     db.query(query.update_download_count, [totalpointtodeduct, isSubUser ? parentuserid : UserId], (err, result) => {
 
                                     });
-                                    db.query(query.add_download_workspace, [CountryCode, isSubUser ? subUserId : UserId, direction.toUpperCase(), recordIds, filename, datetime, data.Location, 'Completed', ''], async (err, result) => {
+                                    db.query(query.add_download_workspace, [CountryCode, isSubUser ? subUserId : UserId, direction.toUpperCase(), recordIds, filename, datetime, data.Location, 'Completed', '',expirydate], async (err, result) => {
                                         return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
                                     });
                                 })
