@@ -26,8 +26,8 @@ exports.saveDownload = async (req, res) => {
         const workspace = await db.query(query.check_download_workspancename, [workspacename]);
         if (workspace.rows.length == 0) {
             const recordtobill = await db.query('select Count(elements) as totalrecordtobill from (select unnest(array[' + recordIds.toString() + ']) except select unnest("recordIds") FROM public.userdownloadtransaction where "userId"=$1) t (elements)', [userId]);
-
-            db.query(query.add_download_workspace, [countrycode, userId, direction.toUpperCase(), recordIds, workspacename, datetime, '', '', ''], async (err, result) => {
+            const date1 = new Date();
+            db.query(query.add_download_workspace, [countrycode, userId, direction.toUpperCase(), recordIds, workspacename, datetime, '', '', '',date1], async (err, result) => {
                 if (!err) {
                     await Deductdownload(recordtobill.rows[0].totalrecordtobill, countrycode, userId);
                     return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
@@ -180,7 +180,8 @@ exports.generateDownloadfiles = async (req, res) => {
                                         db.query(query.update_download_count, [totalpointtodeduct, UserId], (err, result) => {
 
                                         });
-                                        db.query(query.add_download_workspace, [CountryCode, UserId, direction.toUpperCase(), recordIds, filename, datetime, data.Location, 'Completed', error], async (err, result) => {
+                                        const date1 = new Date();
+                                        db.query(query.add_download_workspace, [CountryCode, UserId, direction.toUpperCase(), recordIds, filename, datetime, data.Location, 'Completed', error,date1], async (err, result) => {
                                             return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
                                         });
                                     })
@@ -240,7 +241,8 @@ exports.generateDownloadfiles = async (req, res) => {
                                     db.query(query.update_download_count, [totalpointtodeduct, UserId], (err, result) => {
 
                                     });
-                                    db.query(query.add_download_workspace, [CountryCode, UserId, direction.toUpperCase(), recordIds, filename, datetime, data.Location, 'Completed', errs], async (err, result) => {
+                                    const date1 = new Date();
+                                    db.query(query.add_download_workspace, [CountryCode, UserId, direction.toUpperCase(), recordIds, filename, datetime, data.Location, 'Completed', errs,date1], async (err, result) => {
                                         return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
                                     });
                                 })
@@ -281,8 +283,8 @@ exports.generateDownloadbigfiles = async (req, res) => {
                 Mode, LoadingPort,
                 NotifyPartyName, Currency, 0, 0, getquery(direction, CountryCode), direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
 
-
-            db.query(query.add_download_workspace, [CountryCode, UserId, direction.toUpperCase(), {}, filename, datetime, '', 'In-Progress', ''], async (err, result) => {
+                const date1 = new Date();
+            db.query(query.add_download_workspace, [CountryCode, UserId, direction.toUpperCase(), {}, filename, datetime, '', 'In-Progress', '',date1], async (err, result) => {
                 await calllongquery(finalquery, UserId, CountryCode, direction, filename, datetime, result.rows[0].Id, fromDate, toDate, HsCode);
                 return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
             });
@@ -332,7 +334,8 @@ exports.generateDownloadbigfiles = async (req, res) => {
                                     db.query(query.update_download_count, [totalpointtodeduct, UserId], (err, result) => {
 
                                     });
-                                    db.query(query.add_download_workspace, [CountryCode, UserId, direction.toUpperCase(), recordIds, filename, datetime, data.Location, 'Completed', ''], async (err, result) => {
+                                    const date1 = new Date();
+                                    db.query(query.add_download_workspace, [CountryCode, UserId, direction.toUpperCase(), recordIds, filename, datetime, data.Location, 'Completed', date1], async (err, result) => {
                                         return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
                                     });
                                 })
@@ -384,8 +387,8 @@ exports.generateDownloadbigfilesforalluser = async (req, res) => {
                 Mode, LoadingPort,
                 NotifyPartyName, Currency, 0, 0, getquery(direction, CountryCode), direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
 
-
-            db.query(query.add_download_workspace, [CountryCode, isSubUser ? subUserId : UserId, direction.toUpperCase(), {}, filename, datetime, '', 'In-Progress', ''], async (err, result) => {
+            const date1 = new Date();
+            db.query(query.add_download_workspace, [CountryCode, isSubUser ? subUserId : UserId, direction.toUpperCase(), {}, filename, datetime, '', 'In-Progress', '',date1], async (err, result) => {
                 await calllongquery(finalquery, isSubUser ? parentuserid : UserId, CountryCode, direction, filename, datetime, result.rows[0].Id, fromDate, toDate, HsCode);
                 return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
             });
