@@ -232,4 +232,9 @@ router.get('/gettopthreeproductbycompany', analysisController.gettopthreeproduct
 // Company Profile Controller
 router.post('/getCompanyprofile', companyProfileController.getcompanyprofile);
 
+
+/////////////////////////////////already made whatstranding data APIs/////////////////////////
+router.get("/getWhatstrendingGraphData", analysisController.getWhatstrandingAnalysis);
+router.get("/getWhatstrendingTotalVal", analysisController.getWhatstrandingTotalValues);
+
 module.exports = router;
