@@ -203,5 +203,6 @@ module.exports = {
     get_Name_by_userid:`SELECT "FullName", "Email" FROM public."Cypher" where "UserId"=$1`,
     add_user_Activity_log:`INSERT INTO public."UserActivityLog"("UserId", "Lastlogin", "IP","Email") VALUES ( $1, $2, $3, $4);`,
     get_user_Activitylist:`SELECT * FROM "UserActivityLog" Where "UserId"=$1 ORDER BY "Lastlogin" DESC`,
-    get_user_ActivityAlllist:`SELECT * FROM "UserActivityLog" ORDER BY "Lastlogin" DESC`
+    get_user_ActivityAlllist:`SELECT * FROM "UserActivityLog" ORDER BY "Lastlogin" DESC`,
+    getWhatstrandingTotalVal: `select total_import, total_export, total_value from whatstranding_totalvalues where year=$1 and active=true`,
 };
