@@ -198,10 +198,10 @@ exports.getWhatstrandingTotalValues = (req, res) => {
 exports.getWhatstrandingAnalysis = (req, res) => {
     const {year, direction, tableType} = req.query;
     const columns = tableType=="month" ? ["month","current_value","growth"] : tableType=="company" ? ["hscode","company","value"] : ["country","value"];
-    const sql = `select ${columns.toLocaleString()} from whatstranding_${tableType}wise where year=$1 and direction='$2' and active=true order by id`;
+    const sql = `select ${columns.toLocaleString()} from whatstranding_${tableType}wise where year=${year} and direction='${direction}' and active=true order by id`;
 
     try {
-        db.query(sql, [year, direction], (err, result) => {
+        db.query(sql, (err, result) => {
             if (!err) { return res.status(200).json(success("Ok", result.rows, res.statusCode)); } 
             else { return res.status(200).json(success("Ok", err.message, res.statusCode)); }
         });   
