@@ -1182,10 +1182,14 @@ exports.getProductDesc = async (req, res) => {
     try {
         const { product } = req.query;
         db.query('SELECT * FROM public."Products" WHERE "Product" LIKE $1', [product + '%'], (err, result) => {
-            return res.status(200).json(success("Ok", result.rows, res.statusCode));
+            if (!err) {
+                return res.status(200).json(success("Ok", result.rows, res.statusCode));
+            } else {
+                return res.status(500).json(error(err, res.statusCode));
+            }
         });
-    } catch (err) {
-        return res.status(500).json(error(err, res.statusCode));
+    } catch (er) {
+        return res.status(500).json(error(er, res.statusCode));
     };
 }
 
@@ -1286,7 +1290,7 @@ exports.adduseractionlog = async (req, res) => {
 exports.getUserActionlogs = async (req, res) => {
     try {
         const { LogType } = req.query;
-        db.query(query.get_user_action_log,[`${LogType}%`], (err, result) => {
+        db.query(query.get_user_action_log, [`${LogType}%`], (err, result) => {
             if (!err) {
                 return res.status(200).json(success("Ok", result.rows, res.statusCode));
             } else {
@@ -1302,7 +1306,7 @@ exports.adduserActivitylog = async (req, res) => {
     try {
         const { UserId, IP, Email } = req.body;
         const date = new Date();
-        db.query(query.add_user_Activity_log, [UserId, date,IP, Email], (err, result) => {
+        db.query(query.add_user_Activity_log, [UserId, date, IP, Email], (err, result) => {
             if (!err) {
                 return res.status(200).json(success("Ok", "Insert Successfully !", res.statusCode));
             } else {
@@ -1317,23 +1321,23 @@ exports.adduserActivitylog = async (req, res) => {
 exports.getUserActivitylogs = async (req, res) => {
     try {
         const { UserId } = req.query;
-        if(UserId){
-        db.query(query.get_user_Activitylist,[UserId], (err, result) => {
-            if (!err) {
-                return res.status(200).json(success("Ok", result.rows, res.statusCode));
-            } else {
-                return res.status(200).json(error(err.message, res.statusCode));
-            }
-        });
-    } else {
-        db.query(query.get_user_ActivityAlllist, (err, result) => {
-            if (!err) {
-                return res.status(200).json(success("Ok", result.rows, res.statusCode));
-            } else {
-                return res.status(200).json(error(err.message, res.statusCode));
-            }
-        });
-    }
+        if (UserId) {
+            db.query(query.get_user_Activitylist, [UserId], (err, result) => {
+                if (!err) {
+                    return res.status(200).json(success("Ok", result.rows, res.statusCode));
+                } else {
+                    return res.status(200).json(error(err.message, res.statusCode));
+                }
+            });
+        } else {
+            db.query(query.get_user_ActivityAlllist, (err, result) => {
+                if (!err) {
+                    return res.status(200).json(success("Ok", result.rows, res.statusCode));
+                } else {
+                    return res.status(200).json(error(err.message, res.statusCode));
+                }
+            });
+        }
     } catch (err) {
         return res.status(500).json(error(err, res.statusCode));
     };
