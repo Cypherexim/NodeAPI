@@ -525,13 +525,12 @@ exports.generateDownloadbigfilesforalluser = async (req, res) => {
 }
 
 async function calllongquery(finalquery, UserId, CountryCode, direction, filename, datetime, id, fromDate, toDate, HsCode) {
-    console.log('line 455 executed ' + UserId);
     db.query(finalquery[0], finalquery[1].slice(1), async (error, result) => {
-        console.log('line 457 executed');
+        
         if (!error) {
-            console.log('line 459 executed');
+            
             if (result.rows.length < 500000) {
-                console.log('line 461 executed');
+                
                 const recordIds = result.rows.map(x => x.RecordID);
 
                 const recordtobill = await GetRecordToBill(recordIds, UserId);
