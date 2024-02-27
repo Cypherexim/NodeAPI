@@ -5,10 +5,12 @@ const query = require('../../src/sql/queries');
 exports.getRoleList = async (req, res) => {
     try {
         db.query(query.get_all_roles, (err, result) => {
+            if(!err){
             return res.status(200).json(success("Ok", result.rows, res.statusCode));
+            }
         });
-    } catch (err) {
-        return res.status(500).json(error(err, res.statusCode));
+    } catch (errs) {
+        return res.status(500).json(error(errs, res.statusCode));
     };
 }
 
