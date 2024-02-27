@@ -17,7 +17,7 @@ const region = "us-east-1";
 const client = new AWS.SecretsManager({ region: region });
 
 
-const s3 = new AWS.S3();
+
 
 exports.saveDownload = async (req, res) => {
     try {
@@ -109,7 +109,7 @@ exports.getdownloaddata = async (req, res) => {
 }
 
 exports.generateDownloadfiles = async (req, res) => {
-
+    const s3 = new AWS.S3();
     const { fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
         CountryofDestination, Month, Year, Currency, uqc, Quantity, PortofOrigin,
         PortofDestination,
@@ -259,7 +259,7 @@ exports.generateDownloadfiles = async (req, res) => {
 }
 
 exports.generateDownloadbigfiles = async (req, res) => {
-
+    const s3 = new AWS.S3();
     const { fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
         CountryofDestination, Month, Year, Currency, uqc, Quantity, PortofOrigin,
         PortofDestination,
@@ -352,7 +352,7 @@ exports.generateDownloadbigfiles = async (req, res) => {
 }
 
 exports.generateDownloadbigfilesforalluser = async (req, res) => {
-
+    const s3 = new AWS.S3();
     const { fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
         CountryofDestination, Month, Year, Currency, uqc, Quantity, PortofOrigin,
         PortofDestination,
@@ -705,6 +705,7 @@ async function GetRecordToBill(recordIds, userId) {
 }
 
 async function uploadSingleSheetToS3(excelData, filename) {
+    const s3 = new AWS.S3();
     const stream = new Stream.PassThrough();
     const workbook = new ExcelJs.stream.xlsx.WorkbookWriter({
         stream: stream,
