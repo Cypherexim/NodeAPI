@@ -67,16 +67,16 @@ exports.sharedownloadfile = async (req, res) => {
             WorkspaceId.forEach(workspcid => {
                 if (UserIdto.length > 0) {
                     UserIdto.forEach(element => {
-                        db.query(query.share_download_files, [element, workspcid, datetime], (err, result) => {
-                            if (!err) {
-                                db.query(query.insert_share_history, [UserIdBy, element, datetime, workspcid], (err, result) => {
-                                    if (!err) {
-                                        // return res.status(200).json(success("Ok", result.command + " Successful.", res.statusCode));
+                        db.query(query.share_download_files, [element, workspcid, datetime], (error, result) => {
+                            if (!error) {
+                                db.query(query.insert_share_history, [UserIdBy, element, datetime, workspcid], (errs, result) => {
+                                    if (!errs) {
+                                         return res.status(200).json(success("Ok", result.command + " Successful.", res.statusCode));
                                     }
                                 })
 
                             } else {
-                                return res.status(200).json(success("Ok", err.message, res.statusCode));
+                                return res.status(200).json(success("Ok", error.message, res.statusCode));
                             }
                         });
                     });
