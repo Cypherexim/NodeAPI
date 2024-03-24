@@ -7,9 +7,17 @@ const config = require('../utils/config');
 const Stream = require('stream');
 const ExcelJs = require('exceljs');
 const AWS = require('aws-sdk');
-const { template } = require('../utils/mail-templates/download-mail');
+const {template} = require('../utils/mail-templates/download-mail');
 const mail = require('../utils/mailing');
 //const fs = require('fs');
+// require('dotenv').config();
+const region = "us-east-1";
+
+// Creating a Secrets Manager client
+const client = new AWS.SecretsManager({ region: region });
+
+
+const s3 = new AWS.S3();
 
 exports.saveDownload = async (req, res) => {
     try {
@@ -19,7 +27,7 @@ exports.saveDownload = async (req, res) => {
         if (workspace.rows.length == 0) {
             const recordtobill = await db.query('select Count(elements) as totalrecordtobill from (select unnest(array[' + recordIds.toString() + ']) except select unnest("recordIds") FROM public.userdownloadtransaction where "userId"=$1) t (elements)', [userId]);
             const date1 = new Date();
-            db.query(query.add_download_workspace, [countrycode, userId, direction.toUpperCase(), recordIds, workspacename, datetime, '', '', '', date1], async (err, result) => {
+            db.query(query.add_download_workspace, [countrycode, userId, direction.toUpperCase(), recordIds, workspacename, datetime, '', '', '',date1], async (err, result) => {
                 if (!err) {
                     await Deductdownload(recordtobill.rows[0].totalrecordtobill, countrycode, userId);
                     return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
@@ -101,12 +109,7 @@ exports.getdownloaddata = async (req, res) => {
 }
 
 exports.generateDownloadfiles = async (req, res) => {
-    // require('dotenv').config();
-    const region = "us-east-1";
 
-    // Creating a Secrets Manager client
-    const client = new AWS.SecretsManager({ region: region });
-    const s3 = new AWS.S3();
     const { fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
         CountryofDestination, Month, Year, Currency, uqc, Quantity, PortofOrigin,
         PortofDestination,
@@ -178,7 +181,7 @@ exports.generateDownloadfiles = async (req, res) => {
 
                                         });
                                         const date1 = new Date();
-                                        db.query(query.add_download_workspace, [CountryCode, UserId, direction.toUpperCase(), recordIds, filename, datetime, data.Location, 'Completed', error, date1], async (err, result) => {
+                                        db.query(query.add_download_workspace, [CountryCode, UserId, direction.toUpperCase(), recordIds, filename, datetime, data.Location, 'Completed', error,date1], async (err, result) => {
                                             return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
                                         });
                                     })
@@ -239,7 +242,7 @@ exports.generateDownloadfiles = async (req, res) => {
 
                                     });
                                     const date1 = new Date();
-                                    db.query(query.add_download_workspace, [CountryCode, UserId, direction.toUpperCase(), recordIds, filename, datetime, data.Location, 'Completed', errs, date1], async (err, result) => {
+                                    db.query(query.add_download_workspace, [CountryCode, UserId, direction.toUpperCase(), recordIds, filename, datetime, data.Location, 'Completed', errs,date1], async (err, result) => {
                                         return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
                                     });
                                 })
@@ -256,12 +259,7 @@ exports.generateDownloadfiles = async (req, res) => {
 }
 
 exports.generateDownloadbigfiles = async (req, res) => {
-    // require('dotenv').config();
-const region = "us-east-1";
 
-// Creating a Secrets Manager client
-const client = new AWS.SecretsManager({ region: region });
-    const s3 = new AWS.S3();
     const { fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
         CountryofDestination, Month, Year, Currency, uqc, Quantity, PortofOrigin,
         PortofDestination,
@@ -285,8 +283,8 @@ const client = new AWS.SecretsManager({ region: region });
                 Mode, LoadingPort,
                 NotifyPartyName, Currency, 0, 0, getquery(direction, CountryCode), direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
 
-            const date1 = new Date();
-            db.query(query.add_download_workspace, [CountryCode, UserId, direction.toUpperCase(), {}, filename, datetime, '', 'In-Progress', '', date1], async (err, result) => {
+                const date1 = new Date();
+            db.query(query.add_download_workspace, [CountryCode, UserId, direction.toUpperCase(), {}, filename, datetime, '', 'In-Progress', '',date1], async (err, result) => {
                 await calllongquery(finalquery, UserId, CountryCode, direction, filename, datetime, result.rows[0].Id, fromDate, toDate, HsCode);
                 return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
             });
@@ -354,12 +352,7 @@ const client = new AWS.SecretsManager({ region: region });
 }
 
 exports.generateDownloadbigfilesforalluser = async (req, res) => {
-    // require('dotenv').config();
-const region = "us-east-1";
 
-// Creating a Secrets Manager client
-const client = new AWS.SecretsManager({ region: region });
-    const s3 = new AWS.S3();
     const { fromDate, toDate, HsCode, ProductDesc, Imp_Name, Exp_Name, CountryofOrigin,
         CountryofDestination, Month, Year, Currency, uqc, Quantity, PortofOrigin,
         PortofDestination,
@@ -395,7 +388,7 @@ const client = new AWS.SecretsManager({ region: region });
                 NotifyPartyName, Currency, 0, 0, getquery(direction, CountryCode), direction.toLowerCase() + '_' + CountryName.toLowerCase(), false);
 
             const date1 = new Date();
-            db.query(query.add_download_workspace, [CountryCode, isSubUser ? subUserId : UserId, direction.toUpperCase(), {}, filename, datetime, '', 'In-Progress', '', date1], async (err, result) => {
+            db.query(query.add_download_workspace, [CountryCode, isSubUser ? subUserId : UserId, direction.toUpperCase(), {}, filename, datetime, '', 'In-Progress', '',date1], async (err, result) => {
                 await calllongquery(finalquery, isSubUser ? parentuserid : UserId, CountryCode, direction, filename, datetime, result.rows[0].Id, fromDate, toDate, HsCode);
                 return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
             });
@@ -443,9 +436,9 @@ const client = new AWS.SecretsManager({ region: region });
                                 //worksheet.addImage(imageId2, 'A1:D6');
                                 worksheet.getCell('A2').value = 'DIRECTION :';
                                 worksheet.getCell('B2').value = direction.toUpperCase();
-                                if (HsCode) {
-                                    worksheet.getRow(3).getCell(1).value = 'HSCODE :';
-                                    worksheet.getRow(3).getCell(2).value = HsCode.toString();
+                                if(HsCode){
+                                worksheet.getRow(3).getCell(1).value = 'HSCODE :';
+                                worksheet.getRow(3).getCell(2).value = HsCode.toString();
                                 } else {
                                     worksheet.getRow(3).hidden = true;
                                 }
@@ -489,7 +482,7 @@ const client = new AWS.SecretsManager({ region: region });
                                 // result.rows.forEach((row) => {
                                 //     worksheet.addRow(row).commit();
                                 // });
-                                for (var i = 0; i < result.rows.length; i++) {
+                                for(var i =0; i< result.rows.length;i++){
                                     worksheet.addRow(result.rows[i]).commit();
                                 }
                                 //await workbook.xlsx.writeFile(`${filename}.xlsx`);
@@ -503,8 +496,8 @@ const client = new AWS.SecretsManager({ region: region });
                                     Key: `${filename}.xlsx`,
                                     Body: stream
                                 }
-                                // fs.unlinkSync(`${filename}.xlsx`);
-                                var options = { partSize: 5 * 1024 * 1024, queueSize: 4 };
+                               // fs.unlinkSync(`${filename}.xlsx`);
+                                var options = {partSize: 5 * 1024 * 1024, queueSize: 4};
                                 await s3.upload(params, async (err, data) => {
                                     if (err) {
                                         reject(err)
@@ -515,7 +508,7 @@ const client = new AWS.SecretsManager({ region: region });
                                     db.query(query.update_download_count, [totalpointtodeduct, isSubUser ? parentuserid : UserId], (err, result) => {
 
                                     });
-                                    db.query(query.add_download_workspace, [CountryCode, isSubUser ? subUserId : UserId, direction.toUpperCase(), recordIds, filename, datetime, data.Location, 'Completed', '', expirydate], async (err, result) => {
+                                    db.query(query.add_download_workspace, [CountryCode, isSubUser ? subUserId : UserId, direction.toUpperCase(), recordIds, filename, datetime, data.Location, 'Completed', '',expirydate], async (err, result) => {
                                         return res.status(201).json(success("Ok", result.command + " Successful.", res.statusCode));
                                     });
                                 })
@@ -533,11 +526,11 @@ const client = new AWS.SecretsManager({ region: region });
 
 async function calllongquery(finalquery, UserId, CountryCode, direction, filename, datetime, id, fromDate, toDate, HsCode) {
     db.query(finalquery[0], finalquery[1].slice(1), async (error, result) => {
-
+        
         if (!error) {
-
+            
             if (result.rows.length < 500000) {
-
+                
                 const recordIds = result.rows.map(x => x.RecordID);
 
                 const recordtobill = await GetRecordToBill(recordIds, UserId);
@@ -580,9 +573,9 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                                 //worksheet.addImage(imageId2, 'A1:D6');
                                 worksheet.getCell('A2').value = 'DIRECTION :';
                                 worksheet.getCell('B2').value = direction.toUpperCase();
-                                if (HsCode) {
-                                    worksheet.getRow(3).getCell(1).value = 'HSCODE :';
-                                    worksheet.getRow(3).getCell(2).value = HsCode.toString();
+                                if(HsCode){
+                                worksheet.getRow(3).getCell(1).value = 'HSCODE :';
+                                worksheet.getRow(3).getCell(2).value = HsCode.toString();
                                 } else {
                                     worksheet.getRow(3).hidden = true;
                                 }
@@ -626,7 +619,7 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                                 // result.rows.forEach((row) => {
                                 //     worksheet.addRow(row).commit();
                                 // });
-                                for (var i = 0; i < result.rows.length; i++) {
+                                for(var i =0; i< result.rows.length;i++){
                                     worksheet.addRow(result.rows[i]).commit();
                                 }
                                 //await workbook.xlsx.writeFile(`${filename}.xlsx`);
@@ -640,16 +633,16 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                                     Key: `${filename}.xlsx`,
                                     Body: stream
                                 }
-                                // fs.unlinkSync(`${filename}.xlsx`);
-                                var options = { partSize: 5 * 1024 * 1024, queueSize: 4 };
-                                await s3.upload(params, options, async (err, data) => {
+                               // fs.unlinkSync(`${filename}.xlsx`);
+                                var options = {partSize: 5 * 1024 * 1024, queueSize: 4};
+                                await s3.upload(params,options, async (err, data) => {
                                     console.log('line 562', err);
-
+                                    
                                     if (err) {
                                         reject(err)
                                     }
-                                    db.query(query.get_Name_by_userid, [UserId], (errs, result) => {
-                                        mail.sendSESEmail(result.rows[0].Email, template.replace("{{name}}", result.rows[0].FullName).replace("{{url}}", data.Location), config.downloadSubject, config.downloadsourceemail);
+                                    db.query(query.get_Name_by_userid,[UserId],(errs,result) =>{
+                                        mail.sendSESEmail(result.rows[0].Email,template.replace("{{name}}",result.rows[0].FullName).replace("{{url}}",data.Location),config.downloadSubject, config.downloadsourceemail);
                                     })
                                     const dat = data.Expiration.match('"([^"]+)GMT"');
                                     const expirydate = utility.formatDate(new Date(dat[1]));
@@ -657,8 +650,8 @@ async function calllongquery(finalquery, UserId, CountryCode, direction, filenam
                                     db.query(query.update_download_count, [totalpointtodeduct, UserId], (err, result) => {
 
                                     });
-                                    db.query(query.update_download_workspace, [recordIds, data.Location, 'Completed', '', expirydate, id], async (err, result) => {
-
+                                    db.query(query.update_download_workspace, [recordIds, data.Location, 'Completed', '',expirydate, id], async (err, result) => {
+                                        
                                     });
                                 })
                             } else {
@@ -712,7 +705,6 @@ async function GetRecordToBill(recordIds, userId) {
 }
 
 async function uploadSingleSheetToS3(excelData, filename) {
-    const s3 = new AWS.S3();
     const stream = new Stream.PassThrough();
     const workbook = new ExcelJs.stream.xlsx.WorkbookWriter({
         stream: stream,

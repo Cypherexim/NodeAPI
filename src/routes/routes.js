@@ -58,8 +58,7 @@ const namibiaImportController = require('../controllers/Import/namibiaController
 router.post('/signup', check('FullName').notEmpty(), check('CompanyName').notEmpty(), body('MobileNumber').isLength({ min: 10, max: 10 }).withMessage('Mobile Number should be of 10 digit.'), check('Password').notEmpty(), check('Email').isEmail(), accountController.createUser);
 router.post('/signin', check('Password').notEmpty(), check('Email').isEmail(), accountController.postLogin);
 router.post('/resetpassword', accountController.resetPassword);
-router.get('/getcompanyprofiledata',companyProfileController.getcompanyprofiledata);
-router.get('/getcompanydetails', companyProfileController.getcompanydetails);
+
 
 var jwt = require('jsonwebtoken');
 
