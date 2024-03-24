@@ -74,6 +74,7 @@ exports.getcompanyprofiledata = async (req, res) => {
     //     tablenamesupplier = `"export_india"`
     //     tablenamebuyer = `"import_india`
     // }
+    
     let responsetosend = { buyer: null, supplier: null, hscodes: null, country: null, quantity: null, totalshipments: null };
     const query = `SELECT distinct "Imp_Name" FROM public.export_india where "Exp_Name"='${companyname}' and "Date" BETWEEN '${fromdate}' AND '${todate}';
     SELECT distinct "Exp_Name"  FROM public.import_india where "Imp_Name"='${companyname}' and "Date" BETWEEN '${fromdate}' AND '${todate}';
