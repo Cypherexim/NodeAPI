@@ -38,3 +38,63 @@ exports.getcompanyprofile = async (req, res) => {
     };
     //db.end;
 }
+
+exports.getcompanydetails = async(req, res) =>{
+    const { companyname, country, direction } = req.query;
+    let query = '';
+    if(direction.toLowerCase()=='import'){
+        query = `SELECT "Importer_Phone","Importer_Email","Importer_Address" FROM  ${direction.toLowerCase()}_${country.toLowerCase()}  WHERE "Imp_Name"='${companyname}' limit 1`
+    } else {
+        query = `SELECT "Exp_Email","Exp_Phone","Exp_Address" FROM  ${direction.toLowerCase()}_${country.toLowerCase()}  WHERE "Imp_Name"='${companyname}' limit 1`
+    }
+
+    db.query(query, (err, result) => {
+        if (!err) {
+            return res.status(200).json(success("Ok", result.rows, res.statusCode));
+        } else {
+            return res.status(200).json(success("Ok", err.message, res.statusCode));
+        }
+    });
+}
+
+exports.getcompanyprofiledata = async (req, res) => {
+    const { companyname, fromdate, todate, requestfrom } = req.query;
+    // let supplier = '';
+    // let buyer = '';
+    // let tablenamesupplier = '';
+    // let tablenamebuyer = '';
+    // if(requestfrom == 'supplier'){
+    //     supplier = `"Imp_Name"`
+    //     buyer = `"Exp_Name"`
+    //     tablenamesupplier = `"export_india"`
+    //     tablenamebuyer = `"import_india`
+    // } else {
+    //     supplier = `"Imp_Name"`
+    //     buyer = `"Exp_Name"`
+    //     tablenamesupplier = `"export_india"`
+    //     tablenamebuyer = `"import_india`
+    // }
+    
+    let responsetosend = { buyer: null, supplier: null, hscodes: null, country: null, quantity: null, totalshipments: null };
+    const query = `SELECT distinct "Imp_Name" FROM public.export_india where "Exp_Name"='${companyname}' and "Date" BETWEEN '${fromdate}' AND '${todate}';
+    SELECT distinct "Exp_Name"  FROM public.import_india where "Imp_Name"='${companyname}' and "Date" BETWEEN '${fromdate}' AND '${todate}';
+    SELECT distinct "HsCode" FROM public.import_india where "Imp_Name"='${companyname}' and "Date" BETWEEN '${fromdate}' AND '${todate}';
+    SELECT distinct "CountryofOrigin" FROM public.import_india where "Imp_Name"='${companyname}' and "Date" BETWEEN '${fromdate}' AND '${todate}';
+    SELECT SUM("Quantity") as totalquantity, COUNT(*) as totalshipments FROM public.export_india where "Exp_Name"='${companyname}' and "Date" BETWEEN '${fromdate}' AND '${todate}';`
+    console.log(query)
+    db.query(query, (err, result) => {
+        if (!err) {
+
+            responsetosend.buyer = result[0].rows;
+            responsetosend.supplier = result[1].rows;
+            responsetosend.hscodes = result[2].rows;
+            responsetosend.country = result[3].rows
+            responsetosend.quantity = result[4].rows[0].totalquantity;
+            responsetosend.totalshipments = result[4].rows[0].totalshipments;
+
+            return res.status(200).json(success("Ok", responsetosend, res.statusCode));
+        } else {
+            return res.status(200).json(success("Ok", err.message, res.statusCode));
+        }
+    });
+}
