@@ -2,6 +2,7 @@ const db = require('../../src/utils/database');
 const { success, error } = require('../../src/utils/response');
 const utility = require('../utils/utility');
 const config = require('../utils/config');
+// const query = require('../sql/queries')
 
 exports.getcompanyprofile = async (req, res) => {
     //db.connect();
@@ -19,7 +20,7 @@ exports.getcompanyprofile = async (req, res) => {
             })
             query = 'SELECT ' + selectedfields.replace(/,\s*$/, "") + ' FROM ' + direction.toLowerCase() + '_' + countryname.toLowerCase() + ' where "Imp_Name" = $1 AND "Date" >= $2 AND "Date" <= $3';
         } else {
-            const fieldList = ["Exp_Name", "Imp_Name", "HsCode", "Quantity", "ValueInUSD","CountryofOrigin", "Importer_Address", "Importer_City", "Importer_PIN", "Importer_Phone", "Importer_Email"];
+            const fieldList = ["Exp_Name", "Imp_Name", "HsCode", "Quantity", "ValueInUSD", "CountryofOrigin", "Importer_Address", "Importer_City", "Importer_PIN", "Importer_Phone", "Importer_Email"];
             const availablefield = await db.query('SELECT column_name FROM information_schema.columns WHERE table_name = $1 and column_name = ANY($2)', [direction.toLowerCase() + '_' + countryname.toLowerCase(), fieldList]);
             availablefield.rows.forEach(x => {
                 selectedfields += '"' + x.column_name + '",';
@@ -39,13 +40,13 @@ exports.getcompanyprofile = async (req, res) => {
     //db.end;
 }
 
-exports.getcompanydetails = async(req, res) =>{
+exports.getcompanydetails = async (req, res) => {
     const { companyname, country, direction } = req.query;
     let query = '';
-    if(direction.toLowerCase()=='import'){
+    if (direction.toLowerCase() == 'import') {
         query = `SELECT "Importer_Phone","Importer_Email","Importer_Address" FROM  ${direction.toLowerCase()}_${country.toLowerCase()}  WHERE "Imp_Name"='${companyname}' limit 1`
     } else {
-        query = `SELECT "Exp_Email","Exp_Phone","Exp_Address" FROM  ${direction.toLowerCase()}_${country.toLowerCase()}  WHERE "Imp_Name"='${companyname}' limit 1`
+        query = `SELECT "Exp_Email","Exp_Phone","Exp_Address" FROM  ${direction.toLowerCase()}_${country.toLowerCase()}  WHERE "Exp_Name"='${companyname}' limit 1`
     }
 
     db.query(query, (err, result) => {
@@ -58,30 +59,10 @@ exports.getcompanydetails = async(req, res) =>{
 }
 
 exports.getcompanyprofiledata = async (req, res) => {
-    const { companyname, fromdate, todate, requestfrom } = req.query;
-    // let supplier = '';
-    // let buyer = '';
-    // let tablenamesupplier = '';
-    // let tablenamebuyer = '';
-    // if(requestfrom == 'supplier'){
-    //     supplier = `"Imp_Name"`
-    //     buyer = `"Exp_Name"`
-    //     tablenamesupplier = `"export_india"`
-    //     tablenamebuyer = `"import_india`
-    // } else {
-    //     supplier = `"Imp_Name"`
-    //     buyer = `"Exp_Name"`
-    //     tablenamesupplier = `"export_india"`
-    //     tablenamebuyer = `"import_india`
-    // }
-    
-    let responsetosend = { buyer: null, supplier: null, hscodes: null, country: null, quantity: null, totalshipments: null };
-    const query = `SELECT distinct "Imp_Name" FROM public.export_india where "Exp_Name"='${companyname}' and "Date" BETWEEN '${fromdate}' AND '${todate}';
-    SELECT distinct "Exp_Name"  FROM public.import_india where "Imp_Name"='${companyname}' and "Date" BETWEEN '${fromdate}' AND '${todate}';
-    SELECT distinct "HsCode" FROM public.import_india where "Imp_Name"='${companyname}' and "Date" BETWEEN '${fromdate}' AND '${todate}';
-    SELECT distinct "CountryofOrigin" FROM public.import_india where "Imp_Name"='${companyname}' and "Date" BETWEEN '${fromdate}' AND '${todate}';
-    SELECT SUM("Quantity") as totalquantity, COUNT(*) as totalshipments FROM public.export_india where "Exp_Name"='${companyname}' and "Date" BETWEEN '${fromdate}' AND '${todate}';`
-    console.log(query)
+    const { companyname, fromdate, todate } = req.query;
+    let responsetosend = { buyer: null, supplier: null, hscodes: null, country: null, quantity: null, exportshipment: null , importshipment: null};
+    const query = `SELECT distinct "Imp_Name" as buyer FROM public.export_india where "Exp_Name"='${companyname}' and "Date" BETWEEN '${fromdate}' AND '${todate}';SELECT distinct "Exp_Name" as supplier  FROM public.import_india where "Imp_Name"='${companyname}' and "Date" BETWEEN '${fromdate}' AND '${todate}';SELECT distinct "HsCode" as hscodes FROM public.export_india where "Exp_Name"='${companyname}' and "Date" BETWEEN '${fromdate}' AND '${todate}' union SELECT distinct "HsCode"  FROM public.import_india where "Imp_Name"='${companyname}' and "Date" BETWEEN '${fromdate}' AND '${todate}';SELECT distinct "CountryofDestination" as countries FROM public.export_india where "Exp_Name"='${companyname}' and "Date" BETWEEN '${fromdate}' AND '${todate}' union SELECT distinct "CountryofOrigin" as countries FROM public.import_india where "Imp_Name"='${companyname}' and "Date" BETWEEN '${fromdate}' AND '${todate}';SELECT SUM("Quantity") FROM public.export_india where "Exp_Name"='${companyname}' and "Date" BETWEEN '${fromdate}' AND '${todate}' union all SELECT SUM("Quantity")  FROM public.import_india where "Imp_Name"='${companyname}' and "Date" BETWEEN '${fromdate}' AND '${todate}'; SELECT * FROM public.export_india where "Exp_Name"='${companyname}' and "Date" BETWEEN '${fromdate}' AND '${todate}'; SELECT * FROM public.import_india where "Imp_Name"='${companyname}' and "Date" BETWEEN '${fromdate}' AND '${todate}';`
+
     db.query(query, (err, result) => {
         if (!err) {
 
@@ -89,8 +70,9 @@ exports.getcompanyprofiledata = async (req, res) => {
             responsetosend.supplier = result[1].rows;
             responsetosend.hscodes = result[2].rows;
             responsetosend.country = result[3].rows
-            responsetosend.quantity = result[4].rows[0].totalquantity;
-            responsetosend.totalshipments = result[4].rows[0].totalshipments;
+            responsetosend.quantity = parseInt(result[4].rows[0].sum) + parseInt(result[4].rows[1].sum);
+            responsetosend.exportshipment = result[5].rows;
+            responsetosend.importshipment = result[6].rows;
 
             return res.status(200).json(success("Ok", responsetosend, res.statusCode));
         } else {
